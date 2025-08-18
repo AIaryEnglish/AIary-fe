@@ -1,9 +1,9 @@
 import { Navigate, Route, Routes } from "react-router-dom"
-import Landing from "../pages/LandingPage"
-import Login from "../pages/LoginPage"
-import Register from "../pages/RegisterPage"
-import Daily from "../pages/DailyPage"
-import Vocab from "../pages/VocabPage"
+import Landing from "../pages/LandingPage/LandingPage"
+import Login from "../pages/LoginPage/LoginPage"
+import Register from "../pages/RegisterPage/RegisterPage"
+import Daily from "../pages/DailyPage/DailyPage"
+import Vocab from "../pages/VocabPage/VocabPage"
 import PrivateRoute from "./PrivateRoute";
 
 const AppRouter = () => {
