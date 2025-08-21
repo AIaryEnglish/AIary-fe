@@ -18,7 +18,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth"; // Calendar
 import TrendingUpIcon from "@mui/icons-material/TrendingUp"; // TrendingUp
 import EditNoteIcon from "@mui/icons-material/EditNote"; // Edit3
 
-import "./landing.css";
+import "./landing.style.css";
 
 export default function LandingPage() {
   const [diaryEntries, setDiaryEntries] = useState([]);
