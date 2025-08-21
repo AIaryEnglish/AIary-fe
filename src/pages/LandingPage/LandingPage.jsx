@@ -20,7 +20,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth"; // Calendar
 import TrendingUpIcon from "@mui/icons-material/TrendingUp"; // TrendingUp
 import EditNoteIcon from "@mui/icons-material/EditNote"; // Edit3
 
-import "./style/landing.css";
+import "./landing.css";
 
 export default function LandingPage() {
   const [diaryEntries, setDiaryEntries] = useState([]);
@@ -94,16 +94,6 @@ export default function LandingPage() {
               >
                 내 일기 작성하기
               </Button>
-
-              <Button
-                component={RouterLink}
-                to="/login"
-                size="large"
-                variant="outlined"
-                className="btn-outline"
-              >
-                시작하기
-              </Button>
             </Box>
           </Box>
         </Container>
@@ -122,69 +112,37 @@ export default function LandingPage() {
             </p>
           </Box>
 
-          <Grid container spacing={3} alignItems="center" columns={12}>
-            <Grid item xs={12} sm={6} md={4}>
-              <Card className="card" sx={{ height: "100%", width: "100%" }}>
-                <CardHeader
-                  title={
-                    <Box textAlign="center">
-                      <CalendarMonthIcon className="i-card" />
-                      <Typography className="card-title">
-                        매일의 기록
-                      </Typography>
-                    </Box>
-                  }
-                />
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography className="card-text" align="center">
-                    하루하루의 경험을 영어로 기록하며
-                    <br />
-                    자연스럽게 표현력을 늘려보세요
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
+          <div className="cards-container">
+            <div className="card why-card">
+              <CalendarMonthIcon className="i-card" sx={{ fontSize: 40 }} />
+              <p className="card-title">매일의 기록</p>
+              <p className="card-text">
+                하루하루의 경험을 영어로 기록하며
+                <br />
+                자연스럽게 표현력을 늘려보세요
+              </p>
+            </div>
 
-            <Grid item xs={12} sm={6} md={4}>
-              <Card className="card" sx={{ height: "100%", width: "100%" }}>
-                <CardHeader
-                  title={
-                    <Box textAlign="center">
-                      <MenuBookIcon className="i-card accent" />
-                      <Typography className="card-title">어휘 확장</Typography>
-                    </Box>
-                  }
-                />
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography className="card-text" align="center">
-                    새로운 단어를 자동으로 수집하고 복습하여
-                    <br />
-                    어휘력을 체계적으로 늘려보세요
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
+            <div className="card why-card">
+              <MenuBookIcon className="i-card accent" sx={{ fontSize: 40 }} />
+              <p className="card-title">어휘 확장</p>
+              <p className="card-text">
+                새로운 단어를 자동으로 수집하고 복습하여
+                <br />
+                어휘력을 체계적으로 늘려보세요
+              </p>
+            </div>
 
-            <Grid item xs={12} sm={6} md={4}>
-              <Card className="card" sx={{ height: "100%", width: "100%" }}>
-                <CardHeader
-                  title={
-                    <Box textAlign="center">
-                      <TrendingUpIcon className="i-card" />
-                      <Typography className="card-title">성장 추적</Typography>
-                    </Box>
-                  }
-                />
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography className="card-text" align="center">
-                    일기 작성 횟수와 학습한 단어 수를 추적하며
-                    <br />
-                    성장을 확인하세요
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          </Grid>
+            <div className="card why-card">
+              <TrendingUpIcon className="i-card" sx={{ fontSize: 40 }} />
+              <p className="card-title">성장 추적</p>
+              <p className="card-text">
+                일기 작성 횟수와 학습한 단어 수를 추적하며
+                <br />
+                성장을 확인하세요
+              </p>
+            </div>
+          </div>
         </Container>
       </Box>
 
@@ -197,35 +155,35 @@ export default function LandingPage() {
             </p>
           </Box>
 
-          <Grid container spacing={3} mb={2}>
+          <div className="cards-container">
             {displayEntries.map((entry) => (
-              <Grid key={entry.id} item xs={12} md={6} lg={4}>
-                <Card className="card hoverlift">
+              <div key={entry.id}>
+                <div className="card hoverlift">
                   <CardHeader
                     title={
-                      <Box>
-                        <Box className="entry-meta">
+                      <div>
+                        <div className="entry-meta">
                           <Typography className="entry-date">
                             {new Date(entry.date).toLocaleDateString("ko-KR", {
                               month: "long",
                               day: "numeric",
                             })}
                           </Typography>
-                          <Box className="entry-vocab">
+                          <div className="entry-vocab">
                             <TrackChangesIcon style={{ fontSize: 14 }} />
                             <span>{entry.vocabularyCount}개 단어</span>
-                          </Box>
-                        </Box>
-                        <Typography className="entry-title line-clamp-1">
+                          </div>
+                        </div>
+                        <p className="entry-title line-clamp-1">
                           {entry.title}
-                        </Typography>
-                      </Box>
+                        </p>
+                      </div>
                     }
                   />
                   <CardContent>
-                    <Typography className="entry-content line-clamp-3">
+                    <p className="entry-content line-clamp-3">
                       {entry.content}
-                    </Typography>
+                    </p>
 
                     <Divider style={{ margin: "16px 0" }} />
 
@@ -239,29 +197,19 @@ export default function LandingPage() {
                       전체 읽기
                     </Button>
                   </CardContent>
-                </Card>
-              </Grid>
+                </div>
+              </div>
             ))}
-          </Grid>
+          </div>
 
           <Box className="feed-cta">
             <Button
               component={RouterLink}
-              to="/feed"
               variant="outlined"
               size="large"
               className="btn-outline"
             >
               일기 더보기
-            </Button>
-            <Button
-              component={RouterLink}
-              to="/write"
-              size="large"
-              variant="contained"
-              className="btn-accent"
-            >
-              내 일기 작성하기
             </Button>
           </Box>
         </Container>
@@ -270,21 +218,11 @@ export default function LandingPage() {
       {/* CTA */}
       <Box className="cta">
         <Container maxWidth="md" style={{ textAlign: "center" }}>
-          <h3 className="section-title">오늘부터 영어 일기를 시작해보세요</h3>
+          <h3 className="section-title">오늘부터 Aiary를 시작해보세요</h3>
           <p className="section-sub">
             매일 조금씩 쓰다 보면 어느새 영어로 자유롭게 표현할 수 있게 될
             거예요.
           </p>
-          <Button
-            component={RouterLink}
-            to="/signup"
-            size="large"
-            variant="contained"
-            className="btn-primary wide"
-            startIcon={<EditNoteIcon fontSize="small" />}
-          >
-            무료로 시작하기
-          </Button>
         </Container>
       </Box>
 
@@ -292,13 +230,14 @@ export default function LandingPage() {
       <Box className="floating-write-btn">
         <Button
           component={RouterLink}
-          to="/write"
+          to="/register"
           size="large"
           variant="contained"
           className="btn-accent round"
           startIcon={<EditNoteIcon fontSize="small" />}
+          sx={{ textTransform: "none" }}
         >
-          일기 쓰기
+          Aiary 시작하기
         </Button>
       </Box>
     </Box>
