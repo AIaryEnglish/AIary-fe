@@ -1,0 +1,177 @@
+.voca-page {
+  min-height: 100vh;
+  padding: 0rem 6rem;
+}
+
+.voca-color {
+  background-color: rgb(230, 255, 240);
+}
+
+.voca-header {
+  display: flex;
+  align-items: center;
+  height: 5rem;
+  background-color: white;
+  border-bottom: 1px solid rgb(200, 200, 200);
+  padding: 0rem 8rem;
+}
+
+.voca-header-title {
+  margin: 1.5rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.white-button {
+  outline: none;
+  background-color: white;
+  color: rgb(67, 67, 67);
+  padding: 0.5rem 1.1rem;
+  border: 1px solid rgb(200, 200, 200);
+  border-radius: 0.6rem;
+  font-size: 1rem;
+  font-weight: 300;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.word-button {
+  margin-top: 0.8rem;
+  display: flex;
+  gap: 0.3rem;
+}
+
+.voca-header-add-button {
+  margin-left: auto;
+}
+
+.voca-body-progress {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.1rem;
+  width: 100%;
+  padding: 2rem;
+  box-sizing: border-box;
+  justify-content: center;
+}
+
+.white-card {
+  flex: 1 1 calc(25% - 1rem);
+  background-color: white;
+  color: rgb(67, 67, 67);
+  padding: 3rem 3rem;
+  border: 1px solid rgb(200, 200, 200);
+  border-radius: 0.6rem;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  min-width: 200px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.voca-black-bold {
+  margin: 0.3rem;
+  display: block;
+  color: black;
+  font-size: 2.5rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.voca-red-bold {
+  margin: 0.3rem;
+  display: block;
+  color: rgb(230, 103, 53);
+  font-size: 2.5rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.voca-green-bold {
+  margin: 0.3rem;
+  display: block;
+  color: rgb(79, 210, 127);
+  font-size: 2.5rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.white-card-long {
+  flex: 1;
+  background-color: white;
+  color: rgb(67, 67, 67);
+  padding: 4rem;
+  border: 1px solid rgb(200, 200, 200);
+  border-radius: 0.6rem;
+  font-size: 1rem;
+  font-weight: 500;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-left: 2rem;
+  margin-right: 2rem;
+  margin-bottom: 2rem;
+}
+
+.search-input-place {
+  display: flex;
+  background-color: white;
+  border-radius: 0.6rem;
+  border: 1px solid rgb(200, 200, 200);
+  padding: 0.5rem 0.5rem; /* 상하 padding 줄여서 input 살짝 위로 */
+  margin-top: -1rem; /* 박스 자체를 위로 이동 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-icon {
+  font-size: 1.2rem;
+  margin-right: 0.8rem;
+  pointer-events: none;
+}
+
+.search-input-box {
+  flex: 1; /* 남은 공간 모두 차지 */
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  text-align: left;
+  background-color: transparent;
+}
+
+.word-title-status-date {
+  display: flex;
+}
+
+.word-title {
+  font-weight: 600;
+  margin: 0.3rem;
+}
+
+.word-description {
+  font-weight: 400;
+  margin: 0.3rem;
+}
+
+.word-example {
+  display: flex;
+  font-style: italic;
+}
+
+.mastered-box {
+  outline: none;
+  align-items: center;
+  background-color: rgb(92, 220, 77);
+  color: rgb(255, 255, 255);
+  padding: 0.2rem 0.3rem;
+  border-radius: 0.4rem;
+  font-weight: 500;
+  margin: 0.3rem;
+}
+
+@media (max-width: 768px) {
+  .white-card {
+    flex: 1 1 45%;
+    max-width: 45%;
+  }
+  .white-card-long {
+    flex: 1 1 45%;
+    max-width: 45%;
+  }
+}
