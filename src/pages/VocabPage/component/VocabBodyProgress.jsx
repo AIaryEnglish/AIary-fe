@@ -1,6 +1,7 @@
 import React from "react";
+import "../VocabPage.style.css";
+
 import { useNavigate } from "react-router-dom";
-import "../style/VocabPage.style.css";
 
 const VocabBodyProgress = () => {
   const navigate = useNavigate();

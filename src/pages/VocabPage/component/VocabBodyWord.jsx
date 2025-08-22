@@ -1,5 +1,5 @@
 import React from "react";
-import "../style/VocabPage.style.css";
+import "../VocabPage.style.css";
 
 const VocabBodyWord = () => {
   //하드코딩

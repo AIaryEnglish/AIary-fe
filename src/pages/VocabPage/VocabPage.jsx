@@ -3,7 +3,7 @@ import VocabHeader from "./component/VocabHeader";
 import VocabBodyProgress from "./component/VocabBodyProgress";
 import VocabBodySearch from "./component/VocabBodySearch";
 import VocabBodyWord from "./component/VocabBodyWord";
-import "./style/VocabPage.style.css";
+import "./VocabPage.style.css";
 
 const VocabPage = () => {
   return (

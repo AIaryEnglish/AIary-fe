@@ -1,5 +1,6 @@
 import React from "react";
-import "../style/VocabPage.style.css";
+import "../VocabPage.style.css";
+
 import SearchIcon from "@mui/icons-material/Search";
 
 const VocabBodySearch = () => {
