@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import NewDiaryDialog from "./NewDiaryDialog";
 import { Card, CardContent, Typography, Box } from "@mui/material";
-import useDiaryStore from "../../../stores/useDiaryStore";
 
 const DiaryBox = () => {
   const { selectedDate, setSelectedDate, diaries } = useDiaryStore();
@@ -33,7 +32,7 @@ const DiaryBox = () => {
           justifyContent: "center",
           textAlign: "center",
           padding: 2,
-          mt: 4
+          mt: 4,
         }}
       >
         <CardContent
@@ -50,7 +49,6 @@ const DiaryBox = () => {
           </Typography>
         </CardContent>
       </Card>
-
       <NewDiaryDialog
         open={openDialog}
         onClose={handleCloseDialog}

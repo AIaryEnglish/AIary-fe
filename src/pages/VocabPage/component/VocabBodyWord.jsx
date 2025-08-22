@@ -8,7 +8,9 @@ const VocabBodyWord = () => {
       <div className="word-title-status-date">
         <div className="word-title">green</div>
         <div className="mastered-box">Mastered</div>
-        <div className="word-description">2025.04.02</div>
+        <div className="word-description">
+          <i class="fa-regular fa-calendar"></i> 2025.04.02
+        </div>
       </div>
       <div className="word-title-status-date">
         <span className="word-title">definistion:</span>

@@ -1,5 +1,6 @@
 import React from "react";
 import "../style/VocabPage.style.css";
+import SearchIcon from "@mui/icons-material/Search";
 
 const VocabBodySearch = () => {
   //   const [query, setQuery] = useState("");
@@ -13,7 +14,7 @@ const VocabBodySearch = () => {
   return (
     <div className="white-card-long">
       <div className="search-input-place">
-        <span className="search-icon">&#128269;</span>
+        <SearchIcon sx={{ fontSize: 30 }} />
         <input
           type="text"
           className="search-input-box"

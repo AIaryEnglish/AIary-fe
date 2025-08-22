@@ -1,7 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "../style/VocabPage.style.css";
 
 const VocabBodyProgress = () => {
+  const navigate = useNavigate();
   //숫자들 하드코딩
   const totalWord = 4;
   const masteredWord = 3;
@@ -10,7 +12,7 @@ const VocabBodyProgress = () => {
 
   return (
     <div className="voca-body-progress">
-      <div className="white-card">
+      <div className="white-card" onClick={() => navigate("/")}>
         <span className="voca-black-bold">{totalWord}</span>
         Total Words
       </div>

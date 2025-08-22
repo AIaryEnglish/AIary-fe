@@ -12,9 +12,8 @@ const AppRouter = () => {
       <Route path="/" element={<Landing />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route element={<PrivateRoute />}>
-        <Route path="/vocab" element={<Vocab />} />
-      </Route>
+      <Route element={<PrivateRoute />}></Route>
+      <Route path="/vocab" element={<Vocab />} />
       <Route path="/daily" element={<Daily />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
