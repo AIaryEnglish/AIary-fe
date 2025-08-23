@@ -33,7 +33,7 @@ const DiaryBox = () => {
           justifyContent: "center",
           textAlign: "center",
           padding: 2,
-          mt: 4
+          mt: 4,
         }}
       >
         <CardContent
