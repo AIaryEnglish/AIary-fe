@@ -35,7 +35,6 @@ const RegisterPage = () => {
       ...prev,
       [name]: value,
     }));
-    // 에러 메시지 제거
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
@@ -81,12 +80,10 @@ const RegisterPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // 폼 검증
     if (!validateForm()) {
       return;
     }
 
-    // React Query의 mutate 함수 사용 (try-catch 불필요)
     createUser({
       name: formData.name,
       email: formData.email,
