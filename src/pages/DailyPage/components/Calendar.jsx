@@ -29,13 +29,15 @@ const StyledDateCalendar = styled(DateCalendar)(({ isDesktop }) => ({
     fontSize: isDesktop ? "1.2rem" : "0.9rem",
     margin: isDesktop ? 4 : 2,
   },
-  "& .MuiMonthCalendar-root": { // 월 선택 달력 전체
+  "& .MuiMonthCalendar-root": {
+    // 월 선택 달력 전체
     width: isDesktop ? 500 : 320, // 모바일은 화면 맞춤
     height: isDesktop ? 200 : "100%",
-    gap: isDesktop ? 9 : 9,        // 월 버튼 간격
+    gap: isDesktop ? 9 : 9, // 월 버튼 간격
     padding: isDesktop ? "10px" : "4px",
   },
-  "& .MuiPickersMonth-root": {       // 개별 월 버튼
+  "& .MuiPickersMonth-root": {
+    // 개별 월 버튼
     width: isDesktop ? 60 : 40,
     height: isDesktop ? 60 : 32,
     fontSize: isDesktop ? "1rem" : "0.8rem",
@@ -120,8 +122,6 @@ const Calendar = () => {
           </span>
         </div>
       </div>
-
-      
     </>
   );
 };

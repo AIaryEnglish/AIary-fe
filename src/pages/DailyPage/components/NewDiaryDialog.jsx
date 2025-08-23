@@ -11,6 +11,8 @@ import {
 const NewDiaryDialog = ({ open, onClose, selectedDate }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
+    // 저장 로직 추가 가능
+    onClose();
   };
 
   return (
