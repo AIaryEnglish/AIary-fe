@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Container,
   Box,
@@ -15,10 +15,8 @@ import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import useCreateUser from "../../hooks/useCreateUser";
 import LogoVer1 from "../../assets/logo_ver1.svg";
-import { useAuthStore } from "../../stores/authStore";
 
 const RegisterPage = () => {
-  const { user } = useAuthStore();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -30,13 +28,6 @@ const RegisterPage = () => {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const { mutate: createUser, isPending: isLoading } = useCreateUser();
-
-  // 이미 로그인한 사용자는 이전 페이지로 리다이렉트
-  useEffect(() => {
-    if (user) {
-      navigate(-1); // 이전 페이지로 돌아가기
-    }
-  }, [user, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

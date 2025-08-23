@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Container,
   Box,
@@ -21,10 +21,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import useLoginWithEmail from "../../hooks/useLoginWithEmail";
-import { useAuthStore } from "../../stores/authStore";
 
 const LoginPage = () => {
-  const { user } = useAuthStore();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -33,13 +31,6 @@ const LoginPage = () => {
   const [errors, setErrors] = useState({});
   const { mutate: loginWithEmail } = useLoginWithEmail();
   const navigate = useNavigate();
-
-  // 이미 로그인한 사용자는 이전 페이지로 리다이렉트
-  useEffect(() => {
-    if (user) {
-      navigate(-1); // 이전 페이지로 돌아가기
-    }
-  }, [user, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
