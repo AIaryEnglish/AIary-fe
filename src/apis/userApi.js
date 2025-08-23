@@ -1,6 +1,6 @@
-import api from "../utils/api";
+import api from "../util/api";
 
-export const createUser = async (userData) => {
+export const createUserApi = async (userData) => {
   const response = await api.post("/user", userData);
   return response.data;
 };

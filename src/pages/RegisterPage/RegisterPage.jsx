@@ -5,25 +5,20 @@ import {
   Typography,
   TextField,
   Button,
-  Link,
   Divider,
   Paper,
   IconButton,
   InputAdornment,
 } from "@mui/material";
-import {
-  Visibility,
-  VisibilityOff,
-  MenuBook,
-  ArrowBack,
-} from "@mui/icons-material";
+import { Visibility, VisibilityOff, ArrowBack } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
-import api from "../../util/api";
+import useCreateUser from "../../hooks/useCreateUser";
+import LogoVer1 from "../../assets/logo_ver1.svg";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
-    username: "",
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -31,8 +26,8 @@ const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { mutate: createUser, isPending: isLoading } = useCreateUser();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,10 +47,10 @@ const RegisterPage = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.username.trim()) {
-      newErrors.username = "사용자명을 입력해주세요";
-    } else if (formData.username.length < 2) {
-      newErrors.username = "사용자명은 2자 이상이어야 합니다";
+    if (!formData.name.trim()) {
+      newErrors.name = "사용자명을 입력해주세요";
+    } else if (formData.name.length < 2) {
+      newErrors.name = "사용자명은 2자 이상이어야 합니다";
     }
 
     if (!formData.email.trim()) {
@@ -83,36 +78,20 @@ const RegisterPage = () => {
     return true;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    // TODO: 폼 검증
+    // 폼 검증
     if (!validateForm()) {
       return;
     }
 
-    setIsLoading(true);
-    try {
-      const response = await api.post("/auth/register", {
-        username: formData.username,
-        email: formData.email,
-        password: formData.password,
-      });
-
-      if (response.data.success) {
-        alert("회원가입이 완료되었습니다!");
-        navigate("/login");
-      }
-    } catch (error) {
-      console.error("회원가입 오류:", error);
-      if (error.message) {
-        alert(error.message);
-      } else {
-        alert("회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
-      }
-    } finally {
-      setIsLoading(false);
-    }
+    // React Query의 mutate 함수 사용 (try-catch 불필요)
+    createUser({
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+    });
   };
 
   const handleBackToHome = () => {
@@ -130,14 +109,16 @@ const RegisterPage = () => {
 
         <Box sx={{ textAlign: "center", mb: 4 }}>
           <LogoContainer>
-            <MenuBook sx={{ fontSize: 40, color: "white" }} />
+            <img
+              src={LogoVer1}
+              alt="AIary Logo"
+              style={{
+                width: "60px",
+                height: "60px",
+                objectFit: "contain",
+              }}
+            />
           </LogoContainer>
-          <MainTitle variant="h3" component="h1">
-            AIary
-          </MainTitle>
-          <Subtitle variant="h6">
-            영어 일기로 시작하는 자연스러운 영어 학습
-          </Subtitle>
         </Box>
 
         <FormContainer elevation={8}>
@@ -152,11 +133,11 @@ const RegisterPage = () => {
             <StyledTextField
               fullWidth
               label="사용자명"
-              name="username"
-              value={formData.username}
+              name="name"
+              value={formData.name}
               onChange={handleChange}
-              error={!!errors.username}
-              helperText={errors.username}
+              error={!!errors.name}
+              helperText={errors.name}
               placeholder="사용자명을 입력해주세요"
             />
 
@@ -277,20 +258,10 @@ const LogoContainer = styled(Box)({
   width: 80,
   height: 80,
   borderRadius: "50%",
-  backgroundColor: "var(--app-chart-1)",
+  backgroundColor: "white",
   marginBottom: 16,
   boxShadow: "0 4px 20px rgba(96, 175, 160, 0.3)",
-});
-
-const MainTitle = styled(Typography)({
-  fontWeight: 700,
-  color: "var(--app-chart-1)",
-  marginBottom: 8,
-});
-
-const Subtitle = styled(Typography)({
-  color: "var(--app-muted-fg)",
-  fontWeight: 400,
+  border: "2px solid var(--app-chart-1)",
 });
 
 const FormContainer = styled(Paper)({
