@@ -1,17 +1,8 @@
 import React from "react";
 import "../VocabPage.style.css";
-
 import SearchIcon from "@mui/icons-material/Search";
 
-const VocabBodySearch = () => {
-  //   const [query, setQuery] = useState("");
-
-  //   const handleKeyDown = (e) => {
-  //     if (e.key === "Enter") {
-  //         onSearch(query);
-  //     }
-  //   };
-
+const VocabBodySearch = ({ setFilter }) => {
   return (
     <div className="white-card-long">
       <div className="search-input-place">
@@ -20,14 +11,19 @@ const VocabBodySearch = () => {
           type="text"
           className="search-input-box"
           placeholder="Search Vocabulary..."
-          // onChange={(e) => setQuery(e.target.value)}
-          // onKeyDown={handleKeyDown}
+          onChange={(e) => setFilter(e.target.value)}
         />
       </div>
       <div className="word-button">
-        <button className="white-button">All</button>
-        <button className="white-button">Masterd</button>
-        <button className="white-button">Learning</button>
+        <button className="white-button" onClick={() => setFilter("All")}>
+          All
+        </button>
+        <button className="white-button" onClick={() => setFilter("mastered")}>
+          Mastered
+        </button>
+        <button className="white-button" onClick={() => setFilter("learning")}>
+          Learning
+        </button>
       </div>
     </div>
   );

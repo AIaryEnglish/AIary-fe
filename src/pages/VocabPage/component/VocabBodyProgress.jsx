@@ -1,19 +1,15 @@
 import React from "react";
 import "../VocabPage.style.css";
 
-import { useNavigate } from "react-router-dom";
-
-const VocabBodyProgress = () => {
-  const navigate = useNavigate();
-  //숫자들 하드코딩
-  const totalWord = 4;
-  const masteredWord = 3;
-  const learningWord = 1;
-  const progress = (masteredWord / totalWord) * 100;
+const VocabBodyProgress = ({ vocabList }) => {
+  const totalWord = vocabList.length;
+  const masteredWord = vocabList.filter((v) => v.status === "mastered").length;
+  const learningWord = vocabList.filter((v) => v.status === "learning").length;
+  const progress = totalWord ? Math.round((masteredWord / totalWord) * 100) : 0;
 
   return (
     <div className="voca-body-progress">
-      <div className="white-card" onClick={() => navigate("/")}>
+      <div className="white-card">
         <span className="voca-black-bold">{totalWord}</span>
         Total Words
       </div>
