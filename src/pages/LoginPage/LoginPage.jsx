@@ -20,6 +20,7 @@ import {
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
+import useLoginWithEmail from "../../hooks/useLoginWithEmail";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -28,6 +29,7 @@ const LoginPage = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
+  const { mutate: loginWithEmail } = useLoginWithEmail();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -67,7 +69,10 @@ const LoginPage = () => {
     }
 
     // TODO: 로그인 로직 구현
-    console.log("로그인 시도:", formData);
+    loginWithEmail({
+      email: formData.email,
+      password: formData.password,
+    });
   };
 
   const handleBackToHome = () => {
