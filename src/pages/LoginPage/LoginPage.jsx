@@ -21,6 +21,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import useLoginWithEmail from "../../hooks/useLoginWithEmail";
+import LogoVer1 from "../../assets/logo_ver1.svg";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -91,14 +92,16 @@ const LoginPage = () => {
         {/* 로고 및 제목 */}
         <Box sx={{ textAlign: "center", mb: 4 }}>
           <LogoContainer>
-            <MenuBook sx={{ fontSize: 40, color: "white" }} />
+            <img
+              src={LogoVer1}
+              alt="AIary Logo"
+              style={{
+                width: "60px",
+                height: "60px",
+                objectFit: "contain",
+              }}
+            />
           </LogoContainer>
-          <MainTitle variant="h3" component="h1">
-            AIary
-          </MainTitle>
-          <Subtitle variant="h6">
-            영어 일기로 시작하는 자연스러운 영어 학습
-          </Subtitle>
         </Box>
 
         {/* 로그인 폼 */}
@@ -207,20 +210,10 @@ const LogoContainer = styled(Box)({
   width: 80,
   height: 80,
   borderRadius: "50%",
-  backgroundColor: "var(--app-chart-1)",
+  backgroundColor: "white",
   marginBottom: 16,
   boxShadow: "0 4px 20px rgba(96, 175, 160, 0.3)",
-});
-
-const MainTitle = styled(Typography)({
-  fontWeight: 700,
-  color: "var(--app-chart-1)",
-  marginBottom: 8,
-});
-
-const Subtitle = styled(Typography)({
-  color: "var(--app-muted-fg)",
-  fontWeight: 400,
+  border: "2px solid var(--app-chart-1)",
 });
 
 const FormContainer = styled(Paper)({
