@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Box,
@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import useCreateUser from "../../hooks/useCreateUser";
 import LogoVer1 from "../../assets/logo_ver1.svg";
+import { useAuthStore } from "../../stores/authStore";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -28,6 +29,13 @@ const RegisterPage = () => {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const { mutate: createUser, isPending: isLoading } = useCreateUser();
+  const { user } = useAuthStore();
+
+  useEffect(() => {
+    if (user) {
+      navigate(-1);
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

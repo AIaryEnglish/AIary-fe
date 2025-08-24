@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Box,
@@ -10,16 +10,13 @@ import {
   Paper,
   IconButton,
   InputAdornment,
-  Alert,
 } from "@mui/material";
-import {
-  Visibility,
-  VisibilityOff,
-  MenuBook,
-  ArrowBack,
-} from "@mui/icons-material";
+import { Visibility, VisibilityOff, ArrowBack } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
+import useLoginWithEmail from "../../hooks/useLoginWithEmail";
+import LogoVer1 from "../../assets/logo_ver1.svg";
+import { useAuthStore } from "../../stores/authStore";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -28,7 +25,16 @@ const LoginPage = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
+  const { mutate: loginWithEmail } = useLoginWithEmail();
   const navigate = useNavigate();
+
+  const { user } = useAuthStore();
+
+  useEffect(() => {
+    if (user) {
+      navigate(-1);
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -66,8 +72,10 @@ const LoginPage = () => {
       return;
     }
 
-    // TODO: 로그인 로직 구현
-    console.log("로그인 시도:", formData);
+    loginWithEmail({
+      email: formData.email,
+      password: formData.password,
+    });
   };
 
   const handleBackToHome = () => {
@@ -87,14 +95,16 @@ const LoginPage = () => {
         {/* 로고 및 제목 */}
         <Box sx={{ textAlign: "center", mb: 4 }}>
           <LogoContainer>
-            <MenuBook sx={{ fontSize: 40, color: "white" }} />
+            <img
+              src={LogoVer1}
+              alt="AIary Logo"
+              style={{
+                width: "60px",
+                height: "60px",
+                objectFit: "contain",
+              }}
+            />
           </LogoContainer>
-          <MainTitle variant="h3" component="h1">
-            AIary
-          </MainTitle>
-          <Subtitle variant="h6">
-            영어 일기로 시작하는 자연스러운 영어 학습
-          </Subtitle>
         </Box>
 
         {/* 로그인 폼 */}
@@ -203,20 +213,10 @@ const LogoContainer = styled(Box)({
   width: 80,
   height: 80,
   borderRadius: "50%",
-  backgroundColor: "var(--app-chart-1)",
+  backgroundColor: "white",
   marginBottom: 16,
   boxShadow: "0 4px 20px rgba(96, 175, 160, 0.3)",
-});
-
-const MainTitle = styled(Typography)({
-  fontWeight: 700,
-  color: "var(--app-chart-1)",
-  marginBottom: 8,
-});
-
-const Subtitle = styled(Typography)({
-  color: "var(--app-muted-fg)",
-  fontWeight: 400,
+  border: "2px solid var(--app-chart-1)",
 });
 
 const FormContainer = styled(Paper)({
