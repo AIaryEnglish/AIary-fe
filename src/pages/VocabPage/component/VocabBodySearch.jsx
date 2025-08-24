@@ -2,7 +2,7 @@ import React from "react";
 import "../VocabPage.style.css";
 import SearchIcon from "@mui/icons-material/Search";
 
-const VocabBodySearch = ({ setFilter }) => {
+const VocabBodySearch = ({ setFilter, setSearchQuery }) => {
   return (
     <div className="white-card-long">
       <div className="search-input-place">
@@ -11,7 +11,7 @@ const VocabBodySearch = ({ setFilter }) => {
           type="text"
           className="search-input-box"
           placeholder="Search Vocabulary..."
-          onChange={(e) => setFilter(e.target.value)}
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
       </div>
       <div className="word-button">

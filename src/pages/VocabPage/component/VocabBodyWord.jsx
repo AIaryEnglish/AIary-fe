@@ -1,28 +1,52 @@
 import React from "react";
 import "../VocabPage.style.css";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
-const VocabBodyWord = () => {
-  //하드코딩
+const VocabBodyWord = ({ vocab, onToggleStatus, onDelete }) => {
   return (
     <div className="white-card-long">
-      <div className="word-title-status-date">
-        <div className="word-title">green</div>
-        <div className="mastered-box">Mastered</div>
-        <div className="word-description">
-          <i class="fa-regular fa-calendar"></i> 2025.04.02
+      {/* 단어 정보 */}
+      <div className="word-info">
+        <div className="word-title-status-date">
+          <div className="word-title">{vocab.word}</div>
+          <div
+            className={
+              vocab.status === "mastered" ? "mastered-box" : "learning-box"
+            }
+          >
+            {vocab.status}
+          </div>
+
+          <div className="word-description">
+            <CalendarMonthIcon sx={{ fontSize: 20 }} />{" "}
+            {new Date(vocab.createdAt).toLocaleDateString()}
+          </div>
+        </div>
+
+        <div className="word-title-status-date">
+          <span className="word-title">definistion:</span>
+          <span className="word-description">{vocab.meaning}</span>
+        </div>
+        <div className="word-example">
+          <span className="word-title">Example:</span>
+          <span className="word-description">{vocab.example}</span>
         </div>
       </div>
-      <div className="word-title-status-date">
-        <span className="word-title">definistion:</span>
-        <span className="word-description">
-          having the colour of grass or the leaves of most plants and trees
-        </span>
-      </div>
-      <div className="word-example">
-        <span className="word-title">Example:</span>
-        <span className="word-description">
-          Wait for the light to turn green (= on traffic lights).
-        </span>
+
+      {/* 버튼 정보 */}
+      <div className="word-actions">
+        <button
+          className="action-button toggle"
+          onClick={() => onToggleStatus(vocab._id)}
+        >
+          {vocab.status === "mastered" ? "Set Learning" : "Set Mastered"}
+        </button>
+        <button
+          className="action-button delete"
+          onClick={() => onDelete(vocab._id)}
+        >
+          Delete
+        </button>
       </div>
     </div>
   );
