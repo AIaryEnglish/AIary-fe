@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import NewDiaryDialog from "./NewDiaryDialog";
-import { Card, CardContent, Typography, Box } from "@mui/material";
+import { Card, CardContent, Typography, Box, Button } from "@mui/material";
 import useDiaryStore from "../../../stores/useDiaryStore";
+import dayjs from "dayjs";
 
 const DiaryBox = () => {
   const { selectedDate, setSelectedDate, diaries } = useDiaryStore();
@@ -20,6 +21,13 @@ const DiaryBox = () => {
 
   const dateKey = selectedDate.format("YYYY-MM-DD");
   const diary = diaries[dateKey];
+
+  const today = dayjs().startOf("day");
+  const target = selectedDate.startOf("day");
+  const dayDiff = today.diff(target, "day"); // 0,1,2면 OK / 음수면 미래 / 3이상이면 오래전
+  const isWritableDay = dayDiff >= 0 && dayDiff <= 2;
+
+  const canCreate = !diary && isWritableDay;
 
   return (
     <>
@@ -48,6 +56,11 @@ const DiaryBox = () => {
           <Typography variant="body1" color="text.secondary">
             {diary ? diary.content : "No Diary for this date yet."}
           </Typography>
+          {canCreate && (
+            <Button onClick={() => setOpenDialog(true)} variant="contained">
+              일기 작성하기
+            </Button>
+          )}
         </CardContent>
       </Card>
 
