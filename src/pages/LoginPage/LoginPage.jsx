@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Box,
@@ -10,18 +10,13 @@ import {
   Paper,
   IconButton,
   InputAdornment,
-  Alert,
 } from "@mui/material";
-import {
-  Visibility,
-  VisibilityOff,
-  MenuBook,
-  ArrowBack,
-} from "@mui/icons-material";
+import { Visibility, VisibilityOff, ArrowBack } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import useLoginWithEmail from "../../hooks/useLoginWithEmail";
 import LogoVer1 from "../../assets/logo_ver1.svg";
+import { useAuthStore } from "../../stores/authStore";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -32,6 +27,14 @@ const LoginPage = () => {
   const [errors, setErrors] = useState({});
   const { mutate: loginWithEmail } = useLoginWithEmail();
   const navigate = useNavigate();
+
+  const { user } = useAuthStore();
+
+  useEffect(() => {
+    if (user) {
+      navigate(-1);
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
