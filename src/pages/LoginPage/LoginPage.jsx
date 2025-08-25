@@ -17,6 +17,7 @@ import { styled } from "@mui/material/styles";
 import useLoginWithEmail from "../../hooks/useLoginWithEmail";
 import LogoVer1 from "../../assets/logo_ver1.svg";
 import { useAuthStore } from "../../stores/authStore";
+import { GoogleLogin } from "@react-oauth/google";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -80,6 +81,14 @@ const LoginPage = () => {
 
   const handleBackToHome = () => {
     navigate("/");
+  };
+
+  const handleGoogleLogin = async (credentialResponse) => {
+    console.log("?credentialResponse", credentialResponse);
+  };
+
+  const handleGoogleLoginError = (error) => {
+    console.log(error);
   };
 
   return (
@@ -167,19 +176,32 @@ const LoginPage = () => {
                 비밀번호를 잊으셨나요?
               </ForgotPasswordLink>
             </Box>
-
             <Divider sx={{ my: 3 }}>
               <DividerText variant="body2">처음이신가요?</DividerText>
             </Divider>
+            <FlexBox>
+              <RegisterButton
+                fullWidth
+                variant="outlined"
+                size="large"
+                onClick={() => navigate("/register")}
+              >
+                계정 만들기
+              </RegisterButton>
+            </FlexBox>
 
-            <RegisterButton
-              fullWidth
-              variant="outlined"
-              size="large"
-              onClick={() => navigate("/register")}
-            >
-              계정 만들기
-            </RegisterButton>
+            <Divider sx={{ my: 3 }}>
+              <DividerText variant="body2">외부 계정 로그인</DividerText>
+            </Divider>
+            <FlexBox>
+              <GoogleLogin
+                text="continue_with"
+                onSuccess={handleGoogleLogin}
+                onError={handleGoogleLoginError}
+                shape="pill"
+                size="large"
+              />
+            </FlexBox>
           </Box>
         </FormContainer>
       </Container>
@@ -288,17 +310,23 @@ const DividerText = styled(Typography)({
 });
 
 const RegisterButton = styled(Button)({
-  padding: "12px 0",
-  borderColor: "var(--app-chart-1)",
+  borderColor: "var(--app-border)",
   color: "var(--app-chart-1)",
-  fontSize: "1.1rem",
-  fontWeight: 600,
-  borderRadius: 16,
+  fontSize: "0.85rem",
+  fontWeight: 400,
+  borderRadius: 20,
+  width: "207px",
   textTransform: "none",
   "&:hover": {
     borderColor: "var(--app-chart-2)",
     backgroundColor: "rgba(96, 175, 160, 0.05)",
-    transform: "translateY(-2px)",
   },
   transition: "all 0.3s ease",
+});
+
+const FlexBox = styled(Box)({
+  display: "flex",
+  justifyContent: "center",
+  width: "100%",
+  alignItems: "center",
 });
