@@ -11,9 +11,12 @@ import {
 } from "@mui/material";
 import CloudinaryUploadWidget from "../../../util/CloudinaryUploadWidget";
 import useDiaryStore from "../../../stores/useDiaryStore";
+import { useCreateDiary } from "../../../hooks/useCreateDiary";
 
 const NewDiaryDialog = ({ mode, open, onClose }) => {
-  const { diaries, isLoading, error, addDiary, selectedDate } = useDiaryStore();
+
+  const { selectedDate, setDiaries } = useDiaryStore();
+  const { mutate: createDiary, isLoading, error } = useCreateDiary();
 
   const InitialFormData = {
     title: "",
@@ -28,15 +31,17 @@ const NewDiaryDialog = ({ mode, open, onClose }) => {
   const handleSubmit = async(e) => {
     e.preventDefault();
     // 저장 로직 추가 가능
-    try {
-      if (mode === "new") {
-      await addDiary({ ...formData })
-    }
-    // setFormData(InitialFormData);
-    onClose();
-    } catch(err) {
-      alert("일기 저장 중 오류가 발생했습니다: " + err.message);
-    }
+    if (mode !== "new") return;
+    createDiary(formData, {
+      onSuccess: (result) => {
+        setDiaries(result.diary);  // zustand 상태 업데이트
+        setFormData(InitialFormData);
+        onClose();
+      },
+      onError: (err) => {
+        alert("일기 저장 중 오류 발생: " + err.message);
+      },
+    });
   };
 
   const handleClose = () => {

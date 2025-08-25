@@ -29,6 +29,7 @@ const DiaryBox = () => {
   const isWritableDay = dayDiff >= 0 && dayDiff <= 2;
 
   const canCreate = !diary && isWritableDay;
+  const canEdit = diary;
 
   const openEditForm = (diary) => {
     //edit모드로 설정하고
@@ -72,11 +73,12 @@ const DiaryBox = () => {
           <Typography variant="body1" color="text.secondary">
             {diary ? diary.content : "No Diary for this date yet."}
           </Typography>
-          {canCreate ? (
+          {canCreate && (
             <Button onClick={openAddForm} variant="contained">
               일기 작성하기
             </Button>
-          ) : (
+          )}
+          {canEdit && (
             <Button onClick={openEditForm} variant="contained">
               일기 수정하기
             </Button>
