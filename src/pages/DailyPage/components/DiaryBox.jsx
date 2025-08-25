@@ -50,6 +50,14 @@ const DiaryBox = () => {
     setOpenDialog(true);
   };
 
+  if (isFetchingDiary) {
+    return (
+      <Typography variant="body1" color="text.secondary">
+        Loading...
+      </Typography>
+    );
+  }
+
   return (
     <>
       <Card
@@ -73,11 +81,7 @@ const DiaryBox = () => {
         >
           <DiaryDate>Diary for {formatDate(selectedDate)}</DiaryDate>
 
-          {isFetchingDiary ? (
-            <Typography variant="body1" color="text.secondary">
-              Loading...
-            </Typography>
-          ) : diary ? (
+          {diary ? (
             <>
               <DiaryTitle>{diary.title}</DiaryTitle>
               <DiaryContent variant="body1">{diary.content}</DiaryContent>
