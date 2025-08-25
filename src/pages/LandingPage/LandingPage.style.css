@@ -5,7 +5,9 @@
   color: var(--mui-palette-text-primary);
 }
 
-/* ========== HERO ========== */
+/* =========================
+   HERO
+========================= */
 .hero {
   position: relative;
   padding: 96px 0;
@@ -20,7 +22,6 @@
     padding: 64px 0;
   }
 }
-
 .hero-inner {
   text-align: center;
   max-width: 960px;
@@ -68,7 +69,6 @@
 .hero-title-accent {
   color: var(--mui-palette-primary-main);
 }
-
 .hero-desc {
   color: var(--mui-palette-text-secondary);
   max-width: 720px;
@@ -76,7 +76,6 @@
   line-height: 1.6;
   font-size: clamp(14px, 1.8vw, 18px);
 }
-
 .hero-cta {
   display: flex;
   gap: 12px;
@@ -86,6 +85,7 @@
   flex-wrap: wrap;
 }
 
+/* 버튼 */
 .btn-primary {
   background: var(--mui-palette-primary-main) !important;
   color: var(--mui-palette-primary-contrastText) !important;
@@ -114,7 +114,6 @@
   );
   color: var(--mui-palette-primary-main);
 }
-
 .btn-accent {
   background: var(--app-accent) !important;
   color: var(--app-accent-contrast) !important;
@@ -158,7 +157,9 @@
   }
 }
 
-/* ========== WHY SECTION ========== */
+/* =========================
+   WHY SECTION (STATIC CARDS)
+========================= */
 .why {
   padding: 72px 0;
   background: color-mix(
@@ -178,20 +179,21 @@
   margin-top: -20px;
 }
 
-/* 공통 카드 */
 .cards-container {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: 24px;
 }
+
+/* 공통 .card */
 .card {
   border: 1px solid var(--app-border);
   border-radius: 6px;
-  display: flex;
-  flex-direction: column;
   width: 350px;
   padding: 20px 0 10px;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   text-align: center;
   box-shadow: none;
@@ -201,7 +203,6 @@
   box-shadow: 0 8px 20px color-mix(in oklab, var(--app-ring) 40%, transparent);
 }
 .why-card {
-  /* background-color: #f4fff3; */
   background: linear-gradient(to bottom right, #f4fff3, #ffffff);
 }
 
@@ -220,14 +221,16 @@
   font-size: 22px;
   font-weight: 700;
   font-family: var(--app-font-heading);
-  margin-top: 0px;
+  margin-top: 0;
 }
 .card-text {
   color: var(--mui-palette-text-secondary);
   line-height: 1.7;
 }
 
-/* ========== FEED ========== */
+/* =========================
+   FEED SECTION (DIARY CARDS)
+========================= */
 .feed {
   padding: 72px 0;
 }
@@ -235,49 +238,84 @@
   transform: translateY(-4px);
 }
 
-.entry-meta {
+.feed-card {
+  position: relative;
+  height: 330px; /* 카드 고정 높이 */
+  padding-top: 16px; /* 상단 여백(제목만 있을 때) */
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 6px;
+  flex-direction: column;
+  box-sizing: border-box;
 }
-.entry-date {
+
+/* MUI CardHeader 높이 고정(제목 길이와 무관하게 동일) */
+.feed-card .MuiCardHeader-root {
+  padding: 0 20px; /* 좌우 패딩만 */
+  min-height: 72px; /* 제목 영역 고정 */
+  box-sizing: border-box;
+}
+.feed-card .entry-head .entry-title {
+  margin-top: 4px;
+}
+
+/* 본문/메타/Divider/버튼: 항상 같은 위치 */
+.feed-card .card-body {
+  flex: 1; /* 헤더 제외 남은 높이 */
+  display: grid;
+  grid-template-rows: 1fr auto auto auto; /* 본문, meta-bottom, Divider, 버튼 */
+  gap: 12px;
+  padding: 0 20px 12px;
+  box-sizing: border-box;
+}
+
+/* 본문 */
+.feed-card .entry-content {
+  margin: 0;
+  color: var(--mui-palette-text-secondary);
+  line-height: 1.7;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+/* 날짜+작성자: Divider 바로 위에, 우측 정렬 */
+.feed-card .entry-meta-bottom {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
   font-size: 13px;
   color: var(--mui-palette-text-secondary);
 }
-.entry-vocab {
-  display: inline-flex;
-  gap: 6px;
-  align-items: center;
-  font-size: 12px;
-  color: var(--app-accent);
+.feed-card .entry-meta-bottom .sep {
+  opacity: 0.6;
+}
+.feed-card .entry-meta-bottom .author {
+  max-width: 140px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
+/* Divider/버튼은 아래에 고정 배치됨 */
+.feed-card .entry-divider {
+  width: 100%;
+  margin: 0;
+}
+.feed-card .btn-outline {
+  width: 100%;
+}
+
+/* 공통 타이포 */
 .entry-title {
   font-size: 20px;
   font-weight: 700;
   font-family: var(--app-font-heading);
 }
-.entry-content {
-  color: var(--mui-palette-text-secondary);
-  line-height: 1.7;
-  margin-top: -15px;
-}
 
-/* 줄임 처리 유틸 */
-.line-clamp-1,
-.line-clamp-3 {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.line-clamp-1 {
-  -webkit-line-clamp: 1;
-}
-.line-clamp-3 {
-  -webkit-line-clamp: 3;
-}
-
+/* =========================
+   FEED CTA
+========================= */
 .feed-cta {
   display: flex;
   gap: 12px;
@@ -286,7 +324,9 @@
   margin-top: 20px;
 }
 
-/* ========== CTA ========== */
+/* =========================
+   CTA SECTION
+========================= */
 .cta {
   padding: 72px 0;
   background: linear-gradient(
@@ -296,7 +336,7 @@
   );
 }
 
-/* ========== FLOATING BUTTON ========== */
+/* 플로팅 버튼 */
 .floating-write-btn {
   position: fixed;
   left: 50%;
