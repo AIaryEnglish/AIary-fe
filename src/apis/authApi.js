@@ -9,3 +9,13 @@ export const loginWithEmailApi = async ({ email, password }) => {
     throw error;
   }
 };
+
+export const loginWithGoogleApi = async ({ token }) => {
+  try {
+    const response = await api.post("/auth/google", { token });
+    return response.data;
+  } catch (error) {
+    console.error("로그인 실패:", error);
+    throw error;
+  }
+};
