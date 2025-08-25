@@ -14,7 +14,6 @@ import { Visibility, VisibilityOff, ArrowBack } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import useCreateUser from "../../hooks/useCreateUser";
-import LogoVer1 from "../../assets/logo_ver1.svg";
 import { useAuthStore } from "../../stores/authStore";
 
 const RegisterPage = () => {
@@ -99,33 +98,9 @@ const RegisterPage = () => {
     });
   };
 
-  const handleBackToHome = () => {
-    navigate("/");
-  };
-
   return (
     <PageContainer>
       <Container maxWidth="sm">
-        <Box sx={{ mb: 3, textAlign: "left" }}>
-          <BackButton startIcon={<ArrowBack />} onClick={handleBackToHome}>
-            홈으로 돌아가기
-          </BackButton>
-        </Box>
-
-        <Box sx={{ textAlign: "center", mb: 4 }}>
-          <LogoContainer>
-            <img
-              src={LogoVer1}
-              alt="AIary Logo"
-              style={{
-                width: "60px",
-                height: "60px",
-                objectFit: "contain",
-              }}
-            />
-          </LogoContainer>
-        </Box>
-
         <FormContainer elevation={8}>
           <FormTitle variant="h4" component="h2">
             새로운 여정을 시작하세요
@@ -241,32 +216,12 @@ export default RegisterPage;
 
 // 스타일드 컴포넌트들
 const PageContainer = styled(Box)({
-  minHeight: "100vh",
+  minHeight: "calc(100dvh - 70px)",
   background: "linear-gradient(135deg, #f8fffe 0%, #e8f5e8 100%)",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
   padding: "32px 0",
-});
-
-const BackButton = styled(Button)({
-  color: "var(--app-chart-1)",
-  "&:hover": {
-    backgroundColor: "rgba(96, 175, 160, 0.1)",
-  },
-});
-
-const LogoContainer = styled(Box)({
-  display: "inline-flex",
-  alignItems: "center",
-  justifyContent: "center",
-  width: 80,
-  height: 80,
-  borderRadius: "50%",
-  backgroundColor: "white",
-  marginBottom: 16,
-  boxShadow: "0 4px 20px rgba(96, 175, 160, 0.3)",
-  border: "2px solid var(--app-chart-1)",
 });
 
 const FormContainer = styled(Paper)({
