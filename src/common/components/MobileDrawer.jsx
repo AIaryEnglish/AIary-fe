@@ -66,7 +66,6 @@ const MobileDrawer = ({
             </DrawerListItem>
           ))}
 
-          {/* 모바일에서만 보이는 로그인/로그아웃 버튼 */}
           <DrawerAuthSection>
             <DrawerAuthButton
               variant={isLoggedIn ? "outlined" : "contained"}
@@ -91,7 +90,8 @@ const MobileDrawer = ({
   );
 };
 
-// 스타일드 컴포넌트들
+export default MobileDrawer;
+
 const StyledDrawer = styled(Drawer)({
   display: { xs: "block" },
   "& .MuiDrawer-paper": {
@@ -159,5 +159,3 @@ const DrawerSignupButton = styled(Button)({
     backgroundColor: "rgba(96, 175, 160, 0.05)",
   },
 });
-
-export default MobileDrawer;

@@ -41,7 +41,7 @@ const Header = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
-      setIsScrolled(scrollTop > 10); // 10px 이상 스크롤 시 효과 적용
+      setIsScrolled(scrollTop > 10);
     };
 
     window.addEventListener("scroll", handleScroll);
