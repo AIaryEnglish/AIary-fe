@@ -15,6 +15,7 @@ import { Visibility, VisibilityOff, ArrowBack } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import useLoginWithEmail from "../../hooks/useLoginWithEmail";
+import useLoginWithGoogle from "../../hooks/useLoginWithGoogle";
 import LogoVer1 from "../../assets/logo_ver1.svg";
 import { useAuthStore } from "../../stores/authStore";
 import { GoogleLogin } from "@react-oauth/google";
@@ -27,6 +28,7 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const { mutate: loginWithEmail } = useLoginWithEmail();
+  const { mutate: loginWithGoogle } = useLoginWithGoogle();
   const navigate = useNavigate();
 
   const { user } = useAuthStore();
@@ -83,8 +85,10 @@ const LoginPage = () => {
     navigate("/");
   };
 
-  const handleGoogleLogin = async (credentialResponse) => {
-    console.log("?credentialResponse", credentialResponse);
+  const handleGoogleLogin = async (googleData) => {
+    loginWithGoogle({
+      token: googleData.credential,
+    });
   };
 
   const handleGoogleLoginError = (error) => {
