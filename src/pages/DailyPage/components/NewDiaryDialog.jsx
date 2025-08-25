@@ -27,6 +27,10 @@ const NewDiaryDialog = ({ mode, open, onClose }) => {
 
   const [formData, setFormData] = useState({ ...InitialFormData });
 
+  useEffect(() => {
+    setFormData((prev) => ({ ...prev, date: selectedDate.toDate() }));
+  }, [selectedDate]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     // 저장 로직 추가 가능
