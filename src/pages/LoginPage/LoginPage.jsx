@@ -19,6 +19,7 @@ import useLoginWithGoogle from "../../hooks/useLoginWithGoogle";
 import LogoVer1 from "../../assets/logo_ver1.svg";
 import { useAuthStore } from "../../stores/authStore";
 import { GoogleLogin } from "@react-oauth/google";
+import useSnackbarStore from "../../stores/useSnackbarStore";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -30,7 +31,7 @@ const LoginPage = () => {
   const { mutate: loginWithEmail } = useLoginWithEmail();
   const { mutate: loginWithGoogle } = useLoginWithGoogle();
   const navigate = useNavigate();
-
+  const { showError } = useSnackbarStore();
   const { user } = useAuthStore();
 
   useEffect(() => {
@@ -93,7 +94,7 @@ const LoginPage = () => {
 
   const handleGoogleLoginError = (error) => {
     console.error("Google 로그인 실패:", error);
-    alert("Google 로그인에 실패했습니다. 다시 시도해주세요.");
+    showError("Google 로그인에 실패했습니다. 다시 시도해주세요.");
   };
 
   return (
