@@ -1,12 +1,23 @@
-import React, { useState } from "react";
+import { useMemo, useState } from "react";
 import NewDiaryDialog from "./NewDiaryDialog";
-import { Card, CardContent, Typography, Box, Button } from "@mui/material";
+import { Card, CardContent, Typography, Button, styled } from "@mui/material";
 import useDiaryStore from "../../../stores/useDiaryStore";
 import dayjs from "dayjs";
+import useReadDailyDiary from "../../../hooks/useReadDailyDiary";
 
 const DiaryBox = () => {
-  const { selectedDate, setSelectedDate, diaries } = useDiaryStore();
+  const { selectedDate, diariesByDate } = useDiaryStore();
   const [openDialog, setOpenDialog] = useState(false);
+  const [mode, setMode] = useState("new");
+
+  const dateKey = useMemo(
+    () => selectedDate.format("YYYY-MM-DD"),
+    [selectedDate]
+  );
+
+  const { isFetching: isFetchingDiary } = useReadDailyDiary({ date: dateKey });
+
+  const diary = diariesByDate[dateKey] || null;
 
   const formatDate = (date) => {
     return new Intl.DateTimeFormat("en-US", {
@@ -17,17 +28,27 @@ const DiaryBox = () => {
     }).format(date.toDate());
   };
 
-  const handleCloseDialog = () => setOpenDialog(false);
-
-  const dateKey = selectedDate.format("YYYY-MM-DD");
-  const diary = diaries[dateKey];
-
   const today = dayjs().startOf("day");
   const target = selectedDate.startOf("day");
-  const dayDiff = today.diff(target, "day"); // 0,1,2면 OK / 음수면 미래 / 3이상이면 오래전
+  const dayDiff = today.diff(target, "day"); // 0~2만 작성 가능
   const isWritableDay = dayDiff >= 0 && dayDiff <= 2;
-
   const canCreate = !diary && isWritableDay;
+  const canEdit = diary;
+
+  const openEditForm = (diary) => {
+    //edit모드로 설정하고
+    setMode("edit");
+    // 아이템 수정다이얼로그 열어주기
+    // dispatch(setSelectedProduct(product));
+    setOpenDialog(true);
+  };
+
+  const openAddForm = () => {
+    //new 모드로 설정하고
+    setMode("new");
+    // 다이얼로그 열어주기
+    setOpenDialog(true);
+  };
 
   return (
     <>
@@ -50,23 +71,40 @@ const DiaryBox = () => {
             flexGrow: 1,
           }}
         >
-          <Typography variant="h5" gutterBottom>
-            Diary for {formatDate(selectedDate)}
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            {diary ? diary.content : "No Diary for this date yet."}
-          </Typography>
+          <DiaryDate>Diary for {formatDate(selectedDate)}</DiaryDate>
+
+          {isFetchingDiary ? (
+            <Typography variant="body1" color="text.secondary">
+              Loading...
+            </Typography>
+          ) : diary ? (
+            <>
+              <DiaryTitle>{diary.title}</DiaryTitle>
+              <DiaryContent variant="body1">{diary.content}</DiaryContent>
+            </>
+          ) : (
+            <Typography variant="body1" color="text.secondary">
+              No Diary for this date yet.
+            </Typography>
+          )}
+
           {canCreate && (
-            <Button onClick={() => setOpenDialog(true)} variant="contained">
+            <Button onClick={openAddForm} variant="contained">
               일기 작성하기
+            </Button>
+          )}
+          {canEdit && (
+            <Button onClick={openEditForm} variant="contained">
+              일기 수정하기
             </Button>
           )}
         </CardContent>
       </Card>
 
       <NewDiaryDialog
+        mode={mode}
         open={openDialog}
-        onClose={handleCloseDialog}
+        onClose={() => setOpenDialog(false)}
         selectedDate={selectedDate}
       />
     </>
@@ -74,3 +112,21 @@ const DiaryBox = () => {
 };
 
 export default DiaryBox;
+
+const DiaryDate = styled(Typography)(({ theme }) => ({
+  color: theme.palette.success.light,
+  fontWeight: 700,
+  fontSize: "25px",
+}));
+
+const DiaryTitle = styled(Typography)(({ theme }) => ({
+  marginTop: theme.spacing(1),
+  marginBottom: theme.spacing(1),
+  fontSize: "25px",
+}));
+
+const DiaryContent = styled(Typography)(({ theme }) => ({
+  color: theme.palette.text.primary,
+  lineHeight: 1.6,
+  whiteSpace: "pre-line", // 줄바꿈 유지
+}));
