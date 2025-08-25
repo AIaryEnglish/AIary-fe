@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import {
   Box,
@@ -6,7 +6,6 @@ import {
   CardContent,
   CardHeader,
   Container,
-  Typography,
   Divider,
 } from "@mui/material";
 
@@ -18,45 +17,25 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth"; // Calendar
 import TrendingUpIcon from "@mui/icons-material/TrendingUp"; // TrendingUp
 import EditNoteIcon from "@mui/icons-material/EditNote"; // Edit3
 
-import "./landing.style.css";
+import "./LandingPage.style.css";
+import useReadAllDiaries from "../../hooks/useReadAllDiaries";
+import dayjs from "dayjs";
+import "dayjs/locale/ko";
+import { useAuthStore } from "../../stores/authStore";
+dayjs.locale("ko");
 
 export default function LandingPage() {
-  const [diaryEntries, setDiaryEntries] = useState([]);
+  const { data, isLoading, isError } = useReadAllDiaries();
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn)();
 
-  useEffect(() => {
-    const stored = localStorage.getItem("diary-entries");
-    if (stored) setDiaryEntries(JSON.parse(stored));
-  }, []);
+  // 페이지들을 평탄화 → [{_id,title,content,createdAt,author}, ...]
+  const allDiaries = useMemo(() => {
+    if (!data) return [];
+    return data.pages.flatMap((p) => p.diaries ?? []);
+  }, [data]);
 
-  const sampleEntries = [
-    {
-      id: "sample-1",
-      date: "2024-01-15",
-      title: "My First English Diary",
-      content:
-        "Today I started writing in English. It feels challenging but exciting. I learned new words like 'perseverance' and 'determination'. Writing helps me practice expressing my thoughts in English...",
-      vocabularyCount: 5,
-    },
-    {
-      id: "sample-2",
-      date: "2024-01-14",
-      title: "Weekend Adventures",
-      content:
-        "I went to the park with my friends. We had a picnic and played frisbee. I practiced describing the beautiful scenery in English. The weather was perfect for outdoor activities...",
-      vocabularyCount: 8,
-    },
-    {
-      id: "sample-3",
-      date: "2024-01-13",
-      title: "Learning Journey",
-      content:
-        "Every day brings new opportunities to improve my English. Today I watched an English movie without subtitles and understood most of it. I'm proud of my progress...",
-      vocabularyCount: 6,
-    },
-  ];
-
-  const displayEntries =
-    diaryEntries.length > 0 ? diaryEntries.slice(0, 3) : sampleEntries;
+  // 랜딩에서는 최신 3개만 노출
+  const displayEntries = allDiaries.slice(0, 3);
 
   return (
     <Box className="landing-root">
@@ -153,52 +132,72 @@ export default function LandingPage() {
             </p>
           </Box>
 
-          <div className="cards-container">
-            {displayEntries.map((entry) => (
-              <div key={entry.id}>
-                <div className="card hoverlift">
-                  <CardHeader
-                    title={
-                      <div>
-                        <div className="entry-meta">
-                          <Typography className="entry-date">
-                            {new Date(entry.date).toLocaleDateString("ko-KR", {
-                              month: "long",
-                              day: "numeric",
-                            })}
-                          </Typography>
-                          <div className="entry-vocab">
-                            <TrackChangesIcon style={{ fontSize: 14 }} />
-                            <span>{entry.vocabularyCount}개 단어</span>
+          {isLoading ? (
+            <p className="section-sub">불러오는 중…</p>
+          ) : isError ? (
+            <p className="section-sub">
+              일기를 불러오지 못했어요. 잠시 후 다시 시도해 주세요.
+            </p>
+          ) : (
+            <div className="cards-container">
+              {displayEntries.length > 0 &&
+                displayEntries.map((entry) => {
+                  const id = entry._id ?? entry.id;
+                  const dateForDisplay =
+                    entry.dateKey ?? entry.date ?? entry.createdAt;
+
+                  const formattedDate = entry.dateKey
+                    ? dayjs(entry.dateKey, "YYYY-MM-DD").format("M월 D일 dddd")
+                    : dayjs(dateForDisplay).format("M월 D일 dddd");
+
+                  const title = entry.title;
+                  const content = entry.content;
+                  const authorName = entry.author?.name ?? "익명";
+
+                  return (
+                    <div key={id}>
+                      <div className="card feed-card hoverlift">
+                        <CardHeader
+                          title={
+                            <div className="entry-head">
+                              {/* 제목만 표시 (날짜는 아래로 이동) */}
+                              <p className="entry-title line-clamp-1">
+                                {title}
+                              </p>
+                            </div>
+                          }
+                        />
+                        <CardContent className="card-body">
+                          <p className="entry-content line-clamp-3">
+                            {content}
+                          </p>
+
+                          {/* 날짜 + 작성자: Divider 바로 위, 우측 하단 */}
+                          <div className="entry-meta-bottom">
+                            <span className="date">{formattedDate}</span>
+                            <span className="sep">|</span>
+                            <span className="author" title={authorName}>
+                              {authorName}
+                            </span>
                           </div>
-                        </div>
-                        <p className="entry-title line-clamp-1">
-                          {entry.title}
-                        </p>
+
+                          <Divider className="entry-divider" />
+                          <Button
+                            component={RouterLink}
+                            to={`/entry/${id}`}
+                            variant="outlined"
+                            fullWidth
+                            className="btn-outline subtle"
+                          >
+                            전체 읽기
+                          </Button>
+                        </CardContent>
                       </div>
-                    }
-                  />
-                  <CardContent>
-                    <p className="entry-content line-clamp-3">
-                      {entry.content}
-                    </p>
-
-                    <Divider style={{ margin: "16px 0" }} />
-
-                    <Button
-                      component={RouterLink}
-                      to={`/entry/${entry.id}`}
-                      variant="outlined"
-                      fullWidth
-                      className="btn-outline subtle"
-                    >
-                      전체 읽기
-                    </Button>
-                  </CardContent>
-                </div>
-              </div>
-            ))}
-          </div>
+                    </div>
+                  );
+                })}
+            </div>
+          )}
 
           <Box className="feed-cta">
             <Button
@@ -225,19 +224,21 @@ export default function LandingPage() {
       </Box>
 
       {/* 하단 플로팅 버튼 */}
-      <Box className="floating-write-btn">
-        <Button
-          component={RouterLink}
-          to="/register"
-          size="large"
-          variant="contained"
-          className="btn-accent round"
-          startIcon={<EditNoteIcon fontSize="small" />}
-          sx={{ textTransform: "none" }}
-        >
-          Aiary 시작하기
-        </Button>
-      </Box>
+      {!isLoggedIn && (
+        <Box className="floating-write-btn">
+          <Button
+            component={RouterLink}
+            to="/register"
+            size="large"
+            variant="contained"
+            className="btn-accent round"
+            startIcon={<EditNoteIcon fontSize="small" />}
+            sx={{ textTransform: "none" }}
+          >
+            Aiary 시작하기
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 }
