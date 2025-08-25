@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { getVocabList, toggleVocabStatus, deleteVocab } from "../apis/vocabApi";
 
-const useVocab = (diaryId) => {
+const useVocab = () => {
   const [vocabList, setVocabList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [filter, setFilter] = useState("All"); //All, mastered, learning
@@ -10,14 +10,13 @@ const useVocab = (diaryId) => {
 
   // 초기 vocab 불러오기
   useEffect(() => {
-    if (!diaryId) return; // diaryId 없으면 fetch 안함
-    getVocabList(diaryId)
+    getVocabList()
       .then((data) => {
         setVocabList(data);
         setFilteredList(data);
       })
       .catch(console.error);
-  }, [diaryId]);
+  }, []);
 
   // 필터 및 검색 적용
   useEffect(() => {
@@ -45,7 +44,7 @@ const useVocab = (diaryId) => {
         prev.map((v) => (v._id === id ? { ...v, status: updated.status } : v))
       );
     } catch (err) {
-      console.error("Toggle failed:", err);
+      console.error("상태변경 실패:", err);
     }
   };
 
@@ -54,7 +53,7 @@ const useVocab = (diaryId) => {
       await deleteVocab(id);
       setVocabList((prev) => prev.filter((v) => v._id !== id));
     } catch (err) {
-      console.error("Delete failed:", err);
+      console.error("삭제 실패:", err);
     }
   };
 

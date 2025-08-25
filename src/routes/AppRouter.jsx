@@ -14,7 +14,6 @@ const AppRouter = () => {
       <Route path="/register" element={<Register />} />
       <Route element={<PrivateRoute />}></Route>
       <Route path="/vocab" element={<Vocab />} />
-      <Route path="/vocab/:diaryId" element={<Vocab />} />
       <Route path="/daily" element={<Daily />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

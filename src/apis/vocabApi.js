@@ -1,15 +1,22 @@
 import api from "../util/api";
 
-// 다이어리 ID로 vocab 리스트 가져오기
-export const getVocabList = async (diaryId) => {
-  const response = await api.get(`/vocab/${diaryId}`);
+console.log("Token sent:", sessionStorage.getItem("token"));
+
+//로그인 후 vocab 리스트 가져오기
+export const getVocabList = async () => {
+  const response = await api.get("/vocab");
   return response.data;
 };
 
 // 단어 상태 토글
 export const toggleVocabStatus = async (id) => {
-  const response = await api.post(`/vocab/${id}`);
-  return response.data;
+  try {
+    const response = await api.post(`/vocab/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("단어 상태 변경 실패:", error);
+    throw error;
+  }
 };
 
 // 단어 삭제
