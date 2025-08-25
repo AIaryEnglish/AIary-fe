@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { readUserDiaryByDate } from "../apis/diaryApi";
+import { getUserDiaryByDate } from "../apis/diaryApi";
 import useDiaryStore from "../stores/useDiaryStore";
 import { useEffect } from "react";
 
@@ -8,7 +8,7 @@ const useReadDailyDiary = ({ date }) => {
 
   const query = useQuery({
     queryKey: ["myDailyDiary", date],
-    queryFn: () => readUserDiaryByDate({ date }),
+    queryFn: () => getUserDiaryByDate({ date }),
     enabled: !!date,
     staleTime: 30_000,
   });

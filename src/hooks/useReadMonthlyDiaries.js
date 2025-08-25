@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { readUserDiariesByMonth } from "../apis/diaryApi";
+import { getUserDiariesByMonth } from "../apis/diaryApi";
 import useDiaryStore from "../stores/useDiaryStore";
 import { useEffect } from "react";
 
@@ -8,7 +8,7 @@ const useReadMonthlyDiaries = ({ year, month }) => {
 
   const query = useQuery({
     queryKey: ["myMonthlyDiaries", year, month],
-    queryFn: () => readUserDiariesByMonth({ year, month }),
+    queryFn: () => getUserDiariesByMonth({ year, month }),
     enabled: Number.isInteger(year) && Number.isInteger(month),
     staleTime: 1000 * 60, // 1분 캐싱
     placeholderData: (prev) => prev,

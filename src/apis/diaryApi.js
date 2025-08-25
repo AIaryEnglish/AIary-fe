@@ -1,6 +1,6 @@
 import api from "../util/api";
 
-export const readAllDiaries = async ({ lastId }) => {
+export const getAllDiaries = async ({ lastId }) => {
   const path = "/diary";
   try {
     const response = await api.get(path, {
@@ -8,29 +8,29 @@ export const readAllDiaries = async ({ lastId }) => {
     });
     return response.data;
   } catch (error) {
-    console.error("readAllDiaries API 에러:", error);
+    console.error("getAllDiaries API 에러:", error);
     throw error;
   }
 };
 
-export const readUserDiariesByMonth = async ({ year, month }) => {
+export const getUserDiariesByMonth = async ({ year, month }) => {
   const path = "/diary/my/month";
   try {
     const response = await api.get(path, { params: { year, month } });
     return response.data;
   } catch (error) {
-    console.error("readUserDiariesByMonth API 에러:", error);
+    console.error("getUserDiariesByMonth API 에러:", error);
     throw error;
   }
 };
 
-export const readUserDiaryByDate = async ({ date }) => {
+export const getUserDiaryByDate = async ({ date }) => {
   const path = "/diary/my/date";
   try {
     const response = await api.get(path, { params: { date } });
     return response.data;
   } catch (error) {
-    console.error("readUserDiaryByDate API 에러:", error);
+    console.error("getUserDiaryByDate API 에러:", error);
     throw error;
   }
 };

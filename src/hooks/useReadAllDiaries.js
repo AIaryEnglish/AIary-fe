@@ -1,10 +1,10 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { readAllDiaries } from "../apis/diaryApi";
+import { getAllDiaries } from "../apis/diaryApi";
 
 const useReadAllDiaries = () => {
   return useInfiniteQuery({
     queryKey: ["allDiaries"],
-    queryFn: ({ pageParam }) => readAllDiaries({ lastId: pageParam ?? null }),
+    queryFn: ({ pageParam }) => getAllDiaries({ lastId: pageParam ?? null }),
     initialPageParam: null,
     getNextPageParam: (lastPage) => lastPage?.nextLastId ?? null,
     staleTime: 60_000,
