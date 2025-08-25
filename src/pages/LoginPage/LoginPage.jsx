@@ -16,7 +16,6 @@ import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import useLoginWithEmail from "../../hooks/useLoginWithEmail";
 import useLoginWithGoogle from "../../hooks/useLoginWithGoogle";
-import LogoVer1 from "../../assets/logo_ver1.svg";
 import { useAuthStore } from "../../stores/authStore";
 import { GoogleLogin } from "@react-oauth/google";
 import useSnackbarStore from "../../stores/useSnackbarStore";
@@ -82,10 +81,6 @@ const LoginPage = () => {
     });
   };
 
-  const handleBackToHome = () => {
-    navigate("/");
-  };
-
   const handleGoogleLogin = async (googleData) => {
     loginWithGoogle({
       token: googleData.credential,
@@ -100,28 +95,6 @@ const LoginPage = () => {
   return (
     <PageContainer>
       <Container maxWidth="sm">
-        {/* 뒤로가기 버튼 */}
-        <Box sx={{ mb: 3, textAlign: "left" }}>
-          <BackButton startIcon={<ArrowBack />} onClick={handleBackToHome}>
-            홈으로 돌아가기
-          </BackButton>
-        </Box>
-
-        {/* 로고 및 제목 */}
-        <Box sx={{ textAlign: "center", mb: 4 }}>
-          <LogoContainer>
-            <img
-              src={LogoVer1}
-              alt="AIary Logo"
-              style={{
-                width: "60px",
-                height: "60px",
-                objectFit: "contain",
-              }}
-            />
-          </LogoContainer>
-        </Box>
-
         {/* 로그인 폼 */}
         <FormContainer elevation={8}>
           <FormTitle variant="h4" component="h2">
@@ -219,32 +192,13 @@ export default LoginPage;
 
 // 스타일드 컴포넌트들
 const PageContainer = styled(Box)({
-  minHeight: "100vh",
+  minHeight: "calc(100dvh - 70px)",
   background: "linear-gradient(135deg, #f8fffe 0%, #e8f5e8 100%)",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
   padding: "32px 0",
-});
-
-const BackButton = styled(Button)({
-  color: "var(--app-chart-1)",
-  "&:hover": {
-    backgroundColor: "rgba(96, 175, 160, 0.1)",
-  },
-});
-
-const LogoContainer = styled(Box)({
-  display: "inline-flex",
-  alignItems: "center",
-  justifyContent: "center",
-  width: 80,
-  height: 80,
-  borderRadius: "50%",
-  backgroundColor: "white",
-  marginBottom: 16,
-  boxShadow: "0 4px 20px rgba(96, 175, 160, 0.3)",
-  border: "2px solid var(--app-chart-1)",
+  marginTop: 0,
 });
 
 const FormContainer = styled(Paper)({

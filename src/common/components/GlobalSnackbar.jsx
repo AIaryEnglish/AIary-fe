@@ -14,7 +14,7 @@ const GlobalSnackbar = () => {
       anchorOrigin={{ vertical: "top", horizontal: "right" }}
       sx={{
         zIndex: 9000,
-        marginTop: { xs: "6.4rem", md: "5rem" },
+        marginTop: { xs: "6.4rem", md: "4rem" },
       }}
     >
       <Alert onClose={hideSnackbar} severity={severity} sx={{ width: "100%" }}>
