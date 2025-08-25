@@ -1,15 +1,13 @@
 import { create } from "zustand";
 import dayjs from "dayjs";
+import { createDiaryApi } from "../apis/diaryApi";
 
 const useDiaryStore = create((set) => ({
   selectedDate: dayjs(),
   diaries: [],
 
   setSelectedDate: (date) => set({ selectedDate: date }),
-  addDiary: (date, title, content, image, isPublic) =>
-    set((state) => ({
-      diaries: [...state.diaries, { date, title, content, image, isPublic }],
-    })),
+  setDiaries: (diary) => set((state) => ({ diaries: [...state.diaries, diary] })),
 }));
 
 export default useDiaryStore;
