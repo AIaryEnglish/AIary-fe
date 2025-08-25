@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 const DiaryBox = () => {
   const { selectedDate, setSelectedDate, diaries } = useDiaryStore();
   const [openDialog, setOpenDialog] = useState(false);
+  const [mode, setMode] = useState("new");
 
   const formatDate = (date) => {
     return new Intl.DateTimeFormat("en-US", {
@@ -28,6 +29,21 @@ const DiaryBox = () => {
   const isWritableDay = dayDiff >= 0 && dayDiff <= 2;
 
   const canCreate = !diary && isWritableDay;
+
+  const openEditForm = (diary) => {
+    //edit모드로 설정하고
+    setMode("edit");
+    // 아이템 수정다이얼로그 열어주기
+    // dispatch(setSelectedProduct(product));
+    setOpenDialog(true);
+  };
+
+  const openAddForm = () => {
+    //new 모드로 설정하고
+    setMode("new");
+    // 다이얼로그 열어주기
+    setOpenDialog(true);
+  };
 
   return (
     <>
@@ -56,18 +72,22 @@ const DiaryBox = () => {
           <Typography variant="body1" color="text.secondary">
             {diary ? diary.content : "No Diary for this date yet."}
           </Typography>
-          {canCreate && (
-            <Button onClick={() => setOpenDialog(true)} variant="contained">
+          {canCreate ? (
+            <Button onClick={openAddForm} variant="contained">
               일기 작성하기
+            </Button>
+          ) : (
+            <Button onClick={openEditForm} variant="contained">
+              일기 수정하기
             </Button>
           )}
         </CardContent>
       </Card>
 
       <NewDiaryDialog
+        mode={mode}
         open={openDialog}
         onClose={handleCloseDialog}
-        selectedDate={selectedDate}
       />
     </>
   );
