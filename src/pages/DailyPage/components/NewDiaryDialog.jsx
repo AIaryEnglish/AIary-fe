@@ -14,9 +14,8 @@ import useDiaryStore from "../../../stores/useDiaryStore";
 import { useCreateDiary } from "../../../hooks/useCreateDiary";
 
 const NewDiaryDialog = ({ mode, open, onClose }) => {
-
   const { selectedDate, setDiaries } = useDiaryStore();
-  const { mutate: createDiary, isLoading, error } = useCreateDiary();
+  const { mutate: createDiary, isPending } = useCreateDiary();
 
   const InitialFormData = {
     title: "",
@@ -28,18 +27,14 @@ const NewDiaryDialog = ({ mode, open, onClose }) => {
 
   const [formData, setFormData] = useState({ ...InitialFormData });
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // 저장 로직 추가 가능
     if (mode !== "new") return;
     createDiary(formData, {
-      onSuccess: (result) => {
-        setDiaries(result.diary);  // zustand 상태 업데이트
+      onSuccess: () => {
         setFormData(InitialFormData);
         onClose();
-      },
-      onError: (err) => {
-        alert("일기 저장 중 오류 발생: " + err.message);
       },
     });
   };
@@ -60,9 +55,7 @@ const NewDiaryDialog = ({ mode, open, onClose }) => {
     setFormData((prev) => ({ ...prev, image: url }));
   };
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
-
+  if (isPending) return <p>Loading...</p>; // 로딩 스피너로 바꿀 예정
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
