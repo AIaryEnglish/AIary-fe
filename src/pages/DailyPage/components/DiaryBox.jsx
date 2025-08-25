@@ -8,6 +8,7 @@ import useReadDailyDiary from "../../../hooks/useReadDailyDiary";
 const DiaryBox = () => {
   const { selectedDate, diariesByDate } = useDiaryStore();
   const [openDialog, setOpenDialog] = useState(false);
+  const [mode, setMode] = useState("new");
 
   const dateKey = useMemo(
     () => selectedDate.format("YYYY-MM-DD"),
@@ -32,6 +33,22 @@ const DiaryBox = () => {
   const dayDiff = today.diff(target, "day"); // 0~2만 작성 가능
   const isWritableDay = dayDiff >= 0 && dayDiff <= 2;
   const canCreate = !diary && isWritableDay;
+  const canEdit = diary;
+
+  const openEditForm = (diary) => {
+    //edit모드로 설정하고
+    setMode("edit");
+    // 아이템 수정다이얼로그 열어주기
+    // dispatch(setSelectedProduct(product));
+    setOpenDialog(true);
+  };
+
+  const openAddForm = () => {
+    //new 모드로 설정하고
+    setMode("new");
+    // 다이얼로그 열어주기
+    setOpenDialog(true);
+  };
 
   return (
     <>
@@ -72,14 +89,20 @@ const DiaryBox = () => {
           )}
 
           {canCreate && (
-            <Button onClick={() => setOpenDialog(true)} variant="contained">
+            <Button onClick={openAddForm} variant="contained">
               일기 작성하기
+            </Button>
+          )}
+          {canEdit && (
+            <Button onClick={openEditForm} variant="contained">
+              일기 수정하기
             </Button>
           )}
         </CardContent>
       </Card>
 
       <NewDiaryDialog
+        mode={mode}
         open={openDialog}
         onClose={() => setOpenDialog(false)}
         selectedDate={selectedDate}

@@ -24,6 +24,8 @@ const useDiaryStore = create((set) => ({
     set((state) => ({
       diariesByDate: { ...state.diariesByDate, [dateKey]: diary },
     })),
+  setDiaries: (diary) =>
+    set((state) => ({ diaries: [...state.diaries, diary] })),
 }));
 
 export default useDiaryStore;
