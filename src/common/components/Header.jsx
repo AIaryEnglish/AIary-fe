@@ -37,7 +37,6 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // 스크롤 이벤트 감지
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
