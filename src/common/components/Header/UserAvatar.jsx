@@ -2,7 +2,7 @@ import React from "react";
 import { Avatar, Tooltip } from "@mui/material";
 import { Person as PersonIcon } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
-import { useAuthStore } from "../../stores/authStore";
+import { useAuthStore } from "../../../stores/authStore";
 
 const UserAvatar = ({ size = 30, showTooltip = true }) => {
   const { user } = useAuthStore();

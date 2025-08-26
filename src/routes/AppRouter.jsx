@@ -5,7 +5,7 @@ import Register from "../pages/RegisterPage/RegisterPage";
 import Daily from "../pages/DailyPage/DailyPage";
 import Vocab from "../pages/VocabPage/VocabPage";
 import PrivateRoute from "./PrivateRoute";
-import Header from "../common/components/Header";
+import Header from "../common/components/Header/Header";
 
 const AppRouter = () => {
   return (
