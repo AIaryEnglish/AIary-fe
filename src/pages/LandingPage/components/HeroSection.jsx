@@ -8,7 +8,7 @@ import EditNoteIcon from "@mui/icons-material/EditNote";
 import { useAuthStore } from "../../../stores/authStore";
 
 export default function HeroSection() {
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn)();
+  const isLoggedIn = useAuthStore((s) => s.isAuthed());
 
   return (
     <Box className="hero">

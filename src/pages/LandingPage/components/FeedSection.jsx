@@ -13,7 +13,7 @@ import { useAuthStore } from "../../../stores/authStore";
 dayjs.locale("ko");
 
 export default function FeedSection({ entries = [], isLoading, isError }) {
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn)();
+  const isLoggedIn = useAuthStore((s) => s.isAuthed());
 
   return (
     <Box className="feed">
