@@ -2,7 +2,7 @@ import React from "react";
 import "../VocabPage.style.css";
 import SearchIcon from "@mui/icons-material/Search";
 
-const VocabBodySearch = ({ setFilter, setSearchQuery }) => {
+const VocabBodySearch = ({ setSelectedStatus, setSearchQuery }) => {
   return (
     <div className="white-card-long">
       <div className="search-input-place">
@@ -15,13 +15,22 @@ const VocabBodySearch = ({ setFilter, setSearchQuery }) => {
         />
       </div>
       <div className="word-button">
-        <button className="white-button" onClick={() => setFilter("All")}>
+        <button
+          className="white-button"
+          onClick={() => setSelectedStatus("All")}
+        >
           All
         </button>
-        <button className="white-button" onClick={() => setFilter("mastered")}>
+        <button
+          className="white-button"
+          onClick={() => setSelectedStatus("mastered")}
+        >
           Mastered
         </button>
-        <button className="white-button" onClick={() => setFilter("learning")}>
+        <button
+          className="white-button"
+          onClick={() => setSelectedStatus("learning")}
+        >
           Learning
         </button>
       </div>

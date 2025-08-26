@@ -13,11 +13,11 @@ import "./VocabPage.style.css";
 const VocabPage = () => {
   //단어목록, 상태변화 훅들 불러오기
   const { vocabList, setVocabList } = useReadVocab();
-  const { handleToggleStatus } = useUpdateVocab(setVocabList);
-  const { handleDelete } = useDeleteVocab(setVocabList);
+  const toggleStatusMutation = useUpdateVocab(setVocabList);
+  const deleteMutation = useDeleteVocab(setVocabList);
 
   // 필터, 검색 상태 전용
-  const [filter, setFilter] = useState("All");
+  const [selectedStatus, setSelectedStatus] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredList, setFilteredList] = useState([]);
 
@@ -25,9 +25,9 @@ const VocabPage = () => {
   useEffect(() => {
     let filtered = vocabList;
 
-    if (filter !== "All") {
+    if (selectedStatus !== "All") {
       filtered = filtered.filter(
-        (v) => v.status.toLowerCase() === filter.toLowerCase()
+        (v) => v.status.toLowerCase() === selectedStatus.toLowerCase()
       );
     }
 
@@ -38,23 +38,26 @@ const VocabPage = () => {
     }
 
     setFilteredList(filtered);
-  }, [filter, searchQuery, vocabList]);
+  }, [selectedStatus, searchQuery, vocabList]);
 
   return (
     <div>
       <VocabHeader setVocabList={() => {}} />
       <div className="voca-page voca-color">
-        <VocabBodyProgress vocabList={vocabList} setFilter={setFilter} />
+        <VocabBodyProgress
+          vocabList={vocabList}
+          setSelectedStatus={setSelectedStatus}
+        />
         <VocabBodySearch
-          setFilter={setFilter}
+          setSelectedStatus={setSelectedStatus}
           setSearchQuery={setSearchQuery}
         />
         {filteredList.map((vocab) => (
           <VocabBodyWord
             key={vocab._id}
             vocab={vocab}
-            onToggleStatus={handleToggleStatus}
-            onDelete={handleDelete}
+            onToggleStatus={() => toggleStatusMutation.mutate(vocab._id)}
+            onDelete={() => deleteMutation.mutate(vocab._id)}
           />
         ))}
       </div>

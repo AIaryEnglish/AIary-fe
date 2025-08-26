@@ -28,7 +28,7 @@ export const toggleVocabStatus = async (id) => {
 export const deleteVocab = async (id) => {
   try {
     const response = await api.delete(`/vocab/${id}`);
-    return response.data;
+    return response.data.id;
   } catch (error) {
     console.error("단어 상태 변경 실패:", error);
     throw error;

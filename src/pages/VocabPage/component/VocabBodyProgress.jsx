@@ -1,7 +1,7 @@
 import React from "react";
 import "../VocabPage.style.css";
 
-const VocabBodyProgress = ({ vocabList, setFilter }) => {
+const VocabBodyProgress = ({ vocabList, setSelectedStatus }) => {
   const totalWord = vocabList.length;
   const masteredWord = vocabList.filter((v) => v.status === "mastered").length;
   const learningWord = vocabList.filter((v) => v.status === "learning").length;
@@ -9,15 +9,15 @@ const VocabBodyProgress = ({ vocabList, setFilter }) => {
 
   return (
     <div className="voca-body-progress">
-      <div className="white-card" onClick={() => setFilter("All")}>
+      <div className="white-card" onClick={() => setSelectedStatus("All")}>
         <span className="voca-black-bold">{totalWord}</span>
         Total Words
       </div>
-      <div className="white-card" onClick={() => setFilter("mastered")}>
+      <div className="white-card" onClick={() => setSelectedStatus("mastered")}>
         <span className="voca-green-bold">{masteredWord}</span>
         Mastered
       </div>
-      <div className="white-card" onClick={() => setFilter("learning")}>
+      <div className="white-card" onClick={() => setSelectedStatus("learning")}>
         <span className="voca-red-bold">{learningWord}</span>Learning
       </div>
       <div className="white-card progress">
