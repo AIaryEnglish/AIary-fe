@@ -50,16 +50,21 @@ const DiaryBox = () => {
     <>
       <Card
         sx={{
-          width: { xs: "100%", md: diary ? 560 : 700 },
-          minHeight: 450,
-          maxHeight: 450,
+          width: 1,
+          alignSelf: { xs: "stretch", md: "auto" },
+          maxWidth: { xs: "none", md: "unset" },
+          height: 430,
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
+          justifyContent: "flex-start",
           textAlign: "center",
           p: 2,
-          mt: 4,
-          mx: { md: diary ? 0 : "auto" },
+          mt: 0,
+          mx: { xs: 0, md: diary ? 0 : "auto" },
+          boxShadow: 4,
+          borderRadius: 3,
+          border: "1px solid",
+          borderColor: "success.light",
         }}
       >
         <CardContent
