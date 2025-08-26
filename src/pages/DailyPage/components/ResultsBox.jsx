@@ -39,7 +39,15 @@ const ResultsBox = ({ diary }) => {
           alignItems: "stretch",
         }}
       >
-        <Card sx={{ borderRadius: 3, boxShadow: 4, height: "100%" }}>
+        <Card
+          sx={{
+            borderRadius: 3,
+            boxShadow: 4,
+            border: "1px solid",
+            borderColor: "success.light",
+            height: "100%",
+          }}
+        >
           <CardContent
             sx={{
               maxHeight: { md: "calc(100vh - 220px)" },
