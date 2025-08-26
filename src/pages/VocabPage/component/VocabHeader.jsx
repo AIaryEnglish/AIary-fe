@@ -6,7 +6,7 @@ import "../VocabPage.style.css";
 
 const VocabHeader = () => {
   const navigate = useNavigate();
-  const handleBackToDairy = () => {
+  const handleBackToDiary = () => {
     navigate("/diary");
   };
 
@@ -22,7 +22,7 @@ const VocabHeader = () => {
 
   return (
     <div className="voca-header">
-      <button className="white-button" onClick={handleBackToDairy}>
+      <button className="white-button" onClick={handleBackToDiary}>
         <WestIcon sx={{ fontSize: 15 }} /> Back
       </button>
       <TrackChangesIcon className="voca-header-title" sx={{ fontSize: 30 }} />

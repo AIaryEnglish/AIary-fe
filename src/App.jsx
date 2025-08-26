@@ -7,8 +7,7 @@ import GlobalSnackbar from "./common/components/GlobalSnackbar";
 function App() {
   sessionStorage.setItem(
     "token",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YWJiNjFkMTVjOTc3ODk1YjJkZTQ3NSIsImlhdCI6MTc1NjA4Mzc0MSwiZXhwIjoxNzU2MDg3MzQxfQ.zxiB-SWuAPVzD6YLoExHnCvL31AtmtfzxhK1NpiPHoU"
-    //seed에서 나오는 유저아이디로 만든 토큰 사용
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YWQxOGE2YmZiZTYwZTA2YjljZGY4MCIsImlhdCI6MTc1NjE3NDUwMiwiZXhwIjoxNzU2MTc4MTAyfQ.wD5vsmpPR3HwMRkYtXmgu0tI4dxY5MueEq9073vuMcU"
   );
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
