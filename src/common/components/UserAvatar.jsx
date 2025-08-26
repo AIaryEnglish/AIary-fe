@@ -30,6 +30,8 @@ const UserAvatar = ({ size = 30, showTooltip = true }) => {
   return avatarContent;
 };
 
+export default UserAvatar;
+
 const StyledAvatar = styled(Avatar, {
   shouldForwardProp: (prop) => prop !== "size",
 })(({ size }) => ({
@@ -55,5 +57,3 @@ const StyledAvatar = styled(Avatar, {
     height: `${size * 0.6}px`,
   },
 }));
-
-export default UserAvatar;
