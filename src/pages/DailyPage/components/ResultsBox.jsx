@@ -35,7 +35,7 @@ const ResultsBox = ({ diary }) => {
         sx={{
           display: "grid",
           gridTemplateColumns: { xs: "1fr", md: "5fr 7fr" },
-          gap: { xs: 2, md: 1.5 },
+          gap: { xs: 2, md: 2 },
           alignItems: "stretch",
         }}
       >
@@ -84,8 +84,8 @@ const ResultsBox = ({ diary }) => {
             )}
 
             {corrections.length > 0 && (
-              <Box sx={{ mt: 2 }}>
-                <Divider sx={{ mb: 1 }} />
+              <>
+                <Divider sx={{ my: 1.5 }} />
                 <Typography
                   variant="h6"
                   fontWeight={700}
@@ -111,7 +111,7 @@ const ResultsBox = ({ diary }) => {
                     </ListItem>
                   ))}
                 </List>
-              </Box>
+              </>
             )}
           </CardContent>
         </Card>
