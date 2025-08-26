@@ -1,6 +1,14 @@
 import api from "../util/api";
 
-console.log("Token sent:", sessionStorage.getItem("token"));
+export const createVocab = async (vocab) => {
+  try {
+    const response = await api.post("/vocab", { vocab });
+    return response.data.vocab;
+  } catch (error) {
+    console.error("단어 불러오기 실패:", error);
+    throw error;
+  }
+};
 
 //로그인 후 vocab 리스트 가져오기
 export const getVocabList = async () => {

@@ -4,11 +4,14 @@ import { Card, CardContent, Typography, Button, styled } from "@mui/material";
 import useDiaryStore from "../../../stores/useDiaryStore";
 import dayjs from "dayjs";
 import useReadDailyDiary from "../../../hooks/useReadDailyDiary";
+import useCreateVocab from "../../../hooks/useCreateVocab";
 
 const DiaryBox = () => {
   const { selectedDate, diariesByDate } = useDiaryStore();
   const [openDialog, setOpenDialog] = useState(false);
   const [mode, setMode] = useState("new");
+  const { handleSelection, handleTouchStart, handleTouchEnd } =
+    useCreateVocab();
 
   const dateKey = useMemo(
     () => selectedDate.format("YYYY-MM-DD"),
@@ -84,7 +87,15 @@ const DiaryBox = () => {
           {diary ? (
             <>
               <DiaryTitle>{diary.title}</DiaryTitle>
-              <DiaryContent variant="body1">{diary.content}</DiaryContent>
+              <DiaryContent
+                variant="body1"
+                onMouseUp={() => handleSelection(diary)}
+                onTouchStart={() => handleTouchStart(diary)}
+                onTouchEnd={handleTouchEnd}
+                style={{ whiteSpace: "pre-wrap", lineHeight: "1.6" }}
+              >
+                {diary.content}
+              </DiaryContent>
             </>
           ) : (
             <Typography variant="body1" color="text.secondary">
