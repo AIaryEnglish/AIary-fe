@@ -12,6 +12,7 @@ import {
 import { Close as CloseIcon } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
 import UserAvatar from "./UserAvatar";
+import { useAuthStore } from "../../../stores/authStore";
 
 const MobileDrawer = ({
   open,
@@ -20,9 +21,10 @@ const MobileDrawer = ({
   isActiveMenu,
   handleNavigation,
   handleToggleLogin,
-  isLoggedIn,
-  user,
 }) => {
+  const { user } = useAuthStore();
+  const isLoggedIn = useAuthStore((s) => s.isAuthed());
+
   return (
     <StyledDrawer
       variant="temporary"
@@ -37,9 +39,11 @@ const MobileDrawer = ({
         <DrawerHeader>
           <UserContainer>
             <UserAvatar size={30} />
-            <Typography px={2} fontSize={16}>
-              {user?.name} 님
-            </Typography>
+            {user && (
+              <Typography px={2} fontSize={16}>
+                {user.name} 님
+              </Typography>
+            )}
           </UserContainer>
           <IconButton onClick={onClose}>
             <CloseIcon />
@@ -68,8 +72,10 @@ const MobileDrawer = ({
 
           <DrawerAuthSection>
             <DrawerAuthButton
-              variant={isLoggedIn ? "outlined" : "contained"}
-              onClick={handleToggleLogin}
+              variant="outlined"
+              onClick={() => {
+                handleToggleLogin();
+              }}
               fullWidth
             >
               {isLoggedIn ? "로그아웃" : "로그인"}

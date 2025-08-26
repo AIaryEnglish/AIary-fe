@@ -3,9 +3,9 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useAuthStore } from "../stores/authStore";
 
 const PrivateRoute = () => {
-  const { isLoggedIn, token } = useAuthStore();
+  const isLoggedIn = useAuthStore((s) => s.isAuthed());
 
-  if (!isLoggedIn || !token) {
+  if (!isLoggedIn) {
     return <Navigate to="/login" replace />;
   }
 

@@ -26,7 +26,7 @@ dayjs.locale("ko");
 
 export default function LandingPage() {
   const { data, isLoading, isError } = useReadAllDiaries();
-  const { isLoggedIn } = useAuthStore();
+  const isLoggedIn = useAuthStore((s) => s.isAuthed());
 
   // 페이지들을 평탄화 → [{_id,title,content,createdAt,author}, ...]
   const allDiaries = useMemo(() => {

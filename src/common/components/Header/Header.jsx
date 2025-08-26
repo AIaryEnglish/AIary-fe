@@ -29,7 +29,8 @@ const menuItems = [
 ];
 
 const Header = () => {
-  const { isLoggedIn, logout, user } = useAuthStore();
+  const { logout, user } = useAuthStore();
+  const isLoggedIn = useAuthStore((s) => s.isAuthed());
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const theme = useTheme();
@@ -48,7 +49,7 @@ const Header = () => {
   }, []);
 
   const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
+    setMobileOpen((prev) => !prev);
   };
 
   const handleNavigation = (path) => {
@@ -57,11 +58,13 @@ const Header = () => {
   };
 
   const handleToggleLogin = () => {
-    if (isLoggedIn) {
-      logout();
+    if (!isLoggedIn) {
+      navigate("/login");
+      setMobileOpen(false);
       return;
     }
-    return navigate("/login");
+    logout();
+    setMobileOpen(false);
   };
 
   const isActiveMenu = (path) => {
@@ -126,8 +129,6 @@ const Header = () => {
         onClose={handleDrawerToggle}
         handleNavigation={handleNavigation}
         handleToggleLogin={handleToggleLogin}
-        isLoggedIn={isLoggedIn}
-        user={user}
         menuItems={menuItems}
         isActiveMenu={isActiveMenu}
       />
