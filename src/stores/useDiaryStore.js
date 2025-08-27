@@ -6,6 +6,7 @@ const useDiaryStore = create((set) => ({
   diaries: [],
   daysMap: {}, // { "YYYY-MM-DD": { id, canWrite } }
   diariesByDate: {}, // { "YYYY-MM-DD": diaryDoc }
+  aiPending: false,
 
   setSelectedDate: (date) => set({ selectedDate: date }),
   addDiary: (date, title, content, image, isPublic) =>
@@ -26,6 +27,14 @@ const useDiaryStore = create((set) => ({
     })),
   setDiaries: (diary) =>
     set((state) => ({ diaries: [...state.diaries, diary] })),
+  setAiPending: (v) => set({ aiPending: v }),
+  setDayHasEntry: (dateKey, id, canWrite = true) =>
+    set((state) => ({
+      daysMap: {
+        ...state.daysMap,
+        [dateKey]: { ...(state.daysMap[dateKey] || {}), id, canWrite },
+      },
+    })),
 }));
 
 export default useDiaryStore;

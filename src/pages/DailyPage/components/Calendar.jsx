@@ -6,44 +6,62 @@ import { PickersDay } from "@mui/x-date-pickers/PickersDay";
 import Badge from "@mui/material/Badge";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { styled } from "@mui/material/styles";
+import { Box, Typography } from "@mui/material";
 import useDiaryStore from "../../../stores/useDiaryStore";
 import useReadMonthlyDiaries from "../../../hooks/useReadMonthlyDiaries";
 
-// styled에서 props로 isDesktop 받기 (DOM으로 전달되지 않도록 필터)
 const StyledDateCalendar = styled(DateCalendar, {
-  shouldForwardProp: (prop) => prop !== "isDesktop",
-})(({ isDesktop }) => ({
-  margin: "10px",
-  height: isDesktop ? "500px" : "auto",
-  width: isDesktop ? "600px" : "100%",
-  maxHeight: "none",
-  "& .MuiDayCalendar-weekDayLabel": {
-    fontSize: isDesktop ? "1.2rem" : "0.9rem",
-    fontWeight: 600,
-    marginBottom: "6px",
-  },
-  "& div[role='row']": { justifyContent: "space-around" },
-  "& .MuiDayCalendar-slideTransition": { minHeight: isDesktop ? 500 : 350 },
-  "& .MuiPickersDay-root": {
-    height: isDesktop ? 70 : 40,
-    width: isDesktop ? 70 : 40,
-    fontSize: isDesktop ? "1.2rem" : "0.9rem",
-    margin: isDesktop ? 4 : 2,
-  },
-}));
+  shouldForwardProp: (prop) => prop !== "isDesktop" && prop !== "compact",
+})(({ isDesktop, compact }) => {
+  const DAY = isDesktop ? (compact ? 34 : 54) : 36;
+  const FS = isDesktop ? (compact ? "0.85rem" : "1.06rem") : "0.9rem";
+  const LABEL = isDesktop ? (compact ? "0.9rem" : "1.06rem") : "0.9rem";
+  const GAP = isDesktop ? (compact ? 0.75 : 2.4) : 2; // px
+
+  const sixWeeksMin = isDesktop ? (compact ? 300 : 420) : 300;
+
+  return {
+    width: "100%",
+    margin: "4px 2px",
+    paddingBottom: 0,
+    overflow: "visible",
+    "& *": { overflow: "visible" },
+    "& .MuiDayCalendar-weekDayLabel": {
+      fontSize: LABEL,
+      fontWeight: 600,
+      marginBottom: "6px",
+    },
+    "& div[role='row']": {
+      justifyContent: "space-around",
+      overflow: "visible",
+    },
+    "& .MuiDayCalendar-slideTransition": {
+      minHeight: sixWeeksMin,
+      overflow: "visible",
+    },
+    "& .MuiDayCalendar-monthContainer": { overflow: "visible" },
+    "& .MuiDayCalendar-weekContainer": { overflow: "visible" },
+    "& .MuiPickersDay-root": {
+      height: DAY,
+      width: DAY,
+      fontSize: FS,
+      margin: GAP,
+    },
+  };
+});
 
 function DayWithDot(props) {
-  const { day, outsideCurrentMonth } = props;
+  const { day, outsideCurrentMonth, compact } = props;
   const isDesktop = useMediaQuery("(min-width:768px)");
-  const { daysMap } = useDiaryStore.getState(); // 최신 스토어 값
+  const { daysMap } = useDiaryStore.getState();
   const dk = day.format("YYYY-MM-DD");
   const hasEntry = !!daysMap[dk]?.id;
 
   if (outsideCurrentMonth) return <PickersDay {...props} />;
 
-  const DOT = isDesktop ? 10 : 8;
-  const TOP = isDesktop ? 26 : 10;
-  const RIGHT = isDesktop ? 20 : 12;
+  const DOT = isDesktop ? (compact ? 7 : 10) : 7;
+  const TOP = isDesktop ? (compact ? 6 : 14) : 6;
+  const RIGHT = isDesktop ? (compact ? 2 : 4) : 2;
 
   return (
     <Badge
@@ -53,7 +71,16 @@ function DayWithDot(props) {
       anchorOrigin={{ vertical: "top", horizontal: "right" }}
       sx={{
         "& .MuiBadge-badge": { zIndex: 2 },
-        "& .MuiBadge-dot": { width: DOT, height: DOT, borderRadius: "50%" },
+        "& .MuiBadge-dot": {
+          width: DOT,
+          height: DOT,
+          minWidth: DOT,
+          minHeight: DOT,
+          aspectRatio: "1 / 1",
+          borderRadius: "50%",
+          display: "inline-block",
+          boxSizing: "content-box",
+        },
         "& .MuiBadge-anchorOriginTopRightCircular": { top: TOP, right: RIGHT },
       }}
     >
@@ -62,29 +89,37 @@ function DayWithDot(props) {
   );
 }
 
-export default function Calendar() {
+export default function Calendar({ compact = false, showLegend = false }) {
   const { selectedDate, setSelectedDate } = useDiaryStore();
   const [currentView, setCurrentView] = useState("day");
   const isDesktop = useMediaQuery("(min-width:768px)");
 
   const year = selectedDate.year();
   const month = selectedDate.month() + 1;
-
   useReadMonthlyDiaries({ year, month });
 
   return (
-    <>
+    <Box
+      sx={{
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        overflow: "visible",
+      }}
+    >
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <StyledDateCalendar
           isDesktop={isDesktop}
+          compact={compact}
           value={selectedDate}
           view={currentView}
           onViewChange={(v) => setCurrentView(v)}
           onChange={(d) => setSelectedDate(d)}
           views={["year", "month", "day"]}
-          slots={{ day: DayWithDot }} // 커스텀 데이 적용
+          slots={{ day: DayWithDot }}
           slotProps={{
             day: {
+              compact,
               sx: {
                 "&.Mui-selected": { backgroundColor: "#4caf50", color: "#fff" },
                 "&.Mui-selected:hover": { backgroundColor: "#388e3c" },
@@ -99,42 +134,47 @@ export default function Calendar() {
         />
       </LocalizationProvider>
 
-      <div
-        style={{
-          display: "flex",
-          gap: isDesktop ? 16 : 8,
-          marginTop: isDesktop ? 12 : 8,
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <div
-            style={{
-              width: isDesktop ? 12 : 10,
-              height: isDesktop ? 12 : 10,
-              backgroundColor: "#4caf50",
-              borderRadius: "50%",
+      {showLegend && (
+        <Box sx={{ mt: "auto", pt: 2 }}>
+          <Box
+            sx={{
+              display: "flex",
+              gap: { xs: 1.5, md: 2.5 },
+              alignItems: "center",
+              justifyContent: "flex-start",
+              flexWrap: "wrap",
             }}
-          />
-          <span style={{ fontSize: isDesktop ? 14 : 12, color: "#5D4037" }}>
-            Today
-          </span>
-        </div>
-
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <div
-            style={{
-              width: isDesktop ? 12 : 10,
-              height: isDesktop ? 12 : 10,
-              backgroundColor: "#FFCCBC",
-              border: "2px solid #4caf50",
-              borderRadius: "50%",
-            }}
-          />
-          <span style={{ fontSize: isDesktop ? 14 : 12, color: "#5D4037" }}>
-            Has Entry
-          </span>
-        </div>
-      </div>
-    </>
+          >
+            <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
+              <Box
+                sx={{
+                  width: 12,
+                  height: 12,
+                  borderRadius: "50%",
+                  bgcolor: "#4caf50",
+                }}
+              />
+              <Typography variant="body2" color="text.secondary">
+                Today
+              </Typography>
+            </Box>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
+              <Box
+                sx={{
+                  width: 12,
+                  height: 12,
+                  borderRadius: "50%",
+                  bgcolor: "#FFCCBC",
+                  border: "2px solid #4caf50",
+                }}
+              />
+              <Typography variant="body2" color="text.secondary">
+                Has Entry
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+      )}
+    </Box>
   );
 }

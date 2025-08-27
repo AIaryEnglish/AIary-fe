@@ -5,6 +5,8 @@ import useDiaryStore from "../../../stores/useDiaryStore";
 import dayjs from "dayjs";
 import useReadDailyDiary from "../../../hooks/useReadDailyDiary";
 
+const ACCENT = "#00BE83";
+
 const DiaryBox = () => {
   const { selectedDate, diariesByDate } = useDiaryStore();
   const [openDialog, setOpenDialog] = useState(false);
@@ -14,8 +16,7 @@ const DiaryBox = () => {
     () => selectedDate.format("YYYY-MM-DD"),
     [selectedDate]
   );
-
-  const { isFetching: isFetchingDiary } = useReadDailyDiary({ date: dateKey });
+  useReadDailyDiary({ date: dateKey });
 
   const diary = diariesByDate[dateKey] || null;
 
@@ -33,49 +34,42 @@ const DiaryBox = () => {
   const dayDiff = today.diff(target, "day"); // 0~2만 작성 가능
   const isWritableDay = dayDiff >= 0 && dayDiff <= 2;
   const canCreate = !diary && isWritableDay;
-  const canEdit = diary;
+  const canEdit = !!diary;
 
-  const openEditForm = (diary) => {
-    //edit모드로 설정하고
+  const openEditForm = () => {
     setMode("edit");
-    // 아이템 수정다이얼로그 열어주기
-    // dispatch(setSelectedProduct(product));
     setOpenDialog(true);
   };
 
   const openAddForm = () => {
-    //new 모드로 설정하고
     setMode("new");
-    // 다이얼로그 열어주기
     setOpenDialog(true);
   };
-
-  if (isFetchingDiary) {
-    return (
-      <Typography variant="body1" color="text.secondary">
-        Loading...
-      </Typography>
-    );
-  }
 
   return (
     <>
       <Card
         sx={{
-          width: { xs: "100%", md: 500 },
-          minHeight: 450,
-          maxHeight: 450,
+          width: 1,
+          alignSelf: { xs: "stretch", md: "auto" },
+          maxWidth: { xs: "none", md: "unset" },
+          height: 430,
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
+          justifyContent: "flex-start",
           textAlign: "center",
-          padding: 2,
-          mt: 4,
+          p: 2,
+          mt: 0,
+          mx: { xs: 0, md: diary ? 0 : "auto" },
+          boxShadow: 4,
+          borderRadius: 3,
+          border: "1px solid",
+          borderColor: "success.light",
         }}
       >
         <CardContent
           sx={{
-            overflowY: "auto", // 세로 스크롤
+            overflowY: "auto",
             flexGrow: 1,
           }}
         >
@@ -118,7 +112,7 @@ const DiaryBox = () => {
 export default DiaryBox;
 
 const DiaryDate = styled(Typography)(({ theme }) => ({
-  color: theme.palette.success.light,
+  color: ACCENT,
   fontWeight: 700,
   fontSize: "25px",
 }));
@@ -132,5 +126,5 @@ const DiaryTitle = styled(Typography)(({ theme }) => ({
 const DiaryContent = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.primary,
   lineHeight: 1.6,
-  whiteSpace: "pre-line", // 줄바꿈 유지
+  whiteSpace: "pre-line",
 }));
