@@ -10,15 +10,20 @@ import {
   Divider,
 } from "@mui/material";
 import useDiaryStore from "../../../stores/useDiaryStore";
+import useCreateVocab from "../../../hooks/useCreateVocab";
 
 const ACCENT = "#00BE83";
 
+//여기서 단어 넘기는 함수 넣기
 const ResultsBox = ({ diary }) => {
   const { selectedDate } = useDiaryStore();
   const commentText = diary?.comment;
   const corrections = Array.isArray(diary?.corrections)
     ? diary.corrections
     : [];
+
+  const { handleSelection, handleTouchStart, handleTouchEnd } =
+    useCreateVocab();
 
   const formatDate = (date) => {
     return new Intl.DateTimeFormat("en-US", {
@@ -60,7 +65,12 @@ const ResultsBox = ({ diary }) => {
             <Typography variant="h5" sx={{ mt: 1, mb: 1 }}>
               {diary?.title}
             </Typography>
-            <Typography sx={{ whiteSpace: "pre-line" }}>
+            <Typography
+              sx={{ whiteSpace: "pre-line" }}
+              onMouseUp={() => handleSelection(diary)}
+              onTouchStart={() => handleTouchStart(diary)}
+              onTouchEnd={handleTouchEnd}
+            >
               {diary?.content}
             </Typography>
           </CardContent>
