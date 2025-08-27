@@ -77,51 +77,49 @@ const Header = () => {
   return (
     <>
       <StyledAppBar position="fixed" elevation={0} isScrolled={isScrolled}>
-        <Container maxWidth="lg">
-          <StyledToolbar>
-            <LogoContainer onClick={() => handleNavigation("/")}>
-              <LogoImage src={LogoVer3} alt="AIary Logo" />
-            </LogoContainer>
+        <StyledToolbar>
+          <LogoContainer onClick={() => handleNavigation("/")}>
+            <LogoImage src={LogoVer3} alt="AIary Logo" />
+          </LogoContainer>
 
-            {!isMobile && (
-              <DesktopMenu>
-                {menuItems.map((item) => (
-                  <MenuButton
-                    key={item.text}
-                    color="inherit"
-                    onClick={() => handleNavigation(item.path)}
-                    isActive={isActiveMenu(item.path)}
-                  >
-                    {item.text}
-                  </MenuButton>
-                ))}
-              </DesktopMenu>
-            )}
+          {!isMobile && (
+            <DesktopMenu>
+              {menuItems.map((item) => (
+                <MenuButton
+                  key={item.text}
+                  color="inherit"
+                  onClick={() => handleNavigation(item.path)}
+                  isActive={isActiveMenu(item.path)}
+                >
+                  {item.text}
+                </MenuButton>
+              ))}
+            </DesktopMenu>
+          )}
 
-            <DesktopUserSection>
-              {isLoggedIn && user && !isMobile && <UserAvatar size={32} />}
-              <DesktopAuthButton
-                onClick={handleToggleLogin}
-                sx={{ display: { xs: "none", md: "block" } }}
-              >
-                <Tooltip title={isLoggedIn ? "로그아웃" : "로그인"} arrow>
-                  {isLoggedIn ? <LogoutIcon /> : <LoginIcon />}
-                </Tooltip>
-              </DesktopAuthButton>
-            </DesktopUserSection>
+          <DesktopUserSection>
+            {isLoggedIn && user && !isMobile && <UserAvatar size={32} />}
+            <DesktopAuthButton
+              onClick={handleToggleLogin}
+              sx={{ display: { xs: "none", md: "block" } }}
+            >
+              <Tooltip title={isLoggedIn ? "로그아웃" : "로그인"} arrow>
+                {isLoggedIn ? <LogoutIcon /> : <LoginIcon />}
+              </Tooltip>
+            </DesktopAuthButton>
+          </DesktopUserSection>
 
-            {isMobile && (
-              <MobileMenuButton
-                color="inherit"
-                aria-label="open drawer"
-                edge="start"
-                onClick={handleDrawerToggle}
-              >
-                <MenuIcon />
-              </MobileMenuButton>
-            )}
-          </StyledToolbar>
-        </Container>
+          {isMobile && (
+            <MobileMenuButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+            >
+              <MenuIcon />
+            </MobileMenuButton>
+          )}
+        </StyledToolbar>
       </StyledAppBar>
 
       <MobileDrawer
