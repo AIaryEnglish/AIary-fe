@@ -42,7 +42,7 @@ const VocabPage = () => {
 
   return (
     <div>
-      <VocabHeader setVocabList={() => {}} />
+      {/* <VocabHeader setVocabList={() => {}} /> */}
       <div className="voca-page voca-color">
         <VocabBodyProgress
           vocabList={vocabList}
