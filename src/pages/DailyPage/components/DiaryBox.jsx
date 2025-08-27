@@ -33,8 +33,9 @@ const DiaryBox = () => {
   const target = selectedDate.startOf("day");
   const dayDiff = today.diff(target, "day"); // 0~2만 작성 가능
   const isWritableDay = dayDiff >= 0 && dayDiff <= 2;
+  const isEditableDay = dayDiff >= 0 && dayDiff <= 1;
   const canCreate = !diary && isWritableDay;
-  const canEdit = !!diary;
+  const canEdit = diary && isEditableDay;
 
   const openEditForm = () => {
     setMode("edit");

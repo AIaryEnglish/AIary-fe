@@ -1,17 +1,21 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createDiaryApi } from "../apis/diaryApi";
 import useDiaryStore from "../stores/useDiaryStore";
 import useSnackbarStore from "../stores/useSnackbarStore";
+
 import dayjs from "dayjs";
 
 export const useCreateDiary = () => {
   const { setDiaries, setDiaryForDate, setAiPending, setDayHasEntry } =
     useDiaryStore();
+    const queryClient = useQueryClient();
   const { showError, showSuccess } = useSnackbarStore();
+
 
   const mutation = useMutation({
     mutationFn: (diary) => createDiaryApi(diary),
     onSuccess: (response) => {
+
       if (response?.status !== "success" || !response?.diary) {
         showError("일기 생성 응답에 문제가 있습니다.");
         return;
@@ -27,6 +31,7 @@ export const useCreateDiary = () => {
         vertical: "top",
         horizontal: "center",
       });
+
     },
     onError: (error) =>
       showError(error?.message || "일기 생성 중 오류가 발생했습니다."),

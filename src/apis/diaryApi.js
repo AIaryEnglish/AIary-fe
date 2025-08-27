@@ -43,3 +43,12 @@ export const createDiaryApi = async (diary) => {
     throw err;
   }
 };
+export const updateDiaryApi = async(id, diary) => {
+  try {
+    const response = await api.put(`/diary/${id}`, diary);
+    return response.data;
+  } catch(err) {
+    console.error("일기 수정 실패:", err);
+    throw err;
+  }
+}
