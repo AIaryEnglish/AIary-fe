@@ -108,6 +108,7 @@ const DiaryBox = () => {
               일기 작성하기
             </Button>
           )}
+
           {canEdit && (
             <Button onClick={openEditForm} variant="contained">
               일기 수정하기
