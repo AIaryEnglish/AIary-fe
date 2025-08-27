@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import {
   Box,
@@ -26,7 +26,7 @@ dayjs.locale("ko");
 
 export default function LandingPage() {
   const { data, isLoading, isError } = useReadAllDiaries();
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn)();
+  const isLoggedIn = useAuthStore((s) => s.isAuthed());
 
   // 페이지들을 평탄화 → [{_id,title,content,createdAt,author}, ...]
   const allDiaries = useMemo(() => {
