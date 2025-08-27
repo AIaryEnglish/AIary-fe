@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -12,10 +12,12 @@ import {
 import CloudinaryUploadWidget from "../../../util/CloudinaryUploadWidget";
 import useDiaryStore from "../../../stores/useDiaryStore";
 import { useCreateDiary } from "../../../hooks/useCreateDiary";
+import { useUpdateDiary } from "../../../hooks/useUpdateDiary";
 
 const NewDiaryDialog = ({ mode, open, onClose }) => {
-  const { selectedDate, setDiaries } = useDiaryStore();
+  const { selectedDate, diariesByDate } = useDiaryStore();
   const { mutate: createDiary, isPending } = useCreateDiary();
+  const { mutate: updateDiary, isPending: isLoading } = useUpdateDiary();
 
   const InitialFormData = {
     title: "",
@@ -24,6 +26,13 @@ const NewDiaryDialog = ({ mode, open, onClose }) => {
     isPublic: true,
     date: selectedDate.toDate(),
   };
+
+  const dateKey = useMemo(
+    () => selectedDate.format("YYYY-MM-DD"),
+    [selectedDate]
+  );
+
+  const diary = diariesByDate[dateKey] || null;
 
   const [formData, setFormData] = useState({ ...InitialFormData });
 
@@ -34,13 +43,33 @@ const NewDiaryDialog = ({ mode, open, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // 저장 로직 추가 가능
-    if (mode !== "new") return;
-    createDiary(formData, {
-      onSuccess: () => {
-        setFormData(InitialFormData);
-        onClose();
-      },
-    });
+    if (mode == "new") {
+      createDiary(formData, {
+        onSuccess: () => {
+          setFormData(InitialFormData);
+          onClose();
+        },
+      });
+    } else {
+      const { title, content, image, isPublic } = formData;
+      updateDiary(
+        {
+          id: diary._id,
+          diary: {
+            title,
+            content,
+            image: image || undefined,
+            isPublic, 
+          },
+        },
+        {
+          onSuccess: () => {
+            setFormData(InitialFormData);
+            onClose();
+          },
+        }
+      );
+    }
   };
 
   const handleClose = () => {
@@ -58,6 +87,18 @@ const NewDiaryDialog = ({ mode, open, onClose }) => {
   const uploadImage = (url) => {
     setFormData((prev) => ({ ...prev, image: url }));
   };
+
+  useEffect(() => {
+    if (mode === "edit") {
+      console.log(diary);
+      setFormData({
+        title: diary?.title,
+        content: diary?.content,
+        image: diary?.image,
+        isPublic: diary?.isPublic,
+      });
+    }
+  }, [mode, selectedDate]);
 
   if (isPending) return <p>Loading...</p>; // 로딩 스피너로 바꿀 예정
 
