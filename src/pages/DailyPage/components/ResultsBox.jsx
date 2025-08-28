@@ -20,7 +20,6 @@ import { useState } from "react";
 import NewDiaryDialog from "./NewDiaryDialog";
 import useDeleteDiary from "../../../hooks/useDeleteDiary";
 
-
 const ACCENT = "#00BE83";
 
 //여기서 단어 넘기는 함수 넣기
@@ -59,10 +58,10 @@ const ResultsBox = ({ diary }) => {
     }).format(date.toDate());
   };
 
-  const today = dayjs().startOf("day");
-  const target = dayjs(diary.createdAt).startOf("day");
-  const dayDiff = today.diff(target, "day");
-  const isEditableDay = dayDiff >= 0 && dayDiff <= 1;
+  const now = dayjs();
+  const target = dayjs(diary.createdAt);
+  const hoursDiff = now.diff(target, "hour");
+  const isEditableDay = hoursDiff <= 24;
   const canEdit = diary && isEditableDay;
 
   const openEditForm = () => {
@@ -100,7 +99,6 @@ const ResultsBox = ({ diary }) => {
               height: "100%",
             }}
           >
-
             <CardContent
               sx={{
                 maxHeight: { md: "calc(100vh - 220px)" },
@@ -133,15 +131,18 @@ const ResultsBox = ({ diary }) => {
               </Typography>
               <Typography
                 sx={{ whiteSpace: "pre-line" }}
-onMouseDown={handleMouseDown}
-                              onMouseMove={handleMouseMove}
-                              onMouseUp={handleMouseUp}
-                              onTouchStart={handleTouchStart}
-                              onTouchEnd={handleTouchEnd}
-                              style={{ cursor: "pointer" }}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+                style={{ cursor: "pointer" }}
               >
                 {diary?.content}
               </Typography>
+              {diary?.image && (
+                <img src={diary.image} width={120} alt="image" />
+              )}
             </CardContent>
           </Card>
 
@@ -168,7 +169,6 @@ onMouseDown={handleMouseDown}
                 <Typography sx={{ mt: 1, whiteSpace: "pre-line" }}>
                   {commentText}
                 </Typography>
-
               )}
 
               {corrections.length > 0 && (
@@ -192,13 +192,15 @@ onMouseDown={handleMouseDown}
                           secondary={
                             <>
                               <b
-                              onMouseDown={handleMouseDown}
-                              onMouseMove={handleMouseMove}
-                              onMouseUp={handleMouseUp}
-                              onTouchStart={handleTouchStart}
-                              onTouchEnd={handleTouchEnd}
-                              style={{ cursor: "pointer" }}
-                              >→ {c.correctedSentence}</b>
+                                onMouseDown={handleMouseDown}
+                                onMouseMove={handleMouseMove}
+                                onMouseUp={handleMouseUp}
+                                onTouchStart={handleTouchStart}
+                                onTouchEnd={handleTouchEnd}
+                                style={{ cursor: "pointer" }}
+                              >
+                                → {c.correctedSentence}
+                              </b>
                               {c.reason ? ` — ${c.reason}` : ""}
                             </>
                           }
@@ -219,7 +221,6 @@ onMouseDown={handleMouseDown}
         selectedDate={selectedDate}
       />
     </>
-
   );
 };
 
