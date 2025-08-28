@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material";
-import { Container, Box, Grid } from "@mui/material";
+import { Container, Box, Button, Grid } from "@mui/material";
 import VocabBodyProgress from "./component/VocabBodyProgress";
 import VocabBodySearch from "./component/VocabBodySearch";
 import VocabBodyWord from "./component/VocabBodyWord";
@@ -44,6 +45,8 @@ const VocabPage = () => {
     learning: "학습 중인 단어가 없습니다!",
   };
 
+  const navigate = useNavigate();
+
   return (
     <VocabPageContainer>
       <VocabContent maxWidth="xl">
@@ -62,9 +65,9 @@ const VocabPage = () => {
 
           {/* 오른쪽 패널: 단어 카드들 (스크롤 가능) */}
           <RightPanel>
-            <VocabWordList>
-              {filteredList.length > 0 ? (
-                filteredList.map((vocab) => (
+            {filteredList.length > 0 ? (
+              <VocabWordList>
+                {filteredList.map((vocab) => (
                   <VocabBodyWord
                     key={vocab._id}
                     vocab={vocab}
@@ -73,17 +76,31 @@ const VocabPage = () => {
                     }
                     onDelete={() => deleteMutation.mutate(vocab._id)}
                   />
-                ))
-              ) : (
-                <VocabBodyWord
-                  isPlaceholder
-                  vocab={{
-                    message:
-                      emptyMessages[selectedStatus] || "단어가 없습니다!",
-                  }}
-                />
-              )}
-            </VocabWordList>
+                ))}
+              </VocabWordList>
+            ) : (
+              <PlaceholderPanel>
+                <Message>
+                  {emptyMessages[selectedStatus] || "단어가 없습니다!"}
+                </Message>
+                <ButtonRow>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => navigate("/")}
+                  >
+                    홈으로
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={() => navigate("/daily")}
+                  >
+                    일기로
+                  </Button>
+                </ButtonRow>
+              </PlaceholderPanel>
+            )}
           </RightPanel>
         </VocabLayout>
       </VocabContent>
@@ -94,6 +111,40 @@ const VocabPage = () => {
 export default VocabPage;
 
 // Styled Components
+const PlaceholderPanel = styled(Box)(({ theme }) => ({
+  flex: 1,
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "100%",
+  minHeight: "500px", // LeftPanel과 맞춤
+  backgroundColor: "white",
+  boxShadow: "0 8px 32px rgba(96, 175, 160, 0.15)",
+  borderRadius: theme.spacing(1),
+  padding: theme.spacing(2),
+  border: "1px solid var(--app-border)",
+
+  [theme.breakpoints.down("md")]: {
+    minHeight: "auto",
+    height: "auto",
+    boxShadow: "0 8px 32px rgba(96, 175, 160, 0.15)",
+    backgroundColor: "white",
+  },
+}));
+
+const Message = styled("div")(({ theme }) => ({
+  fontSize: "1.2rem",
+  marginBottom: theme.spacing(3),
+  textAlign: "center",
+}));
+
+const ButtonRow = styled(Box)(({ theme }) => ({
+  display: "flex",
+  gap: theme.spacing(2),
+  flexDirection: "row",
+}));
+
 const VocabPageContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
