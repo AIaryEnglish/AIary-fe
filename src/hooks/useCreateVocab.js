@@ -9,10 +9,17 @@ const useCreateVocab = (existingVocab = []) => {
   const mutation = useMutation({
     mutationFn: (word) => createVocab(word),
     onSuccess: (data) => {
-      showSuccess(`단어 저장 완료! 저장된 단어: ${data.word}`, 3000);
+      showSuccess(`단어 저장 완료! 저장된 단어: ${data.word}`, 3000, {
+        vertical: "top",
+        horizontal: "center",
+      });
       queryClient.invalidateQueries(["myVocab"]);
     },
-    onError: (err) => showError(`단어 저장 실패! ${err.message}`, 3000),
+    onError: (err) =>
+      showError(`단어 저장 실패! ${err.message}`, 3000, {
+        vertical: "top",
+        horizontal: "center",
+      }),
   });
 
   let pressTimer = null;
@@ -22,7 +29,10 @@ const useCreateVocab = (existingVocab = []) => {
     const selected = window.getSelection().toString().trim();
     if (!selected) return;
     if (existingVocab.includes(selected)) {
-      showError(`이미 저장된 단어입니다: ${selected}`, 3000);
+      showError(`이미 저장된 단어입니다: ${selected}`, 3000, {
+        vertical: "top",
+        horizontal: "center",
+      });
       return;
     }
     mutation.mutate(selected);
