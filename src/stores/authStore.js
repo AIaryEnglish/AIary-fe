@@ -23,7 +23,9 @@ export const useAuthStore = create(
         }));
       },
 
-      isLoggedIn: () => !!get().user,
+      isAuthed: () => {
+        return !!get().token;
+      },
     }),
     {
       name: "auth-storage",

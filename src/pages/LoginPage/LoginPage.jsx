@@ -15,8 +15,10 @@ import { Visibility, VisibilityOff, ArrowBack } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import useLoginWithEmail from "../../hooks/useLoginWithEmail";
-import LogoVer1 from "../../assets/logo_ver1.svg";
+import useLoginWithGoogle from "../../hooks/useLoginWithGoogle";
 import { useAuthStore } from "../../stores/authStore";
+import { GoogleLogin } from "@react-oauth/google";
+import useSnackbarStore from "../../stores/useSnackbarStore";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -26,8 +28,9 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const { mutate: loginWithEmail } = useLoginWithEmail();
+  const { mutate: loginWithGoogle } = useLoginWithGoogle();
   const navigate = useNavigate();
-
+  const { showError } = useSnackbarStore();
   const { user } = useAuthStore();
 
   useEffect(() => {
@@ -78,35 +81,20 @@ const LoginPage = () => {
     });
   };
 
-  const handleBackToHome = () => {
-    navigate("/");
+  const handleGoogleLogin = async (googleData) => {
+    loginWithGoogle({
+      token: googleData.credential,
+    });
+  };
+
+  const handleGoogleLoginError = (error) => {
+    console.error("Google 로그인 실패:", error);
+    showError("Google 로그인에 실패했습니다. 다시 시도해주세요.");
   };
 
   return (
     <PageContainer>
       <Container maxWidth="sm">
-        {/* 뒤로가기 버튼 */}
-        <Box sx={{ mb: 3, textAlign: "left" }}>
-          <BackButton startIcon={<ArrowBack />} onClick={handleBackToHome}>
-            홈으로 돌아가기
-          </BackButton>
-        </Box>
-
-        {/* 로고 및 제목 */}
-        <Box sx={{ textAlign: "center", mb: 4 }}>
-          <LogoContainer>
-            <img
-              src={LogoVer1}
-              alt="AIary Logo"
-              style={{
-                width: "60px",
-                height: "60px",
-                objectFit: "contain",
-              }}
-            />
-          </LogoContainer>
-        </Box>
-
         {/* 로그인 폼 */}
         <FormContainer elevation={8}>
           <FormTitle variant="h4" component="h2">
@@ -167,19 +155,32 @@ const LoginPage = () => {
                 비밀번호를 잊으셨나요?
               </ForgotPasswordLink>
             </Box>
-
             <Divider sx={{ my: 3 }}>
               <DividerText variant="body2">처음이신가요?</DividerText>
             </Divider>
+            <FlexBox>
+              <RegisterButton
+                fullWidth
+                variant="outlined"
+                size="large"
+                onClick={() => navigate("/register")}
+              >
+                계정 만들기
+              </RegisterButton>
+            </FlexBox>
 
-            <RegisterButton
-              fullWidth
-              variant="outlined"
-              size="large"
-              onClick={() => navigate("/register")}
-            >
-              계정 만들기
-            </RegisterButton>
+            <Divider sx={{ my: 3 }}>
+              <DividerText variant="body2">외부 계정 로그인</DividerText>
+            </Divider>
+            <FlexBox>
+              <GoogleLogin
+                text="continue_with"
+                onSuccess={handleGoogleLogin}
+                onError={handleGoogleLoginError}
+                shape="pill"
+                size="large"
+              />
+            </FlexBox>
           </Box>
         </FormContainer>
       </Container>
@@ -191,32 +192,13 @@ export default LoginPage;
 
 // 스타일드 컴포넌트들
 const PageContainer = styled(Box)({
-  minHeight: "100vh",
+  minHeight: "calc(100dvh - 70px)",
   background: "linear-gradient(135deg, #f8fffe 0%, #e8f5e8 100%)",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
   padding: "32px 0",
-});
-
-const BackButton = styled(Button)({
-  color: "var(--app-chart-1)",
-  "&:hover": {
-    backgroundColor: "rgba(96, 175, 160, 0.1)",
-  },
-});
-
-const LogoContainer = styled(Box)({
-  display: "inline-flex",
-  alignItems: "center",
-  justifyContent: "center",
-  width: 80,
-  height: 80,
-  borderRadius: "50%",
-  backgroundColor: "white",
-  marginBottom: 16,
-  boxShadow: "0 4px 20px rgba(96, 175, 160, 0.3)",
-  border: "2px solid var(--app-chart-1)",
+  marginTop: 0,
 });
 
 const FormContainer = styled(Paper)({
@@ -288,17 +270,23 @@ const DividerText = styled(Typography)({
 });
 
 const RegisterButton = styled(Button)({
-  padding: "12px 0",
-  borderColor: "var(--app-chart-1)",
+  borderColor: "var(--app-border)",
   color: "var(--app-chart-1)",
-  fontSize: "1.1rem",
-  fontWeight: 600,
-  borderRadius: 16,
+  fontSize: "0.85rem",
+  fontWeight: 400,
+  borderRadius: 20,
+  width: "207px",
   textTransform: "none",
   "&:hover": {
     borderColor: "var(--app-chart-2)",
     backgroundColor: "rgba(96, 175, 160, 0.05)",
-    transform: "translateY(-2px)",
   },
   transition: "all 0.3s ease",
+});
+
+const FlexBox = styled(Box)({
+  display: "flex",
+  justifyContent: "center",
+  width: "100%",
+  alignItems: "center",
 });
