@@ -13,9 +13,13 @@ import {
 import dayjs from "dayjs";
 import useDiaryStore from "../../../stores/useDiaryStore";
 import useCreateVocab from "../../../hooks/useCreateVocab";
+
+import { useQuery } from "@tanstack/react-query";
+import { getVocabList } from "../../../apis/vocabApi";
 import { useState } from "react";
 import NewDiaryDialog from "./NewDiaryDialog";
 import useDeleteDiary from "../../../hooks/useDeleteDiary";
+
 
 const ACCENT = "#00BE83";
 
@@ -27,8 +31,19 @@ const ResultsBox = ({ diary }) => {
     ? diary.corrections
     : [];
 
-  const { handleSelection, handleTouchStart, handleTouchEnd } =
-    useCreateVocab();
+  // 단어장에서 기존 단어들 가져오기
+  const { data: myVocabWords = [] } = useQuery({
+    queryKey: ["myVocab"],
+    queryFn: getVocabList,
+  });
+
+  const {
+    handleMouseDown,
+    handleMouseMove,
+    handleMouseUp,
+    handleTouchStart,
+    handleTouchEnd,
+  } = useCreateVocab(myVocabWords);
 
   const { mutate: deleteDiaryMutate } = useDeleteDiary();
 
@@ -85,6 +100,7 @@ const ResultsBox = ({ diary }) => {
               height: "100%",
             }}
           >
+
             <CardContent
               sx={{
                 maxHeight: { md: "calc(100vh - 220px)" },
@@ -117,9 +133,12 @@ const ResultsBox = ({ diary }) => {
               </Typography>
               <Typography
                 sx={{ whiteSpace: "pre-line" }}
-                onMouseUp={() => handleSelection(diary)}
-                onTouchStart={() => handleTouchStart(diary)}
-                onTouchEnd={handleTouchEnd}
+onMouseDown={handleMouseDown}
+                              onMouseMove={handleMouseMove}
+                              onMouseUp={handleMouseUp}
+                              onTouchStart={handleTouchStart}
+                              onTouchEnd={handleTouchEnd}
+                              style={{ cursor: "pointer" }}
               >
                 {diary?.content}
               </Typography>
@@ -149,6 +168,7 @@ const ResultsBox = ({ diary }) => {
                 <Typography sx={{ mt: 1, whiteSpace: "pre-line" }}>
                   {commentText}
                 </Typography>
+
               )}
 
               {corrections.length > 0 && (
@@ -171,7 +191,14 @@ const ResultsBox = ({ diary }) => {
                           primary={`• ${c.originalSentence}`}
                           secondary={
                             <>
-                              <b>→ {c.correctedSentence}</b>
+                              <b
+                              onMouseDown={handleMouseDown}
+                              onMouseMove={handleMouseMove}
+                              onMouseUp={handleMouseUp}
+                              onTouchStart={handleTouchStart}
+                              onTouchEnd={handleTouchEnd}
+                              style={{ cursor: "pointer" }}
+                              >→ {c.correctedSentence}</b>
                               {c.reason ? ` — ${c.reason}` : ""}
                             </>
                           }
@@ -192,6 +219,7 @@ const ResultsBox = ({ diary }) => {
         selectedDate={selectedDate}
       />
     </>
+
   );
 };
 

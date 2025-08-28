@@ -1,43 +1,58 @@
-// hooks/useCreateVocab.js
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createVocab } from "../apis/vocabApi";
+import useSnackbarStore from "../stores/useSnackbarStore";
 
-const useCreateVocab = () => {
+const useCreateVocab = (existingVocab = []) => {
   const queryClient = useQueryClient();
+  const { showError, showSuccess } = useSnackbarStore();
 
   const mutation = useMutation({
-    mutationFn: (vocab) => createVocab(vocab),
+    mutationFn: (word) => createVocab(word),
     onSuccess: (data) => {
-      alert(`단어 저장 완료: ${data.word}\n뜻: ${data.meaning}`);
-      queryClient.invalidateQueries(["myVocab"]); // 필요시 단어장 캐시 갱신
+      showSuccess(`단어 저장 완료! 저장된 단어: ${data.word}`, 3000);
+      queryClient.invalidateQueries(["myVocab"]);
     },
-    onError: (error) => {
-      alert(`저장 실패: ${error.message}`);
-    },
+    onError: (err) => showError(`단어 저장 실패! ${err.message}`, 3000),
   });
 
-  // 선택된 단어 처리 함수
-  const handleSelection = (diary) => {
-    if (!diary) return;
+  let pressTimer = null;
+  let isDragging = false;
 
+  const saveWord = () => {
     const selected = window.getSelection().toString().trim();
-    console.log("selected: ", selected);
     if (!selected) return;
-
+    if (existingVocab.includes(selected)) {
+      showError(`이미 저장된 단어입니다: ${selected}`, 3000);
+      return;
+    }
     mutation.mutate(selected);
   };
 
-  // 모바일 롱프레스 처리용
-  let pressTimer;
-
-  const handleTouchStart = (diary) => {
-    if (!diary) return;
-    pressTimer = setTimeout(() => handleSelection(diary), 200);
+  // 데스크톱 롱프레스
+  const handleMouseDown = () => {
+    isDragging = false;
+    pressTimer = setTimeout(() => {
+      if (!isDragging) saveWord();
+    }, 800); // 롱프레스 판정 시간
   };
+
+  const handleMouseMove = () => {
+    isDragging = true; // 드래그 중 저장 방지
+  };
+
+  const handleMouseUp = () => clearTimeout(pressTimer);
+
+  // 모바일 롱프레스
+  const handleTouchStart = () => {
+    pressTimer = setTimeout(saveWord, 800); // 단어 선택 후 롱프레스
+  };
+
   const handleTouchEnd = () => clearTimeout(pressTimer);
 
   return {
-    handleSelection,
+    handleMouseDown,
+    handleMouseMove,
+    handleMouseUp,
     handleTouchStart,
     handleTouchEnd,
     isLoading: mutation.isLoading,
