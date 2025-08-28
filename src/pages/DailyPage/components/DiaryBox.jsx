@@ -36,14 +36,7 @@ const DiaryBox = () => {
   const target = selectedDate.startOf("day");
   const dayDiff = today.diff(target, "day"); // 0~2만 작성 가능
   const isWritableDay = dayDiff >= 0 && dayDiff <= 2;
-  const isEditableDay = dayDiff >= 0 && dayDiff <= 1;
   const canCreate = !diary && isWritableDay;
-  const canEdit = diary && isEditableDay;
-
-  const openEditForm = () => {
-    setMode("edit");
-    setOpenDialog(true);
-  };
 
   const openAddForm = () => {
     setMode("new");
@@ -57,7 +50,7 @@ const DiaryBox = () => {
           width: 1,
           alignSelf: { xs: "stretch", md: "auto" },
           maxWidth: { xs: "none", md: "unset" },
-          height: 430,
+          height: 560,
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-start",
@@ -79,34 +72,15 @@ const DiaryBox = () => {
         >
           <DiaryDate>Diary for {formatDate(selectedDate)}</DiaryDate>
 
-          {diary ? (
-            <>
-              <DiaryTitle>{diary.title}</DiaryTitle>
-              <DiaryContent
-                variant="body1"
-                onMouseUp={() => handleSelection(diary)}
-                onTouchStart={() => handleTouchStart(diary)}
-                onTouchEnd={handleTouchEnd}
-                style={{ whiteSpace: "pre-wrap", lineHeight: "1.6" }}
-              >
-                {diary.content}
-              </DiaryContent>
-            </>
-          ) : (
+          {!diary && (
             <Typography variant="body1" color="text.secondary">
               No Diary for this date yet.
             </Typography>
           )}
 
           {canCreate && (
-            <Button onClick={openAddForm} variant="contained">
+            <Button onClick={openAddForm} variant="outlined" color="ACCENT">
               일기 작성하기
-            </Button>
-          )}
-
-          {canEdit && (
-            <Button onClick={openEditForm} variant="contained">
-              일기 수정하기
             </Button>
           )}
         </CardContent>

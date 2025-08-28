@@ -57,9 +57,7 @@ const NewDiaryDialog = ({ mode, open, onClose }) => {
       return showError("일기 내용을 작성해주세요.", 3000, {
         vertical: "top",
         horizontal: "center",
-      });
-
-      
+      });   
       createDiary(formData, {
         onSuccess: () => {
           setFormData(InitialFormData);
@@ -91,7 +89,7 @@ const NewDiaryDialog = ({ mode, open, onClose }) => {
   };
 
   const handleClose = () => {
-    setFormData(InitialFormData);
+    if(mode === "new") setFormData(InitialFormData);
     onClose();
   };
 
@@ -115,9 +113,6 @@ const NewDiaryDialog = ({ mode, open, onClose }) => {
       });
     }
   }, [mode, selectedDate]);
-
-  if (isPending) return <p>Loading...</p>; // 로딩 스피너로 바꿀 예정
-
 
   return (
     <Dialog

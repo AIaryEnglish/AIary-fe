@@ -4,6 +4,7 @@ import DiaryBox from "./components/DiaryBox";
 import ResultsBox from "./components/ResultsBox";
 import AiOverlay from "./components/AiOverlay";
 import useDiaryStore from "../../stores/useDiaryStore";
+import "./DailyPage.style.css";
 
 export default function DailyPage() {
   const { selectedDate, diariesByDate } = useDiaryStore();
@@ -18,7 +19,7 @@ export default function DailyPage() {
   const calMinHeight = !hasDiary ? 560 : hasAi ? 360 : 430;
 
   return (
-    <Container maxWidth="xl" sx={{ mt: 4, pb: 6 }}>
+    <Container maxWidth="xl" sx={{ mt: 4, pb: 6 }} className="daily-page daily-color">
       <AiOverlay />
 
       <Box
