@@ -10,9 +10,9 @@ import useDeleteVocab from "../../hooks/useDeleteVocab";
 
 const VocabPage = () => {
   //단어목록, 상태변화 훅들 불러오기
-  const { vocabList, setVocabList } = useReadVocab();
-  const toggleStatusMutation = useUpdateVocab(setVocabList);
-  const deleteMutation = useDeleteVocab(setVocabList);
+  const { vocabList } = useReadVocab();
+  const toggleStatusMutation = useUpdateVocab();
+  const deleteMutation = useDeleteVocab();
 
   // 필터, 검색 상태 전용
   const [selectedStatus, setSelectedStatus] = useState("All");

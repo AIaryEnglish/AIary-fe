@@ -4,9 +4,6 @@ import { Card, CardContent, Typography, Button, styled } from "@mui/material";
 import useDiaryStore from "../../../stores/useDiaryStore";
 import dayjs from "dayjs";
 import useReadDailyDiary from "../../../hooks/useReadDailyDiary";
-import useCreateVocab from "../../../hooks/useCreateVocab";
-import { useQuery } from "@tanstack/react-query";
-import { getVocabList } from "../../../apis/vocabApi";
 
 const ACCENT = "#00BE83";
 
@@ -15,19 +12,6 @@ const DiaryBox = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [mode, setMode] = useState("new");
 
-  // 단어장에서 기존 단어들 가져오기
-  const { data: myVocabWords = [] } = useQuery({
-    queryKey: ["myVocab"],
-    queryFn: getVocabList,
-  });
-
-  const {
-    handleMouseDown,
-    handleMouseMove,
-    handleMouseUp,
-    handleTouchStart,
-    handleTouchEnd,
-  } = useCreateVocab(myVocabWords);
   const dateKey = useMemo(
     () => selectedDate.format("YYYY-MM-DD"),
     [selectedDate]
