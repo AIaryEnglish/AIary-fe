@@ -51,4 +51,13 @@ export const updateDiaryApi = async(id, diary) => {
     console.error("일기 수정 실패:", err);
     throw err;
   }
-}
+};
+export const deleteDiaryApi = async(id) => {
+  try {
+    const response = await api.delete(`/diary/${id}`);
+    return response.data;
+  } catch(err) {
+    console.error("일기 삭제 실패:", err);
+    throw err;
+  }
+};
