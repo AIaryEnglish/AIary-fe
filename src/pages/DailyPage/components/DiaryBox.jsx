@@ -5,6 +5,8 @@ import useDiaryStore from "../../../stores/useDiaryStore";
 import dayjs from "dayjs";
 import useReadDailyDiary from "../../../hooks/useReadDailyDiary";
 import useCreateVocab from "../../../hooks/useCreateVocab";
+import { useQuery } from "@tanstack/react-query";
+import { getVocabList } from "../../../apis/vocabApi";
 
 const ACCENT = "#00BE83";
 
@@ -12,9 +14,20 @@ const DiaryBox = () => {
   const { selectedDate, diariesByDate } = useDiaryStore();
   const [openDialog, setOpenDialog] = useState(false);
   const [mode, setMode] = useState("new");
-  const { handleSelection, handleTouchStart, handleTouchEnd } =
-    useCreateVocab();
 
+  // 단어장에서 기존 단어들 가져오기
+  const { data: myVocabWords = [] } = useQuery({
+    queryKey: ["myVocab"],
+    queryFn: getVocabList,
+  });
+
+  const {
+    handleMouseDown,
+    handleMouseMove,
+    handleMouseUp,
+    handleTouchStart,
+    handleTouchEnd,
+  } = useCreateVocab(myVocabWords);
   const dateKey = useMemo(
     () => selectedDate.format("YYYY-MM-DD"),
     [selectedDate]
@@ -84,10 +97,12 @@ const DiaryBox = () => {
               <DiaryTitle>{diary.title}</DiaryTitle>
               <DiaryContent
                 variant="body1"
-                onMouseUp={() => handleSelection(diary)}
-                onTouchStart={() => handleTouchStart(diary)}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
-                style={{ whiteSpace: "pre-wrap", lineHeight: "1.6" }}
+                style={{ cursor: "pointer" }}
               >
                 {diary.content}
               </DiaryContent>

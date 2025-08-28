@@ -11,6 +11,8 @@ import {
 } from "@mui/material";
 import useDiaryStore from "../../../stores/useDiaryStore";
 import useCreateVocab from "../../../hooks/useCreateVocab";
+import { useQuery } from "@tanstack/react-query";
+import { getVocabList } from "../../../apis/vocabApi";
 
 const ACCENT = "#00BE83";
 
@@ -22,8 +24,19 @@ const ResultsBox = ({ diary }) => {
     ? diary.corrections
     : [];
 
-  const { handleSelection, handleTouchStart, handleTouchEnd } =
-    useCreateVocab();
+  // 단어장에서 기존 단어들 가져오기
+  const { data: myVocabWords = [] } = useQuery({
+    queryKey: ["myVocab"],
+    queryFn: getVocabList,
+  });
+
+  const {
+    handleMouseDown,
+    handleMouseMove,
+    handleMouseUp,
+    handleTouchStart,
+    handleTouchEnd,
+  } = useCreateVocab(myVocabWords);
 
   const formatDate = (date) => {
     return new Intl.DateTimeFormat("en-US", {
@@ -67,9 +80,12 @@ const ResultsBox = ({ diary }) => {
             </Typography>
             <Typography
               sx={{ whiteSpace: "pre-line" }}
-              onMouseUp={() => handleSelection(diary)}
-              onTouchStart={() => handleTouchStart(diary)}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onTouchStart={handleTouchStart}
               onTouchEnd={handleTouchEnd}
+              style={{ cursor: "pointer" }}
             >
               {diary?.content}
             </Typography>
@@ -121,7 +137,16 @@ const ResultsBox = ({ diary }) => {
                         primary={`• ${c.originalSentence}`}
                         secondary={
                           <>
-                            <b>→ {c.correctedSentence}</b>
+                            <b
+                              onMouseDown={handleMouseDown}
+                              onMouseMove={handleMouseMove}
+                              onMouseUp={handleMouseUp}
+                              onTouchStart={handleTouchStart}
+                              onTouchEnd={handleTouchEnd}
+                              style={{ cursor: "pointer" }}
+                            >
+                              → {c.correctedSentence}
+                            </b>
                             {c.reason ? ` — ${c.reason}` : ""}
                           </>
                         }

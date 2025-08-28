@@ -3,7 +3,15 @@ import { styled } from "@mui/material";
 import { Box, Typography, Button, Chip } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
-const VocabBodyWord = ({ vocab, onToggleStatus, onDelete }) => {
+const VocabBodyWord = ({ vocab, onToggleStatus, onDelete, isPlaceholder }) => {
+  if (isPlaceholder) {
+    return (
+      <WordCard>
+        <MessageBox>{vocab.message}</MessageBox>
+      </WordCard>
+    );
+  }
+
   return (
     <WordCard>
       {/* 단어 정보 */}
@@ -48,6 +56,28 @@ const VocabBodyWord = ({ vocab, onToggleStatus, onDelete }) => {
 export default VocabBodyWord;
 
 // Styled Components
+const MessageBox = styled(Box)(({ theme }) => ({
+  width: "100%",
+  textAlign: "center",
+  color: theme.palette.text.secondary,
+  fontSize: "1rem",
+  fontWeight: 500,
+  p: 3,
+}));
+
+const ActionButton = styled(Button)(({ theme }) => ({
+  marginTop: theme.spacing(2),
+  width: "100%",
+  fontWeight: 600,
+  padding: theme.spacing(1, 0),
+  borderRadius: theme.spacing(1),
+  backgroundColor: theme.palette.primary.main,
+  color: "#fff",
+  "&:hover": {
+    backgroundColor: theme.palette.primary.dark,
+  },
+}));
+
 const WordCard = styled(Box)(({ theme }) => ({
   background: "white",
   border: "1px solid var(--app-border)",

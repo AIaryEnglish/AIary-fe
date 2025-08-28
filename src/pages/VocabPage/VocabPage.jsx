@@ -38,6 +38,12 @@ const VocabPage = () => {
     setFilteredList(filtered);
   }, [selectedStatus, searchQuery, vocabList]);
 
+  const emptyMessages = {
+    All: "단어를 공부하러 갑시다!",
+    mastered: "아직 마스터한 단어가 없습니다!",
+    learning: "학습 중인 단어가 없습니다!",
+  };
+
   return (
     <VocabPageContainer>
       <VocabContent maxWidth="xl">
@@ -57,14 +63,26 @@ const VocabPage = () => {
           {/* 오른쪽 패널: 단어 카드들 (스크롤 가능) */}
           <RightPanel>
             <VocabWordList>
-              {filteredList.map((vocab) => (
+              {filteredList.length > 0 ? (
+                filteredList.map((vocab) => (
+                  <VocabBodyWord
+                    key={vocab._id}
+                    vocab={vocab}
+                    onToggleStatus={() =>
+                      toggleStatusMutation.mutate(vocab._id)
+                    }
+                    onDelete={() => deleteMutation.mutate(vocab._id)}
+                  />
+                ))
+              ) : (
                 <VocabBodyWord
-                  key={vocab._id}
-                  vocab={vocab}
-                  onToggleStatus={() => toggleStatusMutation.mutate(vocab._id)}
-                  onDelete={() => deleteMutation.mutate(vocab._id)}
+                  isPlaceholder
+                  vocab={{
+                    message:
+                      emptyMessages[selectedStatus] || "단어가 없습니다!",
+                  }}
                 />
-              ))}
+              )}
             </VocabWordList>
           </RightPanel>
         </VocabLayout>
@@ -116,6 +134,7 @@ const VocabLayout = styled(Box)(({ theme }) => ({
     gap: theme.spacing(2),
     alignItems: "stretch",
     overflowY: "auto",
+    backgroundColor: "var(--mui-palette-background-paper)",
   },
 }));
 
@@ -136,12 +155,12 @@ const LeftPanel = styled(Box)(({ theme }) => ({
     minHeight: "auto",
     height: "auto",
     backgroundColor: "var(--mui-palette-background-paper)",
+    boxShadow: "none",
   },
 }));
 
 const RightPanel = styled(Box)(({ theme }) => ({
   flex: 1,
-  overflow: "hidden",
   display: "flex",
   flexDirection: "column",
   maxHeight: "500px",
@@ -151,6 +170,15 @@ const RightPanel = styled(Box)(({ theme }) => ({
   padding: theme.spacing(2),
   borderRadius: theme.spacing(1),
 
+  overflow: "hidden",
+  overflowY: "scroll", // 스크롤은 존재
+  scrollbarWidth: "none", // Firefox
+  msOverflowStyle: "none", // IE 10+
+  "&::-webkit-scrollbar": {
+    // Chrome, Safari
+    display: "none",
+  },
+
   [theme.breakpoints.down("md")]: {
     flex: "none",
     width: "100%",
@@ -158,15 +186,16 @@ const RightPanel = styled(Box)(({ theme }) => ({
     height: "auto",
     overflow: "visible",
     backgroundColor: "var(--mui-palette-background-paper)",
+    boxShadow: "none",
   },
 }));
 
 const VocabWordList = styled(Box)(({ theme }) => ({
   display: "flex",
+  height: "auto",
   flexDirection: "column",
   gap: theme.spacing(2),
-  height: "100%",
-  overflowY: "auto",
+  overflow: "visible",
   paddingRight: theme.spacing(1),
   padding: 0,
 
