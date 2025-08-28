@@ -33,7 +33,7 @@ const useCreateVocab = (existingVocab = []) => {
     isDragging = false;
     pressTimer = setTimeout(() => {
       if (!isDragging) saveWord();
-    }, 800); // 롱프레스 판정 시간
+    }, 3000); // 롱프레스 판정 시간 3초
   };
 
   const handleMouseMove = () => {
@@ -44,7 +44,12 @@ const useCreateVocab = (existingVocab = []) => {
 
   // 모바일 롱프레스
   const handleTouchStart = () => {
-    pressTimer = setTimeout(saveWord, 800); // 단어 선택 후 롱프레스
+    pressTimer = setTimeout(() => {
+      const selected = window.getSelection().toString().trim();
+      if (selected) {
+        saveWord();
+      }
+    }, 3000); // 단어 선택 후 롱프레스
   };
 
   const handleTouchEnd = () => clearTimeout(pressTimer);
