@@ -20,12 +20,11 @@ import { useState } from "react";
 import NewDiaryDialog from "./NewDiaryDialog";
 import useDeleteDiary from "../../../hooks/useDeleteDiary";
 
-
 const ACCENT = "#00BE83";
 
-//여기서 단어 넘기는 함수 넣기
-const ResultsBox = ({ diary }) => {
+const ResultsBox = ({ diary, displayedDateKey }) => {
   const { selectedDate } = useDiaryStore();
+
   const commentText = diary?.comment;
   const corrections = Array.isArray(diary?.corrections)
     ? diary.corrections
@@ -50,20 +49,21 @@ const ResultsBox = ({ diary }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [mode, setMode] = useState("edit");
 
-  const formatDate = (date) => {
-    return new Intl.DateTimeFormat("en-US", {
+  const formatDateKey = (dk) =>
+    new Intl.DateTimeFormat("en-US", {
       weekday: "long",
       month: "long",
       day: "numeric",
       year: "numeric",
-    }).format(date.toDate());
-  };
+    }).format(dayjs(dk).toDate());
 
   const today = dayjs().startOf("day");
-  const target = dayjs(diary.createdAt).startOf("day");
-  const dayDiff = today.diff(target, "day");
+  const target = diary?.createdAt
+    ? dayjs(diary.createdAt).startOf("day")
+    : null;
+  const dayDiff = target ? today.diff(target, "day") : Infinity;
   const isEditableDay = dayDiff >= 0 && dayDiff <= 1;
-  const canEdit = diary && isEditableDay;
+  const canEdit = !!diary && isEditableDay;
 
   const openEditForm = () => {
     setMode("edit");
@@ -71,6 +71,7 @@ const ResultsBox = ({ diary }) => {
   };
 
   const deleteEntry = () => {
+    if (!diary?._id || !diary?.dateKey) return;
     const [year, month] = diary.dateKey.split("-").map(Number);
     deleteDiaryMutate({
       id: diary._id,
@@ -79,6 +80,11 @@ const ResultsBox = ({ diary }) => {
       month,
     });
   };
+
+  const displayStr =
+    typeof displayedDateKey === "function"
+      ? displayedDateKey(selectedDate)
+      : formatDateKey(selectedDate);
 
   return (
     <>
@@ -100,7 +106,6 @@ const ResultsBox = ({ diary }) => {
               height: "100%",
             }}
           >
-
             <CardContent
               sx={{
                 maxHeight: { md: "calc(100vh - 220px)" },
@@ -108,13 +113,13 @@ const ResultsBox = ({ diary }) => {
               }}
             >
               <Typography variant="h6" fontWeight={700} sx={{ color: ACCENT }}>
-                Diary for {formatDate(selectedDate)}
+                Diary for {displayStr}
                 {canEdit && (
                   <>
                     <Button
                       onClick={openEditForm}
                       variant="outlined"
-                      color="ACCENT"
+                      sx={{ ml: 1, borderColor: ACCENT, color: ACCENT }}
                     >
                       일기 수정하기
                     </Button>
@@ -122,6 +127,7 @@ const ResultsBox = ({ diary }) => {
                       onClick={deleteEntry}
                       variant="outlined"
                       color="error"
+                      sx={{ ml: 1 }}
                     >
                       일기 삭제하기
                     </Button>
@@ -129,18 +135,18 @@ const ResultsBox = ({ diary }) => {
                 )}
               </Typography>
               <Typography variant="h5" sx={{ mt: 1, mb: 1 }}>
-                {diary?.title}
+                {diary?.title ?? ""}
               </Typography>
               <Typography
                 sx={{ whiteSpace: "pre-line" }}
-onMouseDown={handleMouseDown}
-                              onMouseMove={handleMouseMove}
-                              onMouseUp={handleMouseUp}
-                              onTouchStart={handleTouchStart}
-                              onTouchEnd={handleTouchEnd}
-                              style={{ cursor: "pointer" }}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+                style={{ cursor: "pointer" }}
               >
-                {diary?.content}
+                {diary?.content ?? ""}
               </Typography>
             </CardContent>
           </Card>
@@ -168,7 +174,6 @@ onMouseDown={handleMouseDown}
                 <Typography sx={{ mt: 1, whiteSpace: "pre-line" }}>
                   {commentText}
                 </Typography>
-
               )}
 
               {corrections.length > 0 && (
@@ -192,13 +197,15 @@ onMouseDown={handleMouseDown}
                           secondary={
                             <>
                               <b
-                              onMouseDown={handleMouseDown}
-                              onMouseMove={handleMouseMove}
-                              onMouseUp={handleMouseUp}
-                              onTouchStart={handleTouchStart}
-                              onTouchEnd={handleTouchEnd}
-                              style={{ cursor: "pointer" }}
-                              >→ {c.correctedSentence}</b>
+                                onMouseDown={handleMouseDown}
+                                onMouseMove={handleMouseMove}
+                                onMouseUp={handleMouseUp}
+                                onTouchStart={handleTouchStart}
+                                onTouchEnd={handleTouchEnd}
+                                style={{ cursor: "pointer" }}
+                              >
+                                → {c.correctedSentence}
+                              </b>
                               {c.reason ? ` — ${c.reason}` : ""}
                             </>
                           }
@@ -219,7 +226,6 @@ onMouseDown={handleMouseDown}
         selectedDate={selectedDate}
       />
     </>
-
   );
 };
 
