@@ -23,53 +23,62 @@ const useCreateVocab = (existingVocab = []) => {
   });
 
   let pressTimer = null;
+  let errorTimer = null; // 5초 카운트
   let isDragging = false;
 
-  const saveWord = () => {
-    const selected = window.getSelection().toString().trim().toLowerCase();
-    if (!selected) return;
-    if (existingVocab.includes(selected)) {
-      showError(`이미 저장된 단어입니다: ${selected}`, 3000, {
+  const saveWord = (word) => {
+    if (!word) return;
+
+    const lowerWord = word.toLowerCase();
+    if (existingVocab.includes(lowerWord)) {
+      showError(`이미 저장된 단어입니다: ${lowerWord}`, 3000, {
         vertical: "top",
         horizontal: "center",
       });
       return;
     }
-    mutation.mutate(selected);
+
+    mutation.mutate(lowerWord);
   };
 
-  // 데스크톱 롱프레스
-  const handleMouseDown = () => {
+  const handlePressStart = () => {
     isDragging = false;
+    const selectedWord = window.getSelection()?.toString().trim();
+    if (!selectedWord) return;
+
+    // 3초 후 롱프레스 성공
     pressTimer = setTimeout(() => {
-      if (!isDragging) saveWord();
-    }, 3000); // 롱프레스 판정 시간 3초
-  };
-
-  const handleMouseMove = () => {
-    isDragging = true; // 드래그 중 저장 방지
-  };
-
-  const handleMouseUp = () => clearTimeout(pressTimer);
-
-  // 모바일 롱프레스
-  const handleTouchStart = () => {
-    pressTimer = setTimeout(() => {
-      const selected = window.getSelection().toString().trim();
-      if (selected) {
-        saveWord();
+      if (!isDragging) {
+        saveWord(selectedWord);
+        clearTimeout(errorTimer); // 실패 타이머 취소
       }
-    }, 3000); // 단어 선택 후 롱프레스
+    }, 3000);
+
+    // 5초 후 롱프레스 실패 -> 에러 메시지
+    errorTimer = setTimeout(() => {
+      showError("단어를 다시 한 번 선택해 주세요.", 3000, {
+        vertical: "top",
+        horizontal: "center",
+      });
+      clearTimeout(pressTimer); // 성공 타이머 취소
+    }, 5000);
   };
 
-  const handleTouchEnd = () => clearTimeout(pressTimer);
+  const handlePressMove = () => {
+    isDragging = true; // 드래그 중이면 눌러도 저장 방지
+  };
+
+  const handlePressEnd = () => {
+    clearTimeout(pressTimer);
+    clearTimeout(errorTimer);
+  };
 
   return {
-    handleMouseDown,
-    handleMouseMove,
-    handleMouseUp,
-    handleTouchStart,
-    handleTouchEnd,
+    handleMouseDown: handlePressStart,
+    handleMouseMove: handlePressMove,
+    handleMouseUp: handlePressEnd,
+    handleTouchStart: handlePressStart,
+    handleTouchEnd: handlePressEnd,
     isLoading: mutation.isLoading,
   };
 };
