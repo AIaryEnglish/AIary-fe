@@ -84,20 +84,18 @@ const VocabPage = () => {
                   {emptyMessages[selectedStatus] || "단어가 없습니다!"}
                 </Message>
                 <ButtonRow>
-                  <Button
-                    variant="contained"
-                    color="primary"
+                  <ActionButton
+                    variant="outlined"
                     onClick={() => navigate("/")}
                   >
                     홈으로
-                  </Button>
-                  <Button
+                  </ActionButton>
+                  <ActionButton
                     variant="outlined"
-                    color="secondary"
                     onClick={() => navigate("/daily")}
                   >
                     일기로
-                  </Button>
+                  </ActionButton>
                 </ButtonRow>
               </PlaceholderPanel>
             )}
@@ -111,6 +109,23 @@ const VocabPage = () => {
 export default VocabPage;
 
 // Styled Components
+const ActionButton = styled(Button)(({ theme }) => ({
+  borderRadius: theme.spacing(1),
+  textTransform: "none",
+  fontSize: "1rem",
+  padding: theme.spacing(1, 3),
+  backgroundColor: "white",
+  color: "var(--mui-palette-text-primary)",
+  borderColor: "var(--app-border)",
+  boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+
+  "&:hover": {
+    backgroundColor: "var(--app-muted-bg)",
+    borderColor: "var(--app-chart-1)",
+    color: "var(--app-chart-1)",
+  },
+}));
+
 const PlaceholderPanel = styled(Box)(({ theme }) => ({
   flex: 1,
   display: "flex",
