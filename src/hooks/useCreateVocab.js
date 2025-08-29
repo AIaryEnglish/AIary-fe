@@ -25,44 +25,47 @@ const useCreateVocab = (existingVocab = []) => {
   let pressTimer = null;
   let isDragging = false;
 
-  const saveWord = () => {
-    const selected = window.getSelection().toString().trim().toLowerCase();
-    if (!selected) return;
-    if (existingVocab.includes(selected)) {
-      showError(`이미 저장된 단어입니다: ${selected}`, 3000, {
+  const saveWord = (word) => {
+    if (!word) return;
+
+    const lowerWord = word.toLowerCase();
+    if (existingVocab.includes(lowerWord)) {
+      showError(`이미 저장된 단어입니다: ${lowerWord}`, 3000, {
         vertical: "top",
         horizontal: "center",
       });
       return;
     }
-    mutation.mutate(selected);
+
+    mutation.mutate(lowerWord);
   };
 
-  // 데스크톱 롱프레스
   const handleMouseDown = () => {
     isDragging = false;
+    const selectedWord = window.getSelection()?.toString().trim();
+    if (!selectedWord) return;
+
     pressTimer = setTimeout(() => {
-      if (!isDragging) saveWord();
-    }, 3000); // 롱프레스 판정 시간 3초
+      if (!isDragging) saveWord(selectedWord);
+    }, 3000);
   };
 
   const handleMouseMove = () => {
-    isDragging = true; // 드래그 중 저장 방지
+    isDragging = true;
   };
 
-  const handleMouseUp = () => clearTimeout(pressTimer);
+  const handleMouseUp = () => clearTimeout(pressTimer); // 상태 건드리지 않음
 
-  // 모바일 롱프레스
   const handleTouchStart = () => {
+    const selectedWord = window.getSelection()?.toString().trim();
+    if (!selectedWord) return;
+
     pressTimer = setTimeout(() => {
-      const selected = window.getSelection().toString().trim();
-      if (selected) {
-        saveWord();
-      }
-    }, 3000); // 단어 선택 후 롱프레스
+      saveWord(selectedWord);
+    }, 3000);
   };
 
-  const handleTouchEnd = () => clearTimeout(pressTimer);
+  const handleTouchEnd = () => clearTimeout(pressTimer); // 상태 건드리지 않음
 
   return {
     handleMouseDown,
