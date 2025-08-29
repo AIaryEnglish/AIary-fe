@@ -101,7 +101,7 @@ const AllDiariesPage = () => {
   return (
     <PageContainer>
       <HeaderContainer width="100%" elevation={2}>
-        <HeaderTitle variant="h3" component="h1">
+        <HeaderTitle variant="h4" component="h1">
           다른 사람들의 일기
         </HeaderTitle>
         <HeaderDescription variant="h6">
@@ -178,7 +178,7 @@ const AllDiariesPage = () => {
         {/* 더 이상 로드할 일기가 없을 때 */}
         {!hasNextPage && filteredAndSortedDiaries.length > 0 && (
           <EndMessageContainer>
-            <Typography variant="body2" color="var(--app-muted-fg)">
+            <Typography variant="body2" color="var(--app-chart-1)">
               {searchQuery
                 ? "검색된 모든 일기를 확인했습니다"
                 : "모든 일기를 확인했습니다"}
