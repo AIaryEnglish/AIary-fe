@@ -113,6 +113,7 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
             border: "1px solid",
             borderColor: "success.light",
             height: "100%",
+            minHeight: "430px",
             display: "flex",
             flexDirection: "column",
           }}
