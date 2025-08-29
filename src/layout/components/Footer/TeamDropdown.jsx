@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { ExpandMore } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
-import useDropdownAnimation from "../../../hooks/useDropdownAnimation";
+import useDropdownAnimation from "../../../util/useDropdownAnimation";
 
 // 프로필 이미지들 import
 import user1 from "../../../assets/user1.png";
