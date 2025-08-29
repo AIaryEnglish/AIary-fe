@@ -26,7 +26,7 @@ const useCreateVocab = (existingVocab = []) => {
   let isDragging = false;
 
   const saveWord = () => {
-    const selected = window.getSelection().toString().trim();
+    const selected = window.getSelection().toString().trim().toLowerCase();
     if (!selected) return;
     if (existingVocab.includes(selected)) {
       showError(`이미 저장된 단어입니다: ${selected}`, 3000, {
