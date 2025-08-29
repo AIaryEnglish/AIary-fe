@@ -45,6 +45,18 @@ const SearchAndSortFilter = ({
             startAdornment={
               <SortIcon sx={{ color: "var(--app-muted-fg)", mr: 1 }} />
             }
+            MenuProps={{
+              PaperProps: {
+                sx: {
+                  "& .MuiMenuItem-root.Mui-selected": {
+                    backgroundColor: "rgba(213, 255, 214, 0.8)",
+                    "&:hover": {
+                      backgroundColor: "var(--mui-palette-action-hover)",
+                    },
+                  },
+                },
+              },
+            }}
           >
             <MenuItem value="newest">최신순</MenuItem>
             <MenuItem value="oldest">오래된순</MenuItem>
@@ -116,20 +128,7 @@ const StyledFormControl = styled(FormControl)({
   },
 });
 
-const StyledSelect = styled(Select)({
-  MenuProps: {
-    PaperProps: {
-      sx: {
-        "& .MuiMenuItem-root.Mui-selected": {
-          backgroundColor: "var(--mui-palette-background-paper)",
-          "&:hover": {
-            backgroundColor: "var(--mui-palette-action-hover)",
-          },
-        },
-      },
-    },
-  },
-});
+const StyledSelect = styled(Select)({});
 
 const SearchStatsContainer = styled(Box)(({ theme }) => ({
   display: "flex",
