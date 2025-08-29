@@ -18,7 +18,6 @@ import { Switch, FormControlLabel } from "@mui/material";
 import { useState } from "react";
 import NewDiaryDialog from "./NewDiaryDialog";
 import useDeleteDiary from "../../../hooks/useDeleteDiary";
-import { updatePublicApi } from "../../../apis/diaryApi";
 import { useUpdatePublicDiary } from "../../../hooks/useUpdatePublicDiary";
 
 const ACCENT = "#00BE83";
@@ -63,7 +62,7 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
   const publicEdit = diary && !isEditableDay;
 
   const [isPublic, setIsPublic] = useState(diary.isPublic);
-  const { mutate: updatePublic, isPending } = useUpdatePublicDiary();
+  const { mutate: updatePublic } = useUpdatePublicDiary();
 
   const handleToggle = () => {
     const newValue = !isPublic;
@@ -73,7 +72,6 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
       { onSuccess: setIsPublic(newValue) }
     );
   };
-
 
   const openEditForm = () => {
     setMode("edit");
