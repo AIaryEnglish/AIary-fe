@@ -101,7 +101,7 @@ const AllDiariesPage = () => {
   return (
     <PageContainer>
       <HeaderContainer width="100%" elevation={2}>
-        <HeaderTitle variant="h3" component="h1">
+        <HeaderTitle variant="h4" component="h1">
           다른 사람들의 일기
         </HeaderTitle>
         <HeaderDescription variant="h6">
@@ -120,6 +120,11 @@ const AllDiariesPage = () => {
         </Container>
       </HeaderContainer>
       <ContentContainer maxWidth="lg">
+        {filteredAndSortedDiaries.length > 0 && (
+          <Typography variant="h7" fontWeight={600} color="var(--app-chart-1)">
+            총 {filteredAndSortedDiaries.length} 개의 일기가 있습니다.
+          </Typography>
+        )}
         {/* 일기 카드 그리드 */}
         {filteredAndSortedDiaries.length > 0 ? (
           <DiaryGrid container spacing={3}>
@@ -178,7 +183,7 @@ const AllDiariesPage = () => {
         {/* 더 이상 로드할 일기가 없을 때 */}
         {!hasNextPage && filteredAndSortedDiaries.length > 0 && (
           <EndMessageContainer>
-            <Typography variant="body2" color="var(--app-muted-fg)">
+            <Typography variant="body2" color="var(--app-chart-1)">
               {searchQuery
                 ? "검색된 모든 일기를 확인했습니다"
                 : "모든 일기를 확인했습니다"}

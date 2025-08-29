@@ -1,16 +1,26 @@
 import React from "react";
 import { Box, Container, Typography, Link, Divider } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import LogoVer5 from "../../../assets/logo_ver5.svg";
+import { useNavigate } from "react-router-dom";
+import TeamDropdown from "./TeamDropdown";
 
 const Footer = () => {
+  const navigate = useNavigate();
+
+  const handleNavigation = () => {
+    navigate("/");
+  };
+
   return (
     <StyledFooter>
       <Container maxWidth="lg">
         <FooterContent>
           <FooterSection>
-            <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-              AIary
-            </Typography>
+            <LogoContainer onClick={() => handleNavigation()}>
+              <LogoImage src={LogoVer5} alt="AIary Logo" />
+            </LogoContainer>
+
             <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
               영어 일기 작성의 새로운 경험
             </Typography>
@@ -20,8 +30,11 @@ const Footer = () => {
           </FooterSection>
 
           <FooterSection>
-            <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 2 }}>
-              서비스
+            <Typography
+              variant="subtitle1"
+              sx={{ fontWeight: 600, mb: 2, color: "var(--app-chart-1)" }}
+            >
+              Services
             </Typography>
             <FooterLink href="/daily">일기 작성</FooterLink>
             <FooterLink href="/vocab">단어장</FooterLink>
@@ -29,11 +42,13 @@ const Footer = () => {
           </FooterSection>
 
           <FooterSection>
-            <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 2 }}>
-              지원
+            <Typography
+              variant="subtitle1"
+              sx={{ fontWeight: 600, color: "var(--app-chart-1)" }}
+            >
+              Developers
             </Typography>
-            <FooterLink href="/login">로그인</FooterLink>
-            <FooterLink href="/register">회원가입</FooterLink>
+            <TeamDropdown />
           </FooterSection>
         </FooterContent>
 
@@ -41,7 +56,7 @@ const Footer = () => {
 
         <FooterBottom>
           <Typography variant="body2" color="text.secondary">
-            © 2024 AIary. All rights reserved.
+            © 2025 Aiary. All rights reserved.
           </Typography>
           <Typography variant="body2" color="text.secondary">
             Made with ❤️ for English learners
@@ -61,6 +76,21 @@ const StyledFooter = styled(Box)(({ theme }) => ({
   marginTop: "auto",
 }));
 
+const LogoContainer = styled(Box)({
+  display: "flex",
+  alignItems: "center",
+  cursor: "pointer",
+  "&:hover": {
+    opacity: 0.8,
+  },
+  marginBottom: "12px",
+});
+const LogoImage = styled("img")({
+  width: "100px",
+  height: "60px",
+  marginRight: "12px",
+});
+
 const FooterContent = styled(Box)(({ theme }) => ({
   display: "grid",
   gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
@@ -74,6 +104,8 @@ const FooterContent = styled(Box)(({ theme }) => ({
 const FooterSection = styled(Box)({
   display: "flex",
   flexDirection: "column",
+  gap: "12px",
+  position: "relative", // 메뉴의 절대 위치 기준점
 });
 
 const FooterLink = styled(Link)(({ theme }) => ({
@@ -81,8 +113,7 @@ const FooterLink = styled(Link)(({ theme }) => ({
   textDecoration: "none",
   marginBottom: theme.spacing(0.5),
   "&:hover": {
-    color: theme.palette.primary.main,
-    textDecoration: "underline",
+    color: "var(--app-chart-1)",
   },
 }));
 
