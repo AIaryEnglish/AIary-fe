@@ -158,14 +158,14 @@ const ButtonRow = styled(Box)(({ theme }) => ({
 }));
 
 const VocabPageContainer = styled(Box)(({ theme }) => ({
+  flex: 1, // 헤더/푸터 사이 공간을 자동으로 채움
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  maxHeight: "calc(100dvh - 70px)",
-  height: "100%",
+  width: "100%",
   padding: "0 6rem",
   backgroundColor: "var(--mui-palette-background-paper)",
-  overflowY: "hidden",
+  overflow: "hidden",
 
   [theme.breakpoints.down("md")]: {
     padding: "0 1rem",
