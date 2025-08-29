@@ -1,19 +1,14 @@
-import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { getVocabList } from "../apis/vocabApi";
 
 const useReadVocab = () => {
-  const [vocabList, setVocabList] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const { data: vocabList = [], refetch } = useQuery({
+    queryKey: ["myVocab"],
+    queryFn: getVocabList,
+    staleTime: 5 * 60 * 1000, // 5분 캐시
+  });
 
-  useEffect(() => {
-    setLoading(true);
-    getVocabList()
-      .then((data) => setVocabList(data))
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, []);
-
-  return { vocabList, setVocabList, loading };
+  return { vocabList, refetch };
 };
 
 export default useReadVocab;

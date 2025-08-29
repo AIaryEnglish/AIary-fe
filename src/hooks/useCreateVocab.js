@@ -9,10 +9,17 @@ const useCreateVocab = (existingVocab = []) => {
   const mutation = useMutation({
     mutationFn: (word) => createVocab(word),
     onSuccess: (data) => {
-      showSuccess(`단어 저장 완료! 저장된 단어: ${data.word}`, 3000);
+      showSuccess(`단어 저장 완료! 저장된 단어: ${data.word}`, 3000, {
+        vertical: "top",
+        horizontal: "center",
+      });
       queryClient.invalidateQueries(["myVocab"]);
     },
-    onError: (err) => showError(`단어 저장 실패! ${err.message}`, 3000),
+    onError: (err) =>
+      showError(`단어 저장 실패! ${err.message}`, 3000, {
+        vertical: "top",
+        horizontal: "center",
+      }),
   });
 
   let pressTimer = null;
@@ -22,7 +29,10 @@ const useCreateVocab = (existingVocab = []) => {
     const selected = window.getSelection().toString().trim();
     if (!selected) return;
     if (existingVocab.includes(selected)) {
-      showError(`이미 저장된 단어입니다: ${selected}`, 3000);
+      showError(`이미 저장된 단어입니다: ${selected}`, 3000, {
+        vertical: "top",
+        horizontal: "center",
+      });
       return;
     }
     mutation.mutate(selected);
@@ -33,7 +43,7 @@ const useCreateVocab = (existingVocab = []) => {
     isDragging = false;
     pressTimer = setTimeout(() => {
       if (!isDragging) saveWord();
-    }, 800); // 롱프레스 판정 시간
+    }, 3000); // 롱프레스 판정 시간 3초
   };
 
   const handleMouseMove = () => {
@@ -44,7 +54,12 @@ const useCreateVocab = (existingVocab = []) => {
 
   // 모바일 롱프레스
   const handleTouchStart = () => {
-    pressTimer = setTimeout(saveWord, 800); // 단어 선택 후 롱프레스
+    pressTimer = setTimeout(() => {
+      const selected = window.getSelection().toString().trim();
+      if (selected) {
+        saveWord();
+      }
+    }, 3000); // 단어 선택 후 롱프레스
   };
 
   const handleTouchEnd = () => clearTimeout(pressTimer);
