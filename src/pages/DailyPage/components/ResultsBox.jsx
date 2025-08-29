@@ -57,13 +57,13 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
       year: "numeric",
     }).format(dayjs(dk).toDate());
 
-  const today = dayjs().startOf("day");
-  const target = diary?.createdAt
-    ? dayjs(diary.createdAt).startOf("day")
-    : null;
-  const dayDiff = target ? today.diff(target, "day") : Infinity;
-  const isEditableDay = dayDiff >= 0 && dayDiff <= 1;
-  const canEdit = !!diary && isEditableDay;
+
+  const now = dayjs();
+  const target = dayjs(diary.createdAt);
+  const hoursDiff = now.diff(target, "hour");
+  const isEditableDay = hoursDiff <= 24;
+  const canEdit = diary && isEditableDay;
+
 
   const openEditForm = () => {
     setMode("edit");
@@ -148,6 +148,9 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
               >
                 {diary?.content ?? ""}
               </Typography>
+              {diary?.image && (
+                <img src={diary.image} width={120} alt="image" />
+              )}
             </CardContent>
           </Card>
 

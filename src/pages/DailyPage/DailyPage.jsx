@@ -28,11 +28,9 @@ export default function DailyPage() {
   const calMinHeight = !hasDiary ? 560 : hasAi ? 360 : 430;
 
   return (
-    <Container
-      maxWidth="xl"
-      sx={{ mt: 4, pb: 6 }}
-      className="daily-page daily-color"
-    >
+
+    <Container maxWidth="xl" sx={{ pt: 4, pb: 6 }} className="daily-page daily-color">
+
       <AiOverlay />
 
       <Box
