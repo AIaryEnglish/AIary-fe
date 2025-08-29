@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { ExpandMore } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
+import useDropdownAnimation from "../../../hooks/useDropdownAnimation";
 
 // 프로필 이미지들 import
 import user1 from "../../../assets/user1.png";
@@ -17,8 +18,7 @@ import user3 from "../../../assets/user3.png";
 import user4 from "../../../assets/user4.png";
 
 const TeamDropdown = () => {
-  const [open, setOpen] = React.useState(false);
-  const [isAnimating, setIsAnimating] = React.useState(false);
+  const { open, isAnimating, toggle, close } = useDropdownAnimation(300);
   const dropdownRef = React.useRef(null);
 
   const profile = [
@@ -48,29 +48,8 @@ const TeamDropdown = () => {
     },
   ];
 
-  const handleClick = () => {
-    if (open) {
-      setIsAnimating(true);
-      setTimeout(() => {
-        setOpen(false);
-        setIsAnimating(false);
-      }, 300);
-    } else {
-      setOpen(true);
-      setIsAnimating(true);
-      setTimeout(() => {
-        setIsAnimating(false);
-      }, 300);
-    }
-  };
-
-  const handleClose = () => {
-    setIsAnimating(true);
-    setTimeout(() => {
-      setOpen(false);
-      setIsAnimating(false);
-    }, 300);
-  };
+  const handleClick = toggle;
+  const handleClose = close;
 
   React.useEffect(() => {
     if (open) {
