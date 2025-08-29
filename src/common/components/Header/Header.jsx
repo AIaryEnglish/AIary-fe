@@ -26,6 +26,7 @@ const menuItems = [
   { text: "홈", path: "/" },
   { text: "일기", path: "/daily" },
   { text: "단어장", path: "/vocab" },
+  { text: "모든 일기", path: "/all-diaries" },
 ];
 
 const Header = () => {
