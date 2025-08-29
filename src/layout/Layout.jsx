@@ -20,9 +20,15 @@ const Layout = () => {
           flex: 1,
           display: "flex",
           flexDirection: "column",
+          bgcolor: "var(--mui-palette-background-paper)",
+          alignItems: { xs: "stretch", md: "stretch" },
+          justifyContent: "flex-start",
+          px: { xs: 1, md: 0 },
         }}
       >
-        <Outlet />
+        <Box sx={{ width: 1 }}>
+          <Outlet />
+        </Box>
       </Box>
       <Footer />
     </Box>
