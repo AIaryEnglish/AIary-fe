@@ -64,8 +64,9 @@ const VocabPage = () => {
           </LeftPanel>
 
           {/* 오른쪽 패널: 단어 카드들 (스크롤 가능) */}
-          <RightPanel>
-            {filteredList.length > 0 ? (
+
+          {filteredList.length > 0 ? (
+            <RightPanel>
               <VocabWordList>
                 {filteredList.map((vocab) => (
                   <VocabBodyWord
@@ -78,28 +79,25 @@ const VocabPage = () => {
                   />
                 ))}
               </VocabWordList>
-            ) : (
-              <PlaceholderPanel>
-                <Message>
-                  {emptyMessages[selectedStatus] || "단어가 없습니다!"}
-                </Message>
-                <ButtonRow>
-                  <ActionButton
-                    variant="outlined"
-                    onClick={() => navigate("/")}
-                  >
-                    홈으로
-                  </ActionButton>
-                  <ActionButton
-                    variant="outlined"
-                    onClick={() => navigate("/daily")}
-                  >
-                    일기로
-                  </ActionButton>
-                </ButtonRow>
-              </PlaceholderPanel>
-            )}
-          </RightPanel>
+            </RightPanel>
+          ) : (
+            <PlaceholderPanel>
+              <Message>
+                {emptyMessages[selectedStatus] || "단어가 없습니다!"}
+              </Message>
+              <ButtonRow>
+                <ActionButton variant="outlined" onClick={() => navigate("/")}>
+                  홈으로
+                </ActionButton>
+                <ActionButton
+                  variant="outlined"
+                  onClick={() => navigate("/daily")}
+                >
+                  일기로
+                </ActionButton>
+              </ButtonRow>
+            </PlaceholderPanel>
+          )}
         </VocabLayout>
       </VocabContent>
     </VocabPageContainer>
@@ -116,12 +114,11 @@ const ActionButton = styled(Button)(({ theme }) => ({
   padding: theme.spacing(1, 3),
   backgroundColor: "white",
   color: "var(--mui-palette-text-primary)",
-  borderColor: "var(--app-border)",
+  borderColor: "var(--app-chart-1)",
   boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
 
   "&:hover": {
     backgroundColor: "var(--app-muted-bg)",
-    borderColor: "var(--app-chart-1)",
     color: "var(--app-chart-1)",
   },
 }));
