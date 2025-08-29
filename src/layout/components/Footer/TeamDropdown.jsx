@@ -50,14 +50,12 @@ const TeamDropdown = () => {
 
   const handleClick = () => {
     if (open) {
-      // 닫기 애니메이션
       setIsAnimating(true);
       setTimeout(() => {
         setOpen(false);
         setIsAnimating(false);
       }, 300);
     } else {
-      // 열기 애니메이션
       setOpen(true);
       setIsAnimating(true);
       setTimeout(() => {
@@ -74,7 +72,6 @@ const TeamDropdown = () => {
     }, 300);
   };
 
-  // 드롭다운이 열릴 때 페이지 하단으로 스크롤
   React.useEffect(() => {
     if (open) {
       setTimeout(() => {
