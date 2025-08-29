@@ -378,3 +378,16 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* 본문 아래 이미지 래퍼 – 위/아래 간격만 */
+.entry-image-wrap {
+  margin-top: 12px;
+}
+
+/* 이미지: 카드 너비에 꽉 차게 */
+.entry-image {
+  display: block;
+  width: 100%;
+  height: auto; /* 비율 유지하며 가로 꽉 */
+  border-radius: 8px; /* 카드 라운드와 맞추기 원하면 조정 */
+}
