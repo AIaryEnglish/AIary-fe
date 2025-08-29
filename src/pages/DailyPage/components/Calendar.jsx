@@ -90,7 +90,7 @@ function DayWithDot(props) {
 }
 
 export default function Calendar({ compact = false, showLegend = false }) {
-  const { selectedDate, setSelectedDate } = useDiaryStore();
+  const { selectedDate, setSelectedDate, setDisplayDateKey } = useDiaryStore();
   const [currentView, setCurrentView] = useState("day");
   const isDesktop = useMediaQuery("(min-width:768px)");
 
@@ -114,7 +114,10 @@ export default function Calendar({ compact = false, showLegend = false }) {
           value={selectedDate}
           view={currentView}
           onViewChange={(v) => setCurrentView(v)}
-          onChange={(d) => setSelectedDate(d)}
+          onChange={(d) => {
+            setSelectedDate(d);
+            setDisplayDateKey(d.format("YYYY-MM-DD"));
+          }}
           views={["year", "month", "day"]}
           slots={{ day: DayWithDot }}
           slotProps={{
