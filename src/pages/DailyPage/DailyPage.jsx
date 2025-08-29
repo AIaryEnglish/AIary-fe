@@ -5,21 +5,32 @@ import ResultsBox from "./components/ResultsBox";
 import AiOverlay from "./components/AiOverlay";
 import useDiaryStore from "../../stores/useDiaryStore";
 import "./DailyPage.style.css";
+import useReadDailyDiary from "../../hooks/useReadDailyDiary";
 
 export default function DailyPage() {
-  const { selectedDate, diariesByDate } = useDiaryStore();
-  const dateKey = selectedDate.format("YYYY-MM-DD");
-  const diary = diariesByDate[dateKey];
+  const { selectedDate, diariesByDate, displayDateKey } = useDiaryStore();
+
+  // 사용자가 클릭한 날짜(요청을 날릴 키)
+  const selectedKey = selectedDate.format("YYYY-MM-DD");
+
+  // 항상 선택된 날짜에 대한 요청은 보냄
+  useReadDailyDiary({ date: selectedKey });
+
+  // 이미 store에 선택한 날짜 데이터가 있으면 그걸 "무조건" 우선 표시
+  const effectiveKey = displayDateKey ?? selectedKey;
+
+  const diary = diariesByDate[effectiveKey] || null;
   const hasDiary = !!diary;
   const hasAi = !!(diary && diary.comment);
 
   const calBasisMd = !hasDiary ? "44%" : hasAi ? "27%" : "34%";
   const calMaxMd = !hasDiary ? 680 : hasAi ? 360 : 520;
-
   const calMinHeight = !hasDiary ? 560 : hasAi ? 360 : 430;
 
   return (
+
     <Container maxWidth="xl" sx={{ pt: 4, pb: 6 }} className="daily-page daily-color">
+
       <AiOverlay />
 
       <Box
@@ -32,6 +43,7 @@ export default function DailyPage() {
           overflow: "visible",
         }}
       >
+        {/* Calendar 카드 */}
         <Box
           sx={{
             flexBasis: { md: calBasisMd },
@@ -67,6 +79,7 @@ export default function DailyPage() {
           </Card>
         </Box>
 
+        {/* 우측 패널 */}
         <Box
           sx={{
             flex: 1,
@@ -77,7 +90,18 @@ export default function DailyPage() {
             alignSelf: "flex-start",
           }}
         >
-          {hasAi ? <ResultsBox diary={diary} /> : <DiaryBox />}
+          {hasDiary ? (
+            <ResultsBox
+              key={`res-${effectiveKey}`}
+              diary={diary}
+              displayedDateKey={effectiveKey}
+            />
+          ) : (
+            <DiaryBox
+              key={`box-${effectiveKey}`}
+              displayedDateKey={effectiveKey}
+            />
+          )}
         </Box>
       </Box>
     </Container>

@@ -22,9 +22,9 @@ import useDeleteDiary from "../../../hooks/useDeleteDiary";
 
 const ACCENT = "#00BE83";
 
-//여기서 단어 넘기는 함수 넣기
-const ResultsBox = ({ diary }) => {
+const ResultsBox = ({ diary, displayedDateKey }) => {
   const { selectedDate } = useDiaryStore();
+
   const commentText = diary?.comment;
   const corrections = Array.isArray(diary?.corrections)
     ? diary.corrections
@@ -49,14 +49,14 @@ const ResultsBox = ({ diary }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [mode, setMode] = useState("edit");
 
-  const formatDate = (date) => {
-    return new Intl.DateTimeFormat("en-US", {
+  const formatDateKey = (dk) =>
+    new Intl.DateTimeFormat("en-US", {
       weekday: "long",
       month: "long",
       day: "numeric",
       year: "numeric",
-    }).format(date.toDate());
-  };
+    }).format(dayjs(dk).toDate());
+
 
   const now = dayjs();
   const target = dayjs(diary.createdAt);
@@ -64,12 +64,14 @@ const ResultsBox = ({ diary }) => {
   const isEditableDay = hoursDiff <= 24;
   const canEdit = diary && isEditableDay;
 
+
   const openEditForm = () => {
     setMode("edit");
     setOpenDialog(true);
   };
 
   const deleteEntry = () => {
+    if (!diary?._id || !diary?.dateKey) return;
     const [year, month] = diary.dateKey.split("-").map(Number);
     deleteDiaryMutate({
       id: diary._id,
@@ -78,6 +80,11 @@ const ResultsBox = ({ diary }) => {
       month,
     });
   };
+
+  const displayStr =
+    typeof displayedDateKey === "function"
+      ? displayedDateKey(selectedDate)
+      : formatDateKey(selectedDate);
 
   return (
     <>
@@ -106,13 +113,13 @@ const ResultsBox = ({ diary }) => {
               }}
             >
               <Typography variant="h6" fontWeight={700} sx={{ color: ACCENT }}>
-                Diary for {formatDate(selectedDate)}
+                Diary for {displayStr}
                 {canEdit && (
                   <>
                     <Button
                       onClick={openEditForm}
                       variant="outlined"
-                      color="ACCENT"
+                      sx={{ ml: 1, borderColor: ACCENT, color: ACCENT }}
                     >
                       일기 수정하기
                     </Button>
@@ -120,6 +127,7 @@ const ResultsBox = ({ diary }) => {
                       onClick={deleteEntry}
                       variant="outlined"
                       color="error"
+                      sx={{ ml: 1 }}
                     >
                       일기 삭제하기
                     </Button>
@@ -127,7 +135,7 @@ const ResultsBox = ({ diary }) => {
                 )}
               </Typography>
               <Typography variant="h5" sx={{ mt: 1, mb: 1 }}>
-                {diary?.title}
+                {diary?.title ?? ""}
               </Typography>
               <Typography
                 sx={{ whiteSpace: "pre-line" }}
@@ -138,7 +146,7 @@ const ResultsBox = ({ diary }) => {
                 onTouchEnd={handleTouchEnd}
                 style={{ cursor: "pointer" }}
               >
-                {diary?.content}
+                {diary?.content ?? ""}
               </Typography>
               {diary?.image && (
                 <img src={diary.image} width={120} alt="image" />
