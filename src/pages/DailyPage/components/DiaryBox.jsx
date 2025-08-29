@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import NewDiaryDialog from "./NewDiaryDialog";
 import { Card, CardContent, Typography, Button, styled } from "@mui/material";
 import dayjs from "dayjs";
@@ -57,7 +57,11 @@ const DiaryBox = ({ displayedDateKey }) => {
           </Typography>
 
           {isWritableDay && (
-            <Button onClick={openAddForm} variant="contained" sx={{ mt: 2 }}>
+            <Button
+              onClick={openAddForm}
+              variant="contained"
+              sx={{ mt: 2, backgroundColor: ACCENT }}
+            >
               일기 작성하기
             </Button>
           )}
@@ -74,7 +78,7 @@ const DiaryBox = ({ displayedDateKey }) => {
   );
 };
 
-export default DiaryBox;
+export default React.memo(DiaryBox);
 
 const DiaryDate = styled(Typography)(() => ({
   color: ACCENT,

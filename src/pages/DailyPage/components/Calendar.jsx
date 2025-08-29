@@ -118,7 +118,7 @@ export default function Calendar({ compact = false, showLegend = false }) {
           onViewChange={(v) => setCurrentView(v)}
           onChange={(d) => {
             setSelectedDate(d);
-            setDisplayDateKey(d.format("YYYY-MM-DD"));
+            sessionStorage.setItem("lastDate", d.format("YYYY-MM-DD"));
           }}
           views={["year", "month", "day"]}
           slots={{ day: DayWithDot }}

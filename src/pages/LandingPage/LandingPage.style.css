@@ -168,8 +168,7 @@
   );
 }
 .section-title {
-  font-family: var(--app-font-heading);
-  font-weight: 600;
+  font-weight: 900;
   font-size: clamp(22px, 3.2vw, 36px);
 }
 .section-sub {
@@ -178,7 +177,7 @@
   margin-top: -20px;
 }
 
-/* 여기! 같은 행 카드가 가장 긴 카드 높이에 '늘어나는' 걸 방지 */
+/* 카드 그리드 */
 .cards-container {
   display: flex;
   justify-content: center;
@@ -195,7 +194,7 @@
   padding: 20px 0 10px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center; /* 기본은 가운데 정렬 */
   text-align: center;
   box-shadow: none;
   transition: box-shadow 0.2s ease, transform 0.2s ease;
@@ -220,8 +219,7 @@
 
 .card-title {
   font-size: 22px;
-  font-weight: 700;
-  font-family: var(--app-font-heading);
+  font-weight: 900;
   margin-top: 0;
 }
 .card-text {
@@ -239,32 +237,39 @@
   transform: translateY(-4px);
 }
 
-/* 카드: 높이 고정 없음 → 내용만큼 */
+/* feed 카드에서만 자식 폭 100%로 늘리기 */
 .feed-card {
   position: relative;
   padding-top: 16px;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  align-items: stretch;
+}
+.feed-card .MuiCardHeader-root,
+.feed-card .card-body {
+  width: 100%;
+  align-self: stretch;
 }
 
 /* MUI CardHeader */
 .feed-card .MuiCardHeader-root {
   padding: 0 20px;
-  min-height: 72px; /* 제목 영역 높이는 동일 */
+  min-height: 72px;
   box-sizing: border-box;
 }
 .feed-card .entry-head .entry-title {
   margin-top: 4px;
 }
 
-/* 본문/메타/구분선/버튼: 수직 자연 흐름 + 간격 고정 */
+/* 본문/메타/구분선/버튼 레이아웃 */
 .feed-card .card-body {
   display: flex;
   flex-direction: column;
   gap: 12px;
   padding: 0 20px 12px;
   box-sizing: border-box;
+  text-align: left; /* 본문 영역 기본 좌측 정렬 */
 }
 
 /* 본문 */
@@ -275,32 +280,32 @@
   white-space: normal;
   word-break: break-word;
   overflow-wrap: anywhere;
+  text-align: left; /* 본문만 명시적으로 좌측 정렬 */
 }
 
-/* 접힘 상태: 3줄까지만 보이고 밑은 흰색으로 가림 */
+/* 접힘 상태: 3줄에서 … 처리 */
 .feed-card .entry-content.line-clamp-3 {
-  position: relative;
-  max-height: calc(1.7em * 3);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-}
-.feed-card .entry-content.line-clamp-3::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 0.8em; /* 줄일수록 글씨가 조금 더 보임 */
-  background: #fff; /* 완전 흰색 */
+  text-overflow: ellipsis;
+  /* 미래 호환 */
+  line-clamp: 3;
+  box-orient: vertical;
 }
 
-/* 날짜+작성자 */
+/* 날짜+작성자: 항상 카드 오른쪽/아래 정렬 */
 .feed-card .entry-meta-bottom {
+  width: 100%;
+  margin-top: auto; /* 본문이 짧아도 아래로 내려감 */
   display: flex;
   justify-content: flex-end;
   align-items: center;
   gap: 6px;
   font-size: 13px;
   color: var(--mui-palette-text-secondary);
+  text-align: right; /* .card { text-align:center } 영향 차단 */
 }
 .feed-card .entry-meta-bottom .sep {
   opacity: 0.6;
@@ -323,9 +328,8 @@
 
 /* 타이포 */
 .entry-title {
-  font-size: 20px;
-  font-weight: 700;
-  font-family: var(--app-font-heading);
+  font-size: 22px;
+  font-weight: 900;
 }
 
 /* ======================================
@@ -373,4 +377,17 @@
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* 본문 아래 이미지 래퍼 – 위/아래 간격만 */
+.entry-image-wrap {
+  margin-top: 12px;
+}
+
+/* 이미지: 카드 너비에 꽉 차게 */
+.entry-image {
+  display: block;
+  width: 100%;
+  height: auto; /* 비율 유지하며 가로 꽉 */
+  border-radius: 8px; /* 카드 라운드와 맞추기 원하면 조정 */
 }

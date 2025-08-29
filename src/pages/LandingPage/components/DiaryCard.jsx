@@ -17,6 +17,7 @@ export default function DiaryCard({ diary, isLoggedIn, opened, onToggle }) {
   const title = diary.title;
   const content = diary.content;
   const authorName = diary.author.name;
+  const imageUrl = diary.image;
 
   const contentRef = useRef(null);
   const isShort = useIsShortText(contentRef);
@@ -39,7 +40,7 @@ export default function DiaryCard({ diary, isLoggedIn, opened, onToggle }) {
       <CardHeader
         title={
           <div className="entry-head">
-            <p className="entry-title line-clamp-1">{title}</p>
+            <p className="entry-title">{title}</p>
           </div>
         }
       />
@@ -56,6 +57,11 @@ export default function DiaryCard({ diary, isLoggedIn, opened, onToggle }) {
         >
           {content}
         </p>
+        {opened && imageUrl && (
+          <div className="entry-image-wrap">
+            <img className="entry-image" src={imageUrl} alt="diary" />
+          </div>
+        )}
 
         <div className="entry-meta-bottom">
           <span className="date">{formattedDate}</span>
