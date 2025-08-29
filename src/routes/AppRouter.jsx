@@ -5,16 +5,15 @@ import Register from "../pages/RegisterPage/RegisterPage";
 import Daily from "../pages/DailyPage/DailyPage";
 import Vocab from "../pages/VocabPage/VocabPage";
 import PrivateRoute from "./PrivateRoute";
-import Header from "../common/components/Header/Header";
+import Layout from "../layout/Layout";
 
 const AppRouter = () => {
   return (
-    <>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Landing />} />
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
 
         {/* 인증이 필요한 라우트들 */}
         <Route element={<PrivateRoute />}>
@@ -23,8 +22,8 @@ const AppRouter = () => {
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </>
+      </Route>
+    </Routes>
   );
 };
 
