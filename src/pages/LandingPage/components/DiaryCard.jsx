@@ -4,6 +4,8 @@ import dayjs from "dayjs";
 import "dayjs/locale/ko";
 import { useRef } from "react";
 import useIsShortText from "../../../hooks/useIsShortText";
+import useReadVocab from "../../../hooks/useReadVocab";
+import useCreateVocab from "../../../hooks/useCreateVocab";
 
 dayjs.locale("ko");
 
@@ -22,6 +24,16 @@ export default function DiaryCard({ diary, isLoggedIn, opened, onToggle }) {
   const contentClass =
     opened || isShort ? "entry-content" : "entry-content line-clamp-3";
 
+  const { vocabList } = useReadVocab();
+
+  const {
+    handleMouseDown,
+    handleMouseMove,
+    handleMouseUp,
+    handleTouchStart,
+    handleTouchEnd,
+  } = useCreateVocab(vocabList);
+
   return (
     <div className="card feed-card hoverlift">
       <CardHeader
@@ -32,7 +44,16 @@ export default function DiaryCard({ diary, isLoggedIn, opened, onToggle }) {
         }
       />
       <CardContent className="card-body">
-        <p ref={contentRef} className={contentClass}>
+        <p
+          ref={contentRef}
+          className={contentClass}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          style={{ cursor: "pointer" }}
+        >
           {content}
         </p>
 

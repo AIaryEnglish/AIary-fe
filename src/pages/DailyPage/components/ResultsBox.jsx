@@ -12,10 +12,9 @@ import {
 } from "@mui/material";
 import dayjs from "dayjs";
 import useDiaryStore from "../../../stores/useDiaryStore";
+import useReadVocab from "../../../hooks/useReadVocab";
 import useCreateVocab from "../../../hooks/useCreateVocab";
 
-import { useQuery } from "@tanstack/react-query";
-import { getVocabList } from "../../../apis/vocabApi";
 import { useState } from "react";
 import NewDiaryDialog from "./NewDiaryDialog";
 import useDeleteDiary from "../../../hooks/useDeleteDiary";
@@ -31,10 +30,7 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
     : [];
 
   // 단어장에서 기존 단어들 가져오기
-  const { data: myVocabWords = [] } = useQuery({
-    queryKey: ["myVocab"],
-    queryFn: getVocabList,
-  });
+  const { vocabList } = useReadVocab();
 
   const {
     handleMouseDown,
@@ -42,7 +38,7 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
     handleMouseUp,
     handleTouchStart,
     handleTouchEnd,
-  } = useCreateVocab(myVocabWords);
+  } = useCreateVocab(vocabList);
 
   const { mutate: deleteDiaryMutate } = useDeleteDiary();
 
@@ -57,13 +53,11 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
       year: "numeric",
     }).format(dayjs(dk).toDate());
 
-
   const now = dayjs();
   const target = dayjs(diary.createdAt);
   const hoursDiff = now.diff(target, "hour");
   const isEditableDay = hoursDiff <= 24;
   const canEdit = diary && isEditableDay;
-
 
   const openEditForm = () => {
     setMode("edit");
