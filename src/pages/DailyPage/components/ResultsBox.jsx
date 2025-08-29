@@ -13,12 +13,14 @@ import {
 import dayjs from "dayjs";
 import useDiaryStore from "../../../stores/useDiaryStore";
 import useCreateVocab from "../../../hooks/useCreateVocab";
-
+import { Switch, FormControlLabel } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { getVocabList } from "../../../apis/vocabApi";
 import { useState } from "react";
 import NewDiaryDialog from "./NewDiaryDialog";
 import useDeleteDiary from "../../../hooks/useDeleteDiary";
+import { updatePublicApi } from "../../../apis/diaryApi";
+import { useUpdatePublicDiary } from "../../../hooks/useUpdatePublicDiary";
 
 const ACCENT = "#00BE83";
 
@@ -57,13 +59,24 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
       year: "numeric",
     }).format(dayjs(dk).toDate());
 
-
   const now = dayjs();
   const target = dayjs(diary.createdAt);
   const hoursDiff = now.diff(target, "hour");
   const isEditableDay = hoursDiff <= 24;
   const canEdit = diary && isEditableDay;
+  const publicEdit = diary && !isEditableDay;
 
+  const [isPublic, setIsPublic] = useState(diary.isPublic);
+  const { mutate: updatePublic, isPending } = useUpdatePublicDiary();
+
+  const handleToggle = () => {
+    const newValue = !isPublic;
+
+    updatePublic(
+      { id: diary._id, state: { isPublic: newValue } },
+      { onSuccess: setIsPublic(newValue) }
+    );
+  };
 
   const openEditForm = () => {
     setMode("edit");
@@ -104,16 +117,49 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
               border: "1px solid",
               borderColor: "success.light",
               height: "100%",
+              display: "flex",
+              flexDirection: "column",
             }}
           >
             <CardContent
               sx={{
                 maxHeight: { md: "calc(100vh - 220px)" },
                 overflowY: "auto",
+                display: "flex",
+                flexDirection: "column",
+                flex: 1,
               }}
             >
               <Typography variant="h6" fontWeight={700} sx={{ color: ACCENT }}>
                 Diary for {displayStr}
+              </Typography>
+              <Typography variant="h5" sx={{ mt: 1, mb: 1 }}>
+                {diary?.title ?? ""}
+              </Typography>
+              <Typography
+                sx={{ whiteSpace: "pre-line" }}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+                style={{ cursor: "pointer" }}
+              >
+                {diary?.content ?? ""}
+              </Typography>
+              {diary?.image && (
+                <img src={diary.image} width={120} alt="image" />
+              )}
+              <Box
+                sx={{
+                  mt: "auto",
+                  pt: 2,
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  alignItems: "center",
+                  gap: 1,
+                }}
+              >
                 {canEdit && (
                   <>
                     <Button
@@ -133,24 +179,19 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
                     </Button>
                   </>
                 )}
-              </Typography>
-              <Typography variant="h5" sx={{ mt: 1, mb: 1 }}>
-                {diary?.title ?? ""}
-              </Typography>
-              <Typography
-                sx={{ whiteSpace: "pre-line" }}
-                onMouseDown={handleMouseDown}
-                onMouseMove={handleMouseMove}
-                onMouseUp={handleMouseUp}
-                onTouchStart={handleTouchStart}
-                onTouchEnd={handleTouchEnd}
-                style={{ cursor: "pointer" }}
-              >
-                {diary?.content ?? ""}
-              </Typography>
-              {diary?.image && (
-                <img src={diary.image} width={120} alt="image" />
-              )}
+                {publicEdit && (
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={isPublic}
+                        onChange={handleToggle}
+                        color="success"
+                      />
+                    }
+                    label={isPublic ? "공개" : "비공개"}
+                  />
+                )}
+              </Box>
             </CardContent>
           </Card>
 

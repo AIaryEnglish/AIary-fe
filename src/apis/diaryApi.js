@@ -52,6 +52,16 @@ export const updateDiaryApi = async(id, diary) => {
     throw err;
   }
 };
+export const updatePublicApi = async(id, state) => {
+  try {
+    const response = await api.put(`diary/published/${id}`, state);
+    return response.data;
+  } catch(err) {
+    console.error("일기 수정 실패:", err);
+    throw err;
+  }
+};
+
 export const deleteDiaryApi = async(id) => {
   try {
     const response = await api.delete(`/diary/${id}`);
