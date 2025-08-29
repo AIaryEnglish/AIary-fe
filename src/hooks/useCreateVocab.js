@@ -23,6 +23,7 @@ const useCreateVocab = (existingVocab = []) => {
   });
 
   let pressTimer = null;
+  let errorTimer = null; // 5초 카운트
   let isDragging = false;
 
   const saveWord = (word) => {
@@ -40,39 +41,44 @@ const useCreateVocab = (existingVocab = []) => {
     mutation.mutate(lowerWord);
   };
 
-  const handleMouseDown = () => {
+  const handlePressStart = () => {
     isDragging = false;
     const selectedWord = window.getSelection()?.toString().trim();
     if (!selectedWord) return;
 
+    // 3초 후 롱프레스 성공
     pressTimer = setTimeout(() => {
-      if (!isDragging) saveWord(selectedWord);
+      if (!isDragging) {
+        saveWord(selectedWord);
+        clearTimeout(errorTimer); // 실패 타이머 취소
+      }
     }, 3000);
+
+    // 5초 후 롱프레스 실패 -> 에러 메시지
+    errorTimer = setTimeout(() => {
+      showError("단어를 다시 한 번 선택해 주세요.", 3000, {
+        vertical: "top",
+        horizontal: "center",
+      });
+      clearTimeout(pressTimer); // 성공 타이머 취소
+    }, 5000);
   };
 
-  const handleMouseMove = () => {
-    isDragging = true;
+  const handlePressMove = () => {
+    isDragging = true; // 드래그 중이면 눌러도 저장 방지
   };
 
-  const handleMouseUp = () => clearTimeout(pressTimer); // 상태 건드리지 않음
-
-  const handleTouchStart = () => {
-    const selectedWord = window.getSelection()?.toString().trim();
-    if (!selectedWord) return;
-
-    pressTimer = setTimeout(() => {
-      saveWord(selectedWord);
-    }, 3000);
+  const handlePressEnd = () => {
+    clearTimeout(pressTimer);
+    clearTimeout(errorTimer);
   };
-
-  const handleTouchEnd = () => clearTimeout(pressTimer); // 상태 건드리지 않음
 
   return {
-    handleMouseDown,
-    handleMouseMove,
-    handleMouseUp,
-    handleTouchStart,
-    handleTouchEnd,
+    handleMouseDown: handlePressStart,
+    handleMouseMove: handlePressMove,
+    handleMouseUp: handlePressEnd,
+    handleTouchStart: handlePressStart,
+    handleTouchEnd: handlePressEnd,
     isLoading: mutation.isLoading,
   };
 };
