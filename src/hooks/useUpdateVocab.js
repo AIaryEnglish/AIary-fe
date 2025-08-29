@@ -1,13 +1,14 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toggleVocabStatus } from "../apis/vocabApi";
 
-const useUpdateVocab = (setVocabList) => {
+const useUpdateVocab = () => {
+  const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: toggleVocabStatus,
     onSuccess: (updated) => {
-      // 상태 업데이트
-      setVocabList((prev) =>
-        prev.map((v) => (v._id === updated._id ? updated : v))
+      // React Query 캐시를 바로 갱신
+      queryClient.setQueryData(["myVocab"], (old = []) =>
+        old.map((v) => (v._id === updated._id ? updated : v))
       );
     },
     onError: (err) => {

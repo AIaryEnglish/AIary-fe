@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material";
-import { Container, Box, Grid } from "@mui/material";
+import { Container, Box, Button, Grid } from "@mui/material";
 import VocabBodyProgress from "./component/VocabBodyProgress";
 import VocabBodySearch from "./component/VocabBodySearch";
 import VocabBodyWord from "./component/VocabBodyWord";
@@ -10,9 +11,9 @@ import useDeleteVocab from "../../hooks/useDeleteVocab";
 
 const VocabPage = () => {
   //단어목록, 상태변화 훅들 불러오기
-  const { vocabList, setVocabList } = useReadVocab();
-  const toggleStatusMutation = useUpdateVocab(setVocabList);
-  const deleteMutation = useDeleteVocab(setVocabList);
+  const { vocabList } = useReadVocab();
+  const toggleStatusMutation = useUpdateVocab();
+  const deleteMutation = useDeleteVocab();
 
   // 필터, 검색 상태 전용
   const [selectedStatus, setSelectedStatus] = useState("All");
@@ -44,6 +45,8 @@ const VocabPage = () => {
     learning: "학습 중인 단어가 없습니다!",
   };
 
+  const navigate = useNavigate();
+
   return (
     <VocabPageContainer>
       <VocabContent maxWidth="xl">
@@ -62,9 +65,9 @@ const VocabPage = () => {
 
           {/* 오른쪽 패널: 단어 카드들 (스크롤 가능) */}
           <RightPanel>
-            <VocabWordList>
-              {filteredList.length > 0 ? (
-                filteredList.map((vocab) => (
+            {filteredList.length > 0 ? (
+              <VocabWordList>
+                {filteredList.map((vocab) => (
                   <VocabBodyWord
                     key={vocab._id}
                     vocab={vocab}
@@ -73,17 +76,29 @@ const VocabPage = () => {
                     }
                     onDelete={() => deleteMutation.mutate(vocab._id)}
                   />
-                ))
-              ) : (
-                <VocabBodyWord
-                  isPlaceholder
-                  vocab={{
-                    message:
-                      emptyMessages[selectedStatus] || "단어가 없습니다!",
-                  }}
-                />
-              )}
-            </VocabWordList>
+                ))}
+              </VocabWordList>
+            ) : (
+              <PlaceholderPanel>
+                <Message>
+                  {emptyMessages[selectedStatus] || "단어가 없습니다!"}
+                </Message>
+                <ButtonRow>
+                  <ActionButton
+                    variant="outlined"
+                    onClick={() => navigate("/")}
+                  >
+                    홈으로
+                  </ActionButton>
+                  <ActionButton
+                    variant="outlined"
+                    onClick={() => navigate("/daily")}
+                  >
+                    일기로
+                  </ActionButton>
+                </ButtonRow>
+              </PlaceholderPanel>
+            )}
           </RightPanel>
         </VocabLayout>
       </VocabContent>
@@ -94,6 +109,57 @@ const VocabPage = () => {
 export default VocabPage;
 
 // Styled Components
+const ActionButton = styled(Button)(({ theme }) => ({
+  borderRadius: theme.spacing(1),
+  textTransform: "none",
+  fontSize: "1rem",
+  padding: theme.spacing(1, 3),
+  backgroundColor: "white",
+  color: "var(--mui-palette-text-primary)",
+  borderColor: "var(--app-border)",
+  boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+
+  "&:hover": {
+    backgroundColor: "var(--app-muted-bg)",
+    borderColor: "var(--app-chart-1)",
+    color: "var(--app-chart-1)",
+  },
+}));
+
+const PlaceholderPanel = styled(Box)(({ theme }) => ({
+  flex: 1,
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "100%",
+  minHeight: "500px", // LeftPanel과 맞춤
+  backgroundColor: "white",
+  boxShadow: "0 8px 32px rgba(96, 175, 160, 0.15)",
+  borderRadius: theme.spacing(1),
+  padding: theme.spacing(2),
+  border: "1px solid var(--app-border)",
+
+  [theme.breakpoints.down("md")]: {
+    minHeight: "auto",
+    height: "auto",
+    boxShadow: "0 8px 32px rgba(96, 175, 160, 0.15)",
+    backgroundColor: "white",
+  },
+}));
+
+const Message = styled("div")(({ theme }) => ({
+  fontSize: "1.2rem",
+  marginBottom: theme.spacing(3),
+  textAlign: "center",
+}));
+
+const ButtonRow = styled(Box)(({ theme }) => ({
+  display: "flex",
+  gap: theme.spacing(2),
+  flexDirection: "row",
+}));
+
 const VocabPageContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "center",

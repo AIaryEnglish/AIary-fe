@@ -1,16 +1,17 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteVocab } from "../apis/vocabApi";
+import useSnackbarStore from "../stores/useSnackbarStore";
 
-const useDeleteVocab = (setVocabList) => {
+const useDeleteVocab = () => {
+  const queryClient = useQueryClient();
+  const { showError } = useSnackbarStore();
+
   const mutation = useMutation({
     mutationFn: deleteVocab,
-    onSuccess: (deletedId) => {
-      // 삭제 성공 시 리스트에서 제거
-      setVocabList((prev) => prev.filter((v) => v._id !== deletedId));
+    onSuccess: () => {
+      queryClient.invalidateQueries(["myVocab"]); // 삭제 후 자동 새로고침
     },
-    onError: (err) => {
-      console.error("삭제 실패:", err);
-    },
+    onError: (err) => showError(`삭제 실패! ${err.message}`, 3000),
   });
 
   return {
