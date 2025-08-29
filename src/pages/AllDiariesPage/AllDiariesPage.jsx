@@ -120,6 +120,11 @@ const AllDiariesPage = () => {
         </Container>
       </HeaderContainer>
       <ContentContainer maxWidth="lg">
+        {filteredAndSortedDiaries.length > 0 && (
+          <Typography variant="h7" fontWeight={600} color="var(--app-chart-1)">
+            총 {filteredAndSortedDiaries.length} 개의 일기가 있습니다.
+          </Typography>
+        )}
         {/* 일기 카드 그리드 */}
         {filteredAndSortedDiaries.length > 0 ? (
           <DiaryGrid container spacing={3}>
