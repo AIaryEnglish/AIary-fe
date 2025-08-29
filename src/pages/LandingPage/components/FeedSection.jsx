@@ -1,5 +1,5 @@
 import { Box, Button, Container } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
 import { useAuthStore } from "../../../stores/authStore";
@@ -11,6 +11,7 @@ dayjs.locale("ko");
 
 export default function FeedSection() {
   const isLoggedIn = useAuthStore((s) => s.isAuthed());
+  const navigate = useNavigate();
 
   const [openedDiaries, setOpenedDiaries] = useState(() => new Set());
   const toggleOpen = (id) => {
@@ -63,11 +64,10 @@ export default function FeedSection() {
 
         <Box className="feed-cta">
           <Button
-            component={RouterLink}
-            to={isLoggedIn ? "/all-diaries" : "/login"}
             variant="outlined"
             size="large"
             className="btn-outline"
+            onClick={() => navigate("/all-diaries")}
           >
             일기 더보기
           </Button>
