@@ -278,6 +278,7 @@ const DiaryCardWrapper = styled(Box)({
     display: "flex",
     flexDirection: "column",
     "&:hover": {
+      border: "2px solid var(--app-chart-1)",
       transform: "translateY(-4px)",
       boxShadow: "0 8px 25px rgba(0, 0, 0, 0.15)",
     },
