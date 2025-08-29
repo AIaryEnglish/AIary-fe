@@ -270,13 +270,22 @@ const EndMessageContainer = styled(Box)({
 const DiaryCardWrapper = styled(Box)({
   display: "flex",
   justifyContent: "center",
-  alignItems: "center",
+  alignItems: "stretch",
   "& .card": {
     backgroundColor: "white",
     width: "100%",
+    minHeight: "300px",
+    display: "flex",
+    flexDirection: "column",
     "&:hover": {
       transform: "translateY(-4px)",
       boxShadow: "0 8px 25px rgba(0, 0, 0, 0.15)",
+    },
+    "& .card-body": {
+      flex: 1,
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between",
     },
   },
 });
