@@ -17,7 +17,6 @@ export const useUpdatePublicDiary = () => {
 
   const mutation = useMutation({
     mutationFn: ({ id, state }) => updatePublicApi(id, state),
-    onMutate: () => setAiPending(true),
     onSuccess: (response) => {
       const updated = response.data;
       if (!updated?._id) {
@@ -58,10 +57,10 @@ export const useUpdatePublicDiary = () => {
     },
     onError: (error) => {
       showError(
-        error?.message || "일기 공개 수정 중 오류가 발생했습니다. 다시 시도해주세요."
+        error?.message ||
+          "일기 공개 수정 중 오류가 발생했습니다. 다시 시도해주세요."
       );
     },
-    onSettled: () => setAiPending(false),
   });
 
   return {
