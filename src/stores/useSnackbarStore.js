@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 const DEFAULT_DURATION = 3000;
-const DEFAULT_POSITION = { vertical: "top", horizontal: "right" };
+const DEFAULT_POSITION = { vertical: "top", horizontal: "center" };
 
 const useSnackbarStore = create((set) => ({
   open: false,

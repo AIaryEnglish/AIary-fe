@@ -231,18 +231,25 @@ const FormContainer = styled(Paper)({
   boxShadow: "0 8px 32px rgba(96, 175, 160, 0.15)",
 });
 
-const FormTitle = styled(Typography)({
+const FormTitle = styled(Typography)(({ theme }) => ({
   textAlign: "center",
   marginBottom: 8,
   fontWeight: 600,
   color: "var(--app-chart-1)",
-});
+  [theme.breakpoints.down("md")]: {
+    fontSize: "1.7rem",
+    marginBottom: 10,
+  },
+}));
 
-const FormDescription = styled(Typography)({
+const FormDescription = styled(Typography)(({ theme }) => ({
   textAlign: "center",
   marginBottom: 32,
   color: "var(--app-muted-fg)",
-});
+  [theme.breakpoints.down("md")]: {
+    fontSize: "0.9rem",
+  },
+}));
 
 const StyledTextField = styled(TextField)({
   marginBottom: 24,
