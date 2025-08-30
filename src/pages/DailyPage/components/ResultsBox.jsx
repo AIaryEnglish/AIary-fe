@@ -2,40 +2,38 @@ import {
   Card,
   CardContent,
   Typography,
-  Grow,
   Box,
   List,
   ListItem,
   ListItemText,
   Divider,
   Button,
+  Chip,
 } from "@mui/material";
 import dayjs from "dayjs";
 import useDiaryStore from "../../../stores/useDiaryStore";
+import useReadVocab from "../../../hooks/useReadVocab";
 import useCreateVocab from "../../../hooks/useCreateVocab";
-
-import { useQuery } from "@tanstack/react-query";
-import { getVocabList } from "../../../apis/vocabApi";
-import { useState } from "react";
+import { Switch, FormControlLabel } from "@mui/material";
+import React, { useState } from "react";
 import NewDiaryDialog from "./NewDiaryDialog";
 import useDeleteDiary from "../../../hooks/useDeleteDiary";
-
+import { useUpdatePublicDiary } from "../../../hooks/useUpdatePublicDiary";
 
 const ACCENT = "#00BE83";
 
-//여기서 단어 넘기는 함수 넣기
-const ResultsBox = ({ diary }) => {
+const ResultsBox = ({ diary, displayedDateKey }) => {
+  if (!diary) return null;
+
   const { selectedDate } = useDiaryStore();
+
   const commentText = diary?.comment;
   const corrections = Array.isArray(diary?.corrections)
     ? diary.corrections
     : [];
 
   // 단어장에서 기존 단어들 가져오기
-  const { data: myVocabWords = [] } = useQuery({
-    queryKey: ["myVocab"],
-    queryFn: getVocabList,
-  });
+  const { vocabList } = useReadVocab();
 
   const {
     handleMouseDown,
@@ -43,27 +41,38 @@ const ResultsBox = ({ diary }) => {
     handleMouseUp,
     handleTouchStart,
     handleTouchEnd,
-  } = useCreateVocab(myVocabWords);
+  } = useCreateVocab(vocabList);
 
   const { mutate: deleteDiaryMutate } = useDeleteDiary();
 
   const [openDialog, setOpenDialog] = useState(false);
   const [mode, setMode] = useState("edit");
 
-  const formatDate = (date) => {
-    return new Intl.DateTimeFormat("en-US", {
+  const formatDateKey = (dk) =>
+    new Intl.DateTimeFormat("en-US", {
       weekday: "long",
       month: "long",
       day: "numeric",
       year: "numeric",
-    }).format(date.toDate());
-  };
+    }).format(dayjs(dk).toDate());
 
-  const today = dayjs().startOf("day");
-  const target = dayjs(diary.createdAt).startOf("day");
-  const dayDiff = today.diff(target, "day");
-  const isEditableDay = dayDiff >= 0 && dayDiff <= 1;
+  const now = dayjs();
+  const target = dayjs(diary.createdAt);
+  const hoursDiff = now.diff(target, "hour");
+  const isEditableDay = hoursDiff <= 24;
   const canEdit = diary && isEditableDay;
+
+  const [isPublic, setIsPublic] = useState(diary.isPublic);
+  const { mutate: updatePublic } = useUpdatePublicDiary();
+
+  const handleToggle = () => {
+    const newValue = !isPublic;
+
+    updatePublic(
+      { id: diary._id, state: { isPublic: newValue } },
+      { onSuccess: setIsPublic(newValue) }
+    );
+  };
 
   const openEditForm = () => {
     setMode("edit");
@@ -71,6 +80,7 @@ const ResultsBox = ({ diary }) => {
   };
 
   const deleteEntry = () => {
+    if (!diary?._id || !diary?.dateKey) return;
     const [year, month] = diary.dateKey.split("-").map(Number);
     deleteDiaryMutate({
       id: diary._id,
@@ -80,138 +90,241 @@ const ResultsBox = ({ diary }) => {
     });
   };
 
+  const displayStr =
+    typeof displayedDateKey === "function"
+      ? displayedDateKey(selectedDate)
+      : formatDateKey(selectedDate);
+
   return (
     <>
-      <Grow in timeout={400}>
-        <Box
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr", md: "5fr 7fr" },
+          gap: { xs: 2, md: 2 },
+          alignItems: "stretch",
+        }}
+      >
+        <Card
           sx={{
-            display: "grid",
-            gridTemplateColumns: { xs: "1fr", md: "5fr 7fr" },
-            gap: { xs: 2, md: 2 },
-            alignItems: "stretch",
+            borderRadius: 3,
+            boxShadow: 4,
+            border: "1px solid",
+            borderColor: "success.light",
+            height: "100%",
+            minHeight: "430px",
+            display: "flex",
+            flexDirection: "column",
           }}
         >
-          <Card
+          <CardContent
             sx={{
-              borderRadius: 3,
-              boxShadow: 4,
-              border: "1px solid",
-              borderColor: "success.light",
-              height: "100%",
+              maxHeight: { md: "calc(100vh - 220px)" },
+              overflowY: "auto",
+              display: "flex",
+              flexDirection: "column",
+              flex: 1,
             }}
           >
-
-            <CardContent
+            <Typography variant="h6" fontWeight={700} sx={{ color: ACCENT }}>
+              Diary for {displayStr}
+            </Typography>
+            <Typography variant="h5" sx={{ mt: 1, mb: 1, fontWeight: 900 }}>
+              {diary?.title ?? ""}
+            </Typography>
+            {diary?.image && (
+              <Box sx={{ display: "flex", justifyContent: "center", my: 2 }}>
+                <img src={diary.image} width={160} alt="image" />
+              </Box>
+            )}
+            <Typography
+              sx={{ whiteSpace: "pre-line", fontSize: "16.5px" }}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+              style={{ cursor: "pointer" }}
+            >
+              {diary?.content ?? ""}
+            </Typography>
+            <Box
               sx={{
-                maxHeight: { md: "calc(100vh - 220px)" },
-                overflowY: "auto",
+                mt: "auto",
+                pt: 2,
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
               }}
             >
-              <Typography variant="h6" fontWeight={700} sx={{ color: ACCENT }}>
-                Diary for {formatDate(selectedDate)}
-                {canEdit && (
-                  <>
-                    <Button
-                      onClick={openEditForm}
-                      variant="outlined"
-                      color="ACCENT"
-                    >
-                      일기 수정하기
-                    </Button>
-                    <Button
-                      onClick={deleteEntry}
-                      variant="outlined"
-                      color="error"
-                    >
-                      일기 삭제하기
-                    </Button>
-                  </>
-                )}
-              </Typography>
-              <Typography variant="h5" sx={{ mt: 1, mb: 1 }}>
-                {diary?.title}
-              </Typography>
-              <Typography
-                sx={{ whiteSpace: "pre-line" }}
-onMouseDown={handleMouseDown}
-                              onMouseMove={handleMouseMove}
-                              onMouseUp={handleMouseUp}
-                              onTouchStart={handleTouchStart}
-                              onTouchEnd={handleTouchEnd}
-                              style={{ cursor: "pointer" }}
-              >
-                {diary?.content}
-              </Typography>
-            </CardContent>
-          </Card>
-
-          <Card
-            sx={{
-              borderRadius: 3,
-              boxShadow: 4,
-              border: "1px solid",
-              borderColor: "success.light",
-              height: "100%",
-            }}
-          >
-            <CardContent
-              sx={{
-                maxHeight: { md: "calc(100vh - 220px)" },
-                overflowY: "auto",
-              }}
-            >
-              <Typography variant="h6" fontWeight={700} sx={{ color: ACCENT }}>
-                AI Comment
-              </Typography>
-
-              {commentText && (
-                <Typography sx={{ mt: 1, whiteSpace: "pre-line" }}>
-                  {commentText}
-                </Typography>
-
+              {canEdit && (
+                <Box sx={{ display: "flex", gap: 1 }}>
+                  <Button
+                    onClick={openEditForm}
+                    variant="outlined"
+                    sx={{
+                      ml: 1,
+                      borderColor: ACCENT,
+                      color: ACCENT,
+                      fontWeight: 700,
+                    }}
+                  >
+                    수정
+                  </Button>
+                  <Button
+                    onClick={deleteEntry}
+                    variant="outlined"
+                    color="error"
+                    sx={{ ml: 1, fontWeight: 700 }}
+                  >
+                    삭제
+                  </Button>
+                </Box>
               )}
 
-              {corrections.length > 0 && (
-                <>
-                  <Divider sx={{ my: 1.5 }} />
-                  <Typography
-                    variant="h6"
-                    fontWeight={700}
-                    sx={{ color: ACCENT }}
-                  >
-                    Sentence Corrections
-                  </Typography>
-                  <List dense>
-                    {corrections.map((c, i) => (
-                      <ListItem
-                        key={i}
-                        sx={{ py: 0.5, alignItems: "flex-start" }}
-                      >
-                        <ListItemText
-                          primary={`• ${c.originalSentence}`}
-                          secondary={
-                            <>
-                              <b
+              {diary && (
+                <FormControlLabel
+                  sx={{ marginLeft: "auto" }} // 중요! 오른쪽 끝으로 밀어줌
+                  control={
+                    <Switch
+                      checked={isPublic}
+                      onChange={handleToggle}
+                      color="success"
+                    />
+                  }
+                  label={isPublic ? "공개" : "비공개"}
+                />
+              )}
+            </Box>
+          </CardContent>
+        </Card>
+
+        <Card
+          sx={{
+            borderRadius: 3,
+            boxShadow: 4,
+            border: "1px solid",
+            borderColor: "success.light",
+            height: "100%",
+          }}
+        >
+          <CardContent
+            sx={{
+              maxHeight: { md: "calc(100vh - 220px)" },
+              overflowY: "auto",
+            }}
+          >
+            <Typography variant="h6" fontWeight={700} sx={{ color: ACCENT }}>
+              AI Comment
+            </Typography>
+
+            {commentText && (
+              <Typography
+                sx={{ mt: 1, whiteSpace: "pre-line", fontSize: "15px" }}
+              >
+                {commentText}
+              </Typography>
+            )}
+
+            {corrections.length > 0 && (
+              <>
+                <Divider sx={{ my: 1.5 }} />
+                <Typography
+                  variant="h6"
+                  fontWeight={700}
+                  sx={{ color: ACCENT }}
+                >
+                  Sentence Corrections
+                </Typography>
+                <List dense>
+                  {corrections.map((c, i) => (
+                    <ListItem
+                      key={i}
+                      sx={{
+                        px: 0,
+                        py: 0.3,
+                        mb: 1.25,
+                        alignItems: "flex-start",
+                      }}
+                    >
+                      <ListItemText
+                        sx={{ m: 0 }}
+                        primary={`• ${c.originalSentence}`}
+                        secondary={
+                          <Box sx={{ pl: 2 }}>
+                            <Box
+                              component="b"
                               onMouseDown={handleMouseDown}
                               onMouseMove={handleMouseMove}
                               onMouseUp={handleMouseUp}
                               onTouchStart={handleTouchStart}
                               onTouchEnd={handleTouchEnd}
-                              style={{ cursor: "pointer" }}
-                              >→ {c.correctedSentence}</b>
-                              {c.reason ? ` — ${c.reason}` : ""}
-                            </>
-                          }
-                        />
-                      </ListItem>
-                    ))}
-                  </List>
-                </>
-              )}
-            </CardContent>
-          </Card>
-        </Box>
-      </Grow>
+                              sx={{
+                                display: "block",
+                                cursor: "pointer",
+                                fontWeight: 700,
+                              }}
+                            >
+                              → {c.correctedSentence}
+                            </Box>
+
+                            {c.reason && (
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "flex-start",
+                                  gap: 1,
+                                  mt: 0.5,
+                                }}
+                              >
+                                <Chip
+                                  label="해설"
+                                  size="small"
+                                  sx={{
+                                    bgcolor: "#cbcbcbff",
+                                    color: "#ffffff",
+                                    height: 22,
+                                    borderRadius: "6px",
+                                    fontSize: 12,
+                                    lineHeight: 1,
+                                    flexShrink: 0,
+                                  }}
+                                />
+                                <Box
+                                  component="span"
+                                  sx={{
+                                    color: "text.secondary",
+                                    fontSize: 14,
+                                    lineHeight: 1.6,
+                                    whiteSpace: "pre-line",
+                                  }}
+                                >
+                                  {c.reason}
+                                </Box>
+                              </Box>
+                            )}
+                          </Box>
+                        }
+                        primaryTypographyProps={{
+                          sx: {
+                            fontSize: 16.5,
+                            fontWeight: 500,
+                            lineHeight: 1.6,
+                          },
+                        }}
+                        secondaryTypographyProps={{
+                          component: "div",
+                          sx: { fontSize: 16.5, lineHeight: 1.6 },
+                        }}
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+              </>
+            )}
+          </CardContent>
+        </Card>
+      </Box>
       <NewDiaryDialog
         mode={mode}
         open={openDialog}
@@ -219,8 +332,7 @@ onMouseDown={handleMouseDown}
         selectedDate={selectedDate}
       />
     </>
-
   );
 };
 
-export default ResultsBox;
+export default React.memo(ResultsBox);

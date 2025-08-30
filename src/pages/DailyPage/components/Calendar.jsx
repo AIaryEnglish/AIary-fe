@@ -5,7 +5,7 @@ import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { PickersDay } from "@mui/x-date-pickers/PickersDay";
 import Badge from "@mui/material/Badge";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { styled } from "@mui/material/styles";
+import { styled, useTheme } from "@mui/material/styles";
 import { Box, Typography } from "@mui/material";
 import useDiaryStore from "../../../stores/useDiaryStore";
 import useReadMonthlyDiaries from "../../../hooks/useReadMonthlyDiaries";
@@ -52,7 +52,8 @@ const StyledDateCalendar = styled(DateCalendar, {
 
 function DayWithDot(props) {
   const { day, outsideCurrentMonth, compact } = props;
-  const isDesktop = useMediaQuery("(min-width:768px)");
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
   const { daysMap } = useDiaryStore.getState();
   const dk = day.format("YYYY-MM-DD");
   const hasEntry = !!daysMap[dk]?.id;
@@ -90,9 +91,10 @@ function DayWithDot(props) {
 }
 
 export default function Calendar({ compact = false, showLegend = false }) {
-  const { selectedDate, setSelectedDate } = useDiaryStore();
+  const { selectedDate, setSelectedDate, setDisplayDateKey } = useDiaryStore();
   const [currentView, setCurrentView] = useState("day");
-  const isDesktop = useMediaQuery("(min-width:768px)");
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
 
   const year = selectedDate.year();
   const month = selectedDate.month() + 1;
@@ -114,7 +116,10 @@ export default function Calendar({ compact = false, showLegend = false }) {
           value={selectedDate}
           view={currentView}
           onViewChange={(v) => setCurrentView(v)}
-          onChange={(d) => setSelectedDate(d)}
+          onChange={(d) => {
+            setSelectedDate(d);
+            sessionStorage.setItem("lastDate", d.format("YYYY-MM-DD"));
+          }}
           views={["year", "month", "day"]}
           slots={{ day: DayWithDot }}
           slotProps={{

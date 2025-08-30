@@ -16,7 +16,7 @@ export default function FloatingButton() {
         variant="contained"
         className="btn-accent round"
         startIcon={<EditNoteIcon fontSize="small" />}
-        sx={{ textTransform: "none" }}
+        sx={{ textTransform: "none", fontWeight: 700 }}
       >
         Aiary 시작하기
       </Button>

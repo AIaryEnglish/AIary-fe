@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -15,58 +15,77 @@ import { useCreateDiary } from "../../../hooks/useCreateDiary";
 import useSnackbarStore from "../../../stores/useSnackbarStore";
 import { useUpdateDiary } from "../../../hooks/useUpdateDiary";
 
+const ACCENT = "#00BE83";
+
 const NewDiaryDialog = ({ mode, open, onClose }) => {
-  const { selectedDate, diariesByDate, setAiPending } = useDiaryStore();
-  const { mutate: createDiary, isPending } = useCreateDiary();
-  const { mutate: updateDiary, isPending: isLoading } = useUpdateDiary();
-    const { showError } = useSnackbarStore();
-  const ACCENT = "#00BE83";
+  const { selectedDate, diariesByDate } = useDiaryStore();
+  const { mutate: createDiary, isPending: isCreating } = useCreateDiary();
+  const { mutate: updateDiary, isPending: isUpdating } = useUpdateDiary();
+  const { showError } = useSnackbarStore();
+
+  const dateKey = useMemo(
+    () => selectedDate.format("YYYY-MM-DD"),
+    [selectedDate]
+  );
+  const diary = diariesByDate[dateKey] || null;
 
   const InitialFormData = {
     title: "",
     content: "",
     image: "",
     isPublic: true,
-    date: selectedDate.toDate(),
   };
-
-  const dateKey = useMemo(
-    () => selectedDate.format("YYYY-MM-DD"),
-    [selectedDate]
-  );
-
-  const diary = diariesByDate[dateKey] || null;
 
   const [formData, setFormData] = useState({ ...InitialFormData });
 
+  // 편집 모드일 때만 기존 값 세팅 / 신규는 초기화
   useEffect(() => {
-    setFormData((prev) => ({ ...prev, date: selectedDate.toDate() }));
-  }, [selectedDate]);
+    if (mode === "edit" && diary) {
+      setFormData({
+        title: diary.title ?? "",
+        content: diary.content ?? "",
+        image: diary.image ?? "",
+        isPublic: !!diary.isPublic,
+      });
+    }
+    if (mode === "new") {
+      setFormData({ ...InitialFormData });
+    }
+  }, [mode, diary]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // 저장 로직 추가 가능
-    if (mode == "new") {
-      
-    if (!formData.title.trim())
-      return showError("일기 제목을 작성해주세요.", 3000, {
-        vertical: "top",
-        horizontal: "center",
-      });
-    if (!formData.content.trim())
-      return showError("일기 내용을 작성해주세요.", 3000, {
-        vertical: "top",
-        horizontal: "center",
-      });   
-      createDiary(formData, {
-        onSuccess: () => {
-          setFormData(InitialFormData);
-           setAiPending(true);
-          onClose();
-        },             
-      });
+
+    if (mode === "new") {
+      if (!formData.title.trim())
+        return showError("일기 제목을 작성해주세요.", 3000, {
+          vertical: "top",
+          horizontal: "center",
+        });
+      if (!formData.content.trim())
+        return showError("일기 내용을 작성해주세요.", 3000, {
+          vertical: "top",
+          horizontal: "center",
+        });
+
+      onClose?.();
+      createDiary(
+        {
+          title: formData.title,
+          content: formData.content,
+          image: formData.image || undefined,
+          isPublic: formData.isPublic,
+          date: selectedDate.toISOString(),
+        },
+        { onSuccess: () => setFormData(InitialFormData) }
+      );
     } else {
+      if (!diary?._id) {
+        return showError("수정할 일기를 찾을 수 없습니다.");
+      }
       const { title, content, image, isPublic } = formData;
+
+      onClose?.();
       updateDiary(
         {
           id: diary._id,
@@ -74,50 +93,32 @@ const NewDiaryDialog = ({ mode, open, onClose }) => {
             title,
             content,
             image: image || undefined,
-            isPublic, 
+            isPublic,
           },
         },
-        {
-          onSuccess: () => {
-            setFormData(InitialFormData);
-            onClose();
-          },
-        }
+        { onSuccess: () => setFormData(InitialFormData) }
       );
     }
-
   };
 
   const handleClose = () => {
-    if(mode === "new") setFormData(InitialFormData);
+    if (mode === "new") setFormData(InitialFormData);
     onClose();
   };
 
   const handleChange = (event) => {
     const { id, value } = event.target;
-    setFormData({ ...formData, [id]: value });
+    setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
   const uploadImage = (url) => {
     setFormData((prev) => ({ ...prev, image: url }));
   };
 
-  useEffect(() => {
-    if (mode === "edit") {
-      console.log(diary);
-      setFormData({
-        title: diary?.title,
-        content: diary?.content,
-        image: diary?.image,
-        isPublic: diary?.isPublic,
-      });
-    }
-  }, [mode, selectedDate]);
-
   return (
     <Dialog
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       fullWidth
       maxWidth="sm"
       Backdrop={{
@@ -140,7 +141,8 @@ const NewDiaryDialog = ({ mode, open, onClose }) => {
           borderColor: "success.light",
         }}
       >
-        {selectedDate.format("YYYY-MM-DD")} 일기 작성
+        {selectedDate.format("YYYY-MM-DD")} 일기{" "}
+        {mode === "edit" ? "수정" : "작성"}
       </DialogTitle>
 
       <DialogContent sx={{ pt: 2 }}>
@@ -153,6 +155,18 @@ const NewDiaryDialog = ({ mode, open, onClose }) => {
             value={formData.title}
             onChange={handleChange}
             input={{ maxLength: 60 }}
+            InputLabelProps={{
+              sx: {
+                "&.Mui-focused": { color: ACCENT }, // 포커스 시 라벨만 악센트
+              },
+            }}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                // 기본은 MUI 디폴트 테두리색(회색 유지)
+                "&:hover fieldset": { borderColor: ACCENT },
+                "&.Mui-focused fieldset": { borderColor: ACCENT },
+              },
+            }}
           />
           <TextField
             id="content"
@@ -163,6 +177,18 @@ const NewDiaryDialog = ({ mode, open, onClose }) => {
             rows={6}
             value={formData.content}
             onChange={handleChange}
+            InputLabelProps={{
+              sx: {
+                "&.Mui-focused": { color: ACCENT }, // 포커스 시 라벨만 악센트
+              },
+            }}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                // 기본은 MUI 디폴트 테두리색(회색 유지)
+                "&:hover fieldset": { borderColor: ACCENT },
+                "&.Mui-focused fieldset": { borderColor: ACCENT },
+              },
+            }}
           />
           <FormControlLabel
             sx={{ mt: 1 }}
@@ -195,12 +221,14 @@ const NewDiaryDialog = ({ mode, open, onClose }) => {
       <DialogActions
         sx={{ px: 3, pb: 2, borderTop: "1px solid", borderColor: "divider" }}
       >
-        <Button onClick={handleClose}>취소</Button>
+        <Button onClick={handleClose} sx={{ color: ACCENT }}>
+          취소
+        </Button>
         <Button
           type="submit"
           form="diary-form"
           variant="contained"
-          disabled={isPending}
+          disabled={isCreating || isUpdating}
           sx={{
             borderRadius: 2,
             px: 3,

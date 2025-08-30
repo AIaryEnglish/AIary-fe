@@ -1,4 +1,4 @@
-import { Box, Button, Container } from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
@@ -19,17 +19,41 @@ export default function HeroSection() {
             <AutoAwesomeIcon className="i-sparkle" sx={{ fontSize: 25 }} />
           </Box>
 
-          <p className="hero-title">
+          <Typography
+            component="h1"
+            sx={{
+              fontWeight: 800,
+              lineHeight: 1.3,
+              mt: 1,
+              mb: 1.5,
+              fontSize: "clamp(28px, 4.5vw, 56px)",
+            }}
+          >
             영어 일기로 시작하는 <br />
-            <span className="hero-title-accent">자연스러운 영어 학습</span>
-          </p>
+            <Box
+              component="span"
+              sx={{ color: "var(--mui-palette-primary-main)" }}
+            >
+              자연스러운 영어 학습
+            </Box>
+          </Typography>
 
-          <p className="hero-desc">
+          <Typography
+            component="p"
+            sx={{
+              color: "text.secondary",
+              maxWidth: 720,
+              mx: "auto",
+              my: 3,
+              lineHeight: 1.6,
+              fontSize: "clamp(14px, 1.8vw, 18px)",
+            }}
+          >
             매일 영어로 일기를 쓰며 자연스럽게 어휘력을 늘리고 표현력을
             키워보세요.
             <br />
             AI가 도와주는 개인 맞춤형 영어 학습 경험을 시작하세요.
-          </p>
+          </Typography>
 
           <Box className="hero-cta">
             <Button
@@ -38,6 +62,7 @@ export default function HeroSection() {
               size="large"
               variant="contained"
               className="btn-primary"
+              sx={{ fontWeight: 700 }}
               startIcon={<EditNoteIcon fontSize="small" />}
             >
               내 일기 작성하기

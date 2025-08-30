@@ -7,7 +7,6 @@ import {
   Box,
   useTheme,
   useMediaQuery,
-  Container,
   Tooltip,
 } from "@mui/material";
 import {
@@ -17,7 +16,7 @@ import {
 } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
 import { styled } from "@mui/material/styles";
-import LogoVer3 from "../../../assets/logo_ver3.svg";
+import LogoVer5 from "../../../assets/logo_ver5.svg";
 import { useAuthStore } from "../../../stores/authStore";
 import UserAvatar from "./UserAvatar";
 import MobileDrawer from "./MobileDrawer";
@@ -26,6 +25,7 @@ const menuItems = [
   { text: "홈", path: "/" },
   { text: "일기", path: "/daily" },
   { text: "단어장", path: "/vocab" },
+  { text: "모든 일기", path: "/all-diaries" },
 ];
 
 const Header = () => {
@@ -79,7 +79,7 @@ const Header = () => {
       <StyledAppBar position="fixed" elevation={0} isScrolled={isScrolled}>
         <StyledToolbar>
           <LogoContainer onClick={() => handleNavigation("/")}>
-            <LogoImage src={LogoVer3} alt="AIary Logo" />
+            <LogoImage src={LogoVer5} alt="AIary Logo" />
           </LogoContainer>
 
           {!isMobile && (

@@ -8,7 +8,7 @@ export default function WhySection() {
     <Box className="why">
       <Container maxWidth="lg">
         <Box textAlign="center" mb={6}>
-          <h3 className="section-title">왜 영어 일기인가요?</h3>
+          <p className="section-title">왜 영어 일기인가요?</p>
           <p className="section-sub">
             일기 쓰기는 가장 자연스럽고 효과적인 언어 학습 방법입니다.
           </p>
