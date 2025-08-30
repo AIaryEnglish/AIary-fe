@@ -158,15 +158,6 @@ const ButtonRow = styled(Box)(({ theme }) => ({
 }));
 
 const VocabPageContainer = styled(Box)(({ theme }) => ({
-  // flex: 1, // 헤더/푸터 사이 공간을 자동으로 채움
-  // width: "100%",
-  // padding: "0 6rem",
-  // backgroundColor: "var(--mui-palette-background-paper)",
-  // flexDirection: "column", // 세로 정렬을 위해 column
-  // display: "flex",
-  // justifyContent: "center",
-  // alignItems: "center",
-
   display: "flex",
   flexDirection: "column",
   justifyContent: "center", // 세로 중앙

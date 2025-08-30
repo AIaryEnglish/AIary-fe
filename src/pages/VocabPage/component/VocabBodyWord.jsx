@@ -83,11 +83,11 @@ const WordCard = styled(Box)(({ theme }) => ({
   border: "1px solid var(--app-border)",
   borderRadius: theme.spacing(1),
   boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-  padding: theme.spacing(3),
+  padding: theme.spacing(4, 3),
   margin: 0,
   display: "flex",
   flexDirection: "column",
-  gap: theme.spacing(2),
+  gap: theme.spacing(2.1),
 
   [theme.breakpoints.down("md")]: {
     padding: theme.spacing(2),
@@ -99,7 +99,7 @@ const WordInfo = styled(Box)(({ theme }) => ({
   minWidth: "250px",
   display: "flex",
   flexDirection: "column",
-  gap: theme.spacing(1.5),
+  gap: theme.spacing(1),
 }));
 
 const WordHeader = styled(Box)(({ theme }) => ({
