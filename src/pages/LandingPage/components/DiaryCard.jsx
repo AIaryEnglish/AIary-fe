@@ -48,7 +48,7 @@ export default function DiaryCard({ diary, isLoggedIn, opened, onToggle }) {
           </div>
         }
       />
-      <CardContent className="card-body">
+      <CardContent className={`card-body ${isShort ? "no-cta" : "has-cta"}`}>
         <p
           ref={contentRef}
           className={contentClass}
