@@ -196,7 +196,7 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
                       fontWeight: 700,
                     }}
                   >
-                    수정
+                    Edit
                   </Button>
                   <Button
                     onClick={deleteEntry}
@@ -204,7 +204,7 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
                     color="error"
                     sx={{ ml: 1, fontWeight: 700 }}
                   >
-                    삭제
+                    Delete
                   </Button>
                 </Box>
               )}
