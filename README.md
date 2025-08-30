@@ -1,7 +1,5 @@
 <div align="center">
 
-# 📝 Aiary
-
 <img src="./src/assets/logo_ver5.svg" alt="Aiary-logo" width="180"/>
 
 > **AI + Diary = Aiary**  
