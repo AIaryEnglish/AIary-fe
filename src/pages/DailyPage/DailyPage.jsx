@@ -1,6 +1,13 @@
 import React, { useEffect } from "react";
 import dayjs from "dayjs";
-import { Container, Box, Card, CardContent, styled } from "@mui/material";
+import {
+  Container,
+  Box,
+  Card,
+  CardContent,
+  styled,
+  Typography,
+} from "@mui/material";
 
 import Calendar from "./components/Calendar";
 import DiaryBox from "./components/DiaryBox";
@@ -8,6 +15,7 @@ import ResultsBox from "./components/ResultsBox";
 import AiOverlay from "./components/AiOverlay";
 import useDiaryStore from "../../stores/useDiaryStore";
 import useReadDailyDiary from "../../hooks/useReadDailyDiary";
+import { useAuthStore } from "../../stores/authStore";
 
 import "./DailyPage.style.css";
 
@@ -76,11 +84,15 @@ export default function DailyPage() {
   const calMaxMd = !hasDiary ? 680 : hasAi ? 360 : 520;
   const calMinHeight = !hasDiary ? 560 : hasAi ? 360 : 430;
 
+  //사용자 이름 인식 일기
+  const { user } = useAuthStore(); // 유저 정보
+  const username = user?.name || "사용자";
+
   return (
     <DailyPageContainer>
       <Container maxWidth="xl" sx={{ pt: 4, pb: 6 }}>
+        <HeaderText>{username} 님의 일기</HeaderText>
         <AiOverlay />
-
         <Box
           sx={{
             display: "flex",
@@ -167,11 +179,18 @@ export default function DailyPage() {
   );
 }
 
+const HeaderText = styled(Typography)(({ theme }) => ({
+  fontSize: "1.3rem",
+  fontWeight: 600,
+  marginBottom: theme.spacing(2),
+  color: "var(--mui-palette-primary-main)",
+}));
+
 const DailyPageContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  maxHeight: "calc(100dvh - 70px)",
+  minHeight: "calc(100vh - 350px)",
   height: "100%",
   padding: "0 6rem",
   backgroundColor: "var(--mui-palette-background-paper)",
