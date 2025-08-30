@@ -190,7 +190,7 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
                     onClick={openEditForm}
                     variant="outlined"
                     sx={{
-                      ml: 1,
+                      mr: 1,
                       borderColor: ACCENT,
                       color: ACCENT,
                       fontWeight: 700,
@@ -202,7 +202,7 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
                     onClick={deleteEntry}
                     variant="outlined"
                     color="error"
-                    sx={{ ml: 1, fontWeight: 700 }}
+                    sx={{ mr: 1, fontWeight: 700 }}
                   >
                     Delete
                   </Button>
