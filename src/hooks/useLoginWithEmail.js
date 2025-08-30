@@ -1,11 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
 import { loginWithEmailApi } from "../apis/authApi";
 import { useAuthStore } from "../stores/authStore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import useSnackbarStore from "../stores/useSnackbarStore";
 
 const useLoginWithEmail = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuthStore();
   const { showSuccess, showError } = useSnackbarStore();
   const mutation = useMutation({
@@ -14,7 +15,14 @@ const useLoginWithEmail = () => {
       if (response.status === "success") {
         login({ token: response.token, user: response.user });
         showSuccess("로그인 성공!");
-        navigate("/daily");
+
+        // 리디렉션으로 온 경우 원래 페이지로, 직접 로그인 페이지에 온 경우 랜딩페이지로
+        const from = location.state?.from?.pathname;
+        if (from && from !== "/login") {
+          navigate(from, { replace: true });
+        } else {
+          navigate("/", { replace: true });
+        }
       }
     },
     onError: (error) => {
