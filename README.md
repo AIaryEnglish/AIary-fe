@@ -2,7 +2,7 @@
 
 # 📝 Aiary
 
-[![Aiary Logo](https://aiary.netlify.app/logo_ver5.svg)](https://aiary.netlify.app/)
+[![Aiary Logo](https://img.shields.io/badge/Aiary-AI%20Diary%20Platform-60A5FA?style=for-the-badge&logo=book&logoColor=white)](https://aiary.netlify.app/)
 
 > **AI + Diary = Aiary**  
 > 현지 표현을 사용해서 영어 일기를 쓰고 싶은 사람들을 위한 AI 기반 영어 학습 플랫폼
