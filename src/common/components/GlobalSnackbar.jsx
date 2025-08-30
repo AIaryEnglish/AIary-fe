@@ -12,10 +12,6 @@ const GlobalSnackbar = () => {
     commonPosition,
   } = useSnackbarStore();
 
-  const isTopCenter =
-    commonPosition?.vertical === "top" &&
-    commonPosition?.horizontal === "center";
-
   // 수동 타이머: open이 true가 되면 autoHideDuration 후 상태 hide
   // 자동으로 하면 없어져버려서 수동으로 변경
   useEffect(() => {
@@ -32,19 +28,12 @@ const GlobalSnackbar = () => {
     <Snackbar
       open={open}
       anchorOrigin={commonPosition}
-      sx={(theme) => ({
+      sx={{
         zIndex: 9000,
-        ...(isTopCenter
-          ? {
-              mt: 0,
-              "&.MuiSnackbar-anchorOriginTopCenter": {
-                top: theme.spacing(2),
-              },
-            }
-          : {
-              mt: { xs: "6.4rem", md: "5rem" },
-            }),
-      })}
+        "&.MuiSnackbar-anchorOriginTopCenter": {
+          mt: { xs: "6.4rem", md: "3rem" },
+        },
+      }}
     >
       <Alert severity={severity} onClose={hideSnackbar} sx={{ width: "100%" }}>
         {message}
