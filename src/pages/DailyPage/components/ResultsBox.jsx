@@ -61,7 +61,6 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
   const hoursDiff = now.diff(target, "hour");
   const isEditableDay = hoursDiff <= 24;
   const canEdit = diary && isEditableDay;
-  const publicEdit = diary && !isEditableDay;
 
   const [isPublic, setIsPublic] = useState(diary.isPublic);
   const { mutate: updatePublic } = useUpdatePublicDiary();
@@ -133,6 +132,11 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
             <Typography variant="h5" sx={{ mt: 1, mb: 1, fontWeight: 900 }}>
               {diary?.title ?? ""}
             </Typography>
+            {diary?.image && (
+              <Box sx={{ display: "flex", justifyContent: "center", my: 2 }}>
+                <img src={diary.image} width={160} alt="image" />
+              </Box>
+            )}
             <Typography
               sx={{ whiteSpace: "pre-line", fontSize: "16.5px" }}
               onMouseDown={handleMouseDown}
@@ -144,19 +148,17 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
             >
               {diary?.content ?? ""}
             </Typography>
-            {diary?.image && <img src={diary.image} width={120} alt="image" />}
             <Box
               sx={{
                 mt: "auto",
                 pt: 2,
                 display: "flex",
-                justifyContent: "flex-end",
                 alignItems: "center",
                 gap: 1,
               }}
             >
               {canEdit && (
-                <>
+                <Box sx={{ display: "flex", gap: 1 }}>
                   <Button
                     onClick={openEditForm}
                     variant="outlined"
@@ -167,7 +169,7 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
                       fontWeight: 700,
                     }}
                   >
-                    일기 수정하기
+                    수정
                   </Button>
                   <Button
                     onClick={deleteEntry}
@@ -175,12 +177,14 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
                     color="error"
                     sx={{ ml: 1, fontWeight: 700 }}
                   >
-                    일기 삭제하기
+                    삭제
                   </Button>
-                </>
+                </Box>
               )}
-              {publicEdit && (
+
+              {diary && (
                 <FormControlLabel
+                  sx={{ marginLeft: "auto" }} // 중요! 오른쪽 끝으로 밀어줌
                   control={
                     <Switch
                       checked={isPublic}
