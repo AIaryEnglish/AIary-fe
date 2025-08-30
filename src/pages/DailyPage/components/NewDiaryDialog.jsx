@@ -71,8 +71,10 @@ const NewDiaryDialog = ({ mode, open, onClose }) => {
       onClose?.();
       createDiary(
         {
-          title: formData.title,
-          content: formData.content,
+          title: formData.title.trim(),
+          content: formData.content
+            .replace(/\n{3,}/g, "\n\n") // 연속 3줄 이상 → 2줄로 줄임
+            .trim(),
           image: formData.image || undefined,
           isPublic: formData.isPublic,
           date: selectedDate.toISOString(),

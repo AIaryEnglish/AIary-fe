@@ -169,8 +169,8 @@ export default function Calendar({ compact = false, showLegend = false }) {
                   width: 12,
                   height: 12,
                   borderRadius: "50%",
-                  bgcolor: "#FFCCBC",
-                  border: "2px solid #4caf50",
+                  bgcolor: "#d32f2f",
+                  border: "2px solid #d32f2f",
                 }}
               />
               <Typography variant="body2" color="text.secondary">

@@ -50,7 +50,21 @@ const DiaryBox = ({ displayedDateKey }) => {
         }}
       >
         <CardContent sx={{ overflowY: "auto", flexGrow: 1 }}>
-          <DiaryDate>Diary for {formatDate(displayedDateKey)}</DiaryDate>
+          <Typography
+            variant="h6"
+            fontWeight={700}
+            sx={{
+              color: ACCENT,
+              whiteSpace: "nowrap",
+              fontSize: {
+                xs: "14px", // 모바일
+                sm: "18px", // 태블릿
+                md: "20px", // 데스크탑
+              },
+            }}
+          >
+            Diary for {formatDate(displayedDateKey)}
+          </Typography>
 
           <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
             No Diary for this date yet.
@@ -62,7 +76,7 @@ const DiaryBox = ({ displayedDateKey }) => {
               variant="contained"
               sx={{ mt: 2, backgroundColor: ACCENT, fontWeight: 700 }}
             >
-              일기 작성하기
+              Write a Diary
             </Button>
           )}
         </CardContent>
