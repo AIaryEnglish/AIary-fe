@@ -1,15 +1,11 @@
-/* ======================================
-   PAGE ROOT
-====================================== */
+/* PAGE ROOT */
 .landing-root {
   min-height: 100dvh;
   background: var(--mui-palette-background-default);
   color: var(--mui-palette-text-primary);
 }
 
-/* ======================================
-   HERO
-====================================== */
+/* HERO */
 .hero {
   position: relative;
   padding: 96px 0;
@@ -156,9 +152,7 @@
   }
 }
 
-/* ======================================
-   WHY SECTION
-====================================== */
+/* WHY SECTION */
 .why {
   padding: 72px 0;
   background: color-mix(
@@ -188,7 +182,7 @@
 
 /* 접힘 상태: 같은 줄에서 보기 좋은 공통 높이 부여 */
 .feed-card.collapsed {
-  min-height: 290px;
+  min-height: 265px;
 }
 
 /* 펼침 상태: 카드만 길어져도 됨 */
@@ -201,7 +195,7 @@
   border: 1px solid var(--app-border);
   border-radius: 6px;
   width: 350px;
-  /* padding: 10px 0 10px; */
+  padding: 20px 0 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -237,9 +231,7 @@
   line-height: 1.7;
 }
 
-/* ======================================
-   FEED SECTION (DIARY CARDS)
-====================================== */
+/* FEED SECTION (DIARY CARDS) */
 .feed {
   padding: 72px 0;
 }
@@ -250,36 +242,57 @@
 /* feed 카드에서만 자식 폭 100%로 늘리기 */
 .feed-card {
   position: relative;
-  padding-top: 16px;
+  padding-top: 0px;
+  padding-bottom: 0px;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   align-items: stretch;
 }
 .feed-card .MuiCardHeader-root,
-.feed-card .card-body {
-  width: 100%;
-  align-self: stretch;
-}
+
 
 /* MUI CardHeader */
 .feed-card .MuiCardHeader-root {
   padding: 0 20px;
-  min-height: 72px;
+  min-height: auto;
   box-sizing: border-box;
 }
 .feed-card .entry-head .entry-title {
-  margin-top: 4px;
+  margin-top: 20px;
+  margin-bottom: 15px;
+  line-height: 1.4;
 }
 
 /* 본문/메타/구분선/버튼 레이아웃 */
 .feed-card .card-body {
+  width: 100%;
+  align-self: stretch;
   display: flex;
   flex-direction: column;
   gap: 12px;
   padding: 0 20px 12px;
   box-sizing: border-box;
   text-align: left; /* 본문 영역 기본 좌측 정렬 */
+}
+
+/* 버튼 없음 → 본문 영역이 남는 높이를 차지 */
+.feed-card .card-body.no-cta {
+  flex: 1 1 auto; /* 카드의 남는 높이 채움 */
+}
+
+/* 버튼 있음 → 기존 레이아웃 유지 */
+.feed-card .card-body.has-cta {
+  flex: 0 0 auto;
+}
+
+/* 메타는 항상 컬럼의 맨 아래로 */
+.feed-card .entry-meta-bottom {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
 }
 
 /* 본문 */
@@ -290,7 +303,7 @@
   white-space: pre-wrap;
   word-break: break-word;
   overflow-wrap: anywhere;
-  text-align: left; /* 본문만 명시적으로 좌측 정렬 */
+  text-align: left;
 }
 
 /* 접힘 상태: 3줄에서 … 처리 */
@@ -301,7 +314,6 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  /* 미래 호환 */
   line-clamp: 3;
   box-orient: vertical;
 }
@@ -353,9 +365,7 @@
   white-space: normal;
 }
 
-/* ======================================
-   FEED CTA
-====================================== */
+/* FEED CTA */
 .feed-cta {
   display: flex;
   gap: 12px;
@@ -364,9 +374,7 @@
   margin-top: 20px;
 }
 
-/* ======================================
-   CTA SECTION
-====================================== */
+/* CTA SECTION */
 .cta {
   padding: 72px 0;
   background: linear-gradient(
@@ -376,13 +384,11 @@
   );
 }
 
-/* ======================================
-   FLOATING BUTTON
-====================================== */
+/* FLOATING BUTTON */
 .floating-write-btn {
   position: fixed;
   left: 50%;
-  bottom: 10px;
+  bottom: 24px;
   transform: translateX(-50%);
   z-index: 1000;
   filter: drop-shadow(
@@ -390,9 +396,7 @@
   );
 }
 
-/* ======================================
-   LINE CLAMP UTILITIES
-====================================== */
+/* LINE CLAMP UTILITIES */
 .line-clamp-1 {
   display: -webkit-box;
   -webkit-line-clamp: 1;
