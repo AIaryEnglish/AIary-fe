@@ -67,6 +67,7 @@ export default function FeedSection() {
             variant="outlined"
             size="large"
             className="btn-outline"
+            sx={{ fontWeight: 700 }}
             onClick={() => navigate("/all-diaries")}
           >
             일기 더보기

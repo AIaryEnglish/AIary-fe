@@ -160,7 +160,12 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
                   <Button
                     onClick={openEditForm}
                     variant="outlined"
-                    sx={{ ml: 1, borderColor: ACCENT, color: ACCENT }}
+                    sx={{
+                      ml: 1,
+                      borderColor: ACCENT,
+                      color: ACCENT,
+                      fontWeight: 700,
+                    }}
                   >
                     일기 수정하기
                   </Button>
@@ -168,7 +173,7 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
                     onClick={deleteEntry}
                     variant="outlined"
                     color="error"
-                    sx={{ ml: 1 }}
+                    sx={{ ml: 1, fontWeight: 700 }}
                   >
                     일기 삭제하기
                   </Button>
