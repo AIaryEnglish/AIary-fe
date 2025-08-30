@@ -126,15 +126,42 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
               flex: 1,
             }}
           >
-            <Typography variant="h6" fontWeight={700} sx={{ color: ACCENT }}>
+            <Typography
+              variant="h6"
+              fontWeight={700}
+              sx={{
+                color: ACCENT,
+                whiteSpace: "nowrap",
+                fontSize: {
+                  xs: "14px", // 모바일
+                  sm: "18px", // 태블릿
+                  md: "20px", // 데스크탑
+                },
+              }}
+            >
               Diary for {displayStr}
             </Typography>
             <Typography variant="h5" sx={{ mt: 1, mb: 1, fontWeight: 900 }}>
               {diary?.title ?? ""}
             </Typography>
             {diary?.image && (
-              <Box sx={{ display: "flex", justifyContent: "center", my: 2 }}>
-                <img src={diary.image} width={160} alt="image" />
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  my: 2,
+                  width: "100%",
+                }}
+              >
+                <img
+                  src={diary.image}
+                  alt="image"
+                  style={{
+                    maxWidth: "100%", // 부모 너비에 맞춤
+                    height: "auto", // 비율 유지
+                    borderRadius: "8px", // 선택: 라운딩 효과
+                  }}
+                />
               </Box>
             )}
             <Typography
@@ -183,17 +210,23 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
               )}
 
               {diary && (
-                <FormControlLabel
-                  sx={{ marginLeft: "auto" }} // 중요! 오른쪽 끝으로 밀어줌
-                  control={
-                    <Switch
-                      checked={isPublic}
-                      onChange={handleToggle}
-                      color="success"
-                    />
-                  }
-                  label={isPublic ? "공개" : "비공개"}
-                />
+                <Box
+                  sx={{
+                    marginLeft: "auto", // 오른쪽 끝으로 밀기
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                  }}
+                >
+                  <Switch
+                    checked={isPublic}
+                    onChange={handleToggle}
+                    color="success"
+                  />
+                  <Typography sx={{ fontSize: "20px" }}>
+                    {isPublic ? "🌍" : "🔒"}
+                  </Typography>
+                </Box>
               )}
             </Box>
           </CardContent>
