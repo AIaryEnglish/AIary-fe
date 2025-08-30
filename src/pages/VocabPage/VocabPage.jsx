@@ -158,14 +158,23 @@ const ButtonRow = styled(Box)(({ theme }) => ({
 }));
 
 const VocabPageContainer = styled(Box)(({ theme }) => ({
-  flex: 1, // 헤더/푸터 사이 공간을 자동으로 채움
+  // flex: 1, // 헤더/푸터 사이 공간을 자동으로 채움
+  // width: "100%",
+  // padding: "0 6rem",
+  // backgroundColor: "var(--mui-palette-background-paper)",
+  // flexDirection: "column", // 세로 정렬을 위해 column
+  // display: "flex",
+  // justifyContent: "center",
+  // alignItems: "center",
+
   display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
+  flexDirection: "column",
+  justifyContent: "center", // 세로 중앙
+  alignItems: "center", // 이미 좌우 중앙은 돼 있음
+  minHeight: "calc(100vh - 350px)", // 헤더,푸터 높이 제외
   width: "100%",
   padding: "0 6rem",
   backgroundColor: "var(--mui-palette-background-paper)",
-  overflow: "hidden",
 
   [theme.breakpoints.down("md")]: {
     padding: "0 1rem",
@@ -188,7 +197,7 @@ const VocabContent = styled(Container)(({ theme }) => ({
 
 const VocabLayout = styled(Box)(({ theme }) => ({
   display: "flex",
-  height: "100%",
+  flex: 1,
   gap: theme.spacing(3),
 
   [theme.breakpoints.down("md")]: {
