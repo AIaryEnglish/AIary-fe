@@ -1,14 +1,17 @@
 import { Box, Button, Container, Typography } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import TrackChangesIcon from "@mui/icons-material/TrackChanges";
 import EditNoteIcon from "@mui/icons-material/EditNote";
-import { useAuthStore } from "../../../stores/authStore";
 
 export default function HeroSection() {
-  const isLoggedIn = useAuthStore((s) => s.isAuthed());
+  const navigate = useNavigate();
+
+  const handleStartWriting = () => {
+    navigate("/daily");
+  };
 
   return (
     <Box className="hero">
@@ -57,8 +60,7 @@ export default function HeroSection() {
 
           <Box className="hero-cta">
             <Button
-              component={RouterLink}
-              to={isLoggedIn ? "/daily" : "/login"}
+              onClick={handleStartWriting}
               size="large"
               variant="contained"
               className="btn-primary"
