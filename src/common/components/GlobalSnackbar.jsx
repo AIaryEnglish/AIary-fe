@@ -31,7 +31,7 @@ const GlobalSnackbar = () => {
       sx={{
         zIndex: 9000,
         "&.MuiSnackbar-anchorOriginTopCenter": {
-          mt: { xs: "6.4rem", md: "3rem" },
+          mt: { xs: "4rem", md: "3rem" },
         },
       }}
     >
