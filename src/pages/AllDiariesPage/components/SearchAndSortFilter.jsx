@@ -109,6 +109,9 @@ const SearchTextField = styled(TextField)(({ theme }) => ({
         borderWidth: 2,
       },
     },
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.85rem",
+    },
   },
 }));
 
