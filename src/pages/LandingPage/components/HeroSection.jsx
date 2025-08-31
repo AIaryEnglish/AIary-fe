@@ -1,12 +1,21 @@
-import { Box, Button, Container, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import TrackChangesIcon from "@mui/icons-material/TrackChanges";
 import EditNoteIcon from "@mui/icons-material/EditNote";
+import { useTheme } from "@mui/material/styles";
 
 export default function HeroSection() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
 
   const handleStartWriting = () => {
@@ -52,8 +61,8 @@ export default function HeroSection() {
               fontSize: "clamp(14px, 1.8vw, 18px)",
             }}
           >
-            매일 영어로 일기를 쓰며 자연스럽게 어휘력을 늘리고 표현력을
-            키워보세요.
+            매일 영어로 일기를 쓰며 자연스럽게 어휘력을 늘리고{" "}
+            {isMobile && <br />}표현력을 키워보세요.
             <br />
             AI가 도와주는 개인 맞춤형 영어 학습 경험을 시작하세요.
           </Typography>
