@@ -6,7 +6,7 @@ export default function FloatingButton() {
   const navigate = useNavigate();
 
   const handleStartAiary = () => {
-    navigate("/vocab");
+    navigate("/login");
   };
 
   return (
