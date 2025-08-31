@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useCallback,
-  useRef,
-  useEffect,
-  useMemo,
-} from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import {
   Container,
   Box,
@@ -14,18 +8,24 @@ import {
   Alert,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import dayjs from "dayjs";
+import "dayjs/locale/ko";
 import useReadAllDiaries from "../../hooks/useReadAllDiaries";
 import { filterAndSortDiaries } from "../../util/diaryFilter";
-import DiaryCard from "../LandingPage/components/DiaryCard";
-import { useAuthStore } from "../../stores/authStore";
+import AllDiariesCard from "./components/AllDiariesCard";
 import SearchAndSortFilter from "./components/SearchAndSortFilter";
+import DiaryModal from "./components/DiaryModal";
+
+dayjs.locale("ko");
 
 const AllDiariesPage = () => {
-  const [openedCards, setOpenedCards] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("newest");
-  const { user } = useAuthStore();
-  const isLoggedIn = !!user;
+  const [modalState, setModalState] = useState({
+    isOpen: false,
+    currentDiary: null,
+    currentIndex: 0,
+  });
 
   const {
     data,
@@ -55,18 +55,53 @@ const AllDiariesPage = () => {
     return () => observer.disconnect();
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  const handleToggleCard = useCallback((diaryId) => {
-    setOpenedCards((prev) => ({
-      ...prev,
-      [diaryId]: !prev[diaryId],
-    }));
-  }, []);
-
   // 검색 및 정렬된 일기 목록
   const filteredAndSortedDiaries = useMemo(() => {
     const allDiaries = data?.pages?.flatMap((page) => page.diaries || []) || [];
     return filterAndSortDiaries(allDiaries, searchQuery, sortBy);
   }, [data, searchQuery, sortBy]);
+
+  // 모달 관련 핸들러들
+  const handleOpenModal = (diary) => {
+    const index = filteredAndSortedDiaries.findIndex(
+      (d) => d._id === diary._id
+    );
+    setModalState({
+      isOpen: true,
+      currentDiary: diary,
+      currentIndex: index,
+    });
+  };
+
+  const handleCloseModal = () => {
+    setModalState({
+      isOpen: false,
+      currentDiary: null,
+      currentIndex: 0,
+    });
+  };
+
+  const handlePreviousDiary = () => {
+    if (modalState.currentIndex > 0) {
+      const newIndex = modalState.currentIndex - 1;
+      setModalState((prev) => ({
+        ...prev,
+        currentDiary: filteredAndSortedDiaries[newIndex],
+        currentIndex: newIndex,
+      }));
+    }
+  };
+
+  const handleNextDiary = () => {
+    if (modalState.currentIndex < filteredAndSortedDiaries.length - 1) {
+      const newIndex = modalState.currentIndex + 1;
+      setModalState((prev) => ({
+        ...prev,
+        currentDiary: filteredAndSortedDiaries[newIndex],
+        currentIndex: newIndex,
+      }));
+    }
+  };
 
   if (isLoading) {
     return (
@@ -131,12 +166,7 @@ const AllDiariesPage = () => {
             {filteredAndSortedDiaries.map((diary) => (
               <Grid size={{ xs: 12, sm: 6, lg: 4 }} key={diary._id}>
                 <DiaryCardWrapper>
-                  <DiaryCard
-                    diary={diary}
-                    isLoggedIn={isLoggedIn}
-                    opened={openedCards[diary._id] || false}
-                    onToggle={() => handleToggleCard(diary._id)}
-                  />
+                  <AllDiariesCard diary={diary} onOpenModal={handleOpenModal} />
                 </DiaryCardWrapper>
               </Grid>
             ))}
@@ -191,6 +221,30 @@ const AllDiariesPage = () => {
           </EndMessageContainer>
         )}
       </ContentContainer>
+
+      {/* 모달 */}
+      {modalState.isOpen && modalState.currentDiary && (
+        <DiaryModal
+          open={modalState.isOpen}
+          onClose={handleCloseModal}
+          diary={modalState.currentDiary}
+          formattedDate={
+            modalState.currentDiary.dateKey
+              ? dayjs(modalState.currentDiary.dateKey, "YYYY-MM-DD").format(
+                  "M월 D일 dddd"
+                )
+              : dayjs(
+                  modalState.currentDiary.dateKey ??
+                    modalState.currentDiary.date ??
+                    modalState.currentDiary.createdAt
+                ).format("M월 D일 dddd")
+          }
+          diaries={filteredAndSortedDiaries}
+          currentIndex={modalState.currentIndex}
+          onPrevious={handlePreviousDiary}
+          onNext={handleNextDiary}
+        />
+      )}
     </PageContainer>
   );
 };

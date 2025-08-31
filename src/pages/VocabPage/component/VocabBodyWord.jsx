@@ -124,7 +124,7 @@ const StatusChip = styled(Chip, {
     status === "MASTERED" ? "rgb(92, 220, 77)" : "rgb(255, 228, 211)",
   color: status === "MASTERED" ? "rgb(255, 255, 255)" : "rgb(222, 85, 70)",
 
-  fontWeight: 500,
+  fontWeight: 800,
   fontSize: "0.8rem",
   height: "24px",
   "& .MuiChip-label": {
