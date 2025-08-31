@@ -247,7 +247,20 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
               overflowY: "auto",
             }}
           >
-            <Typography variant="h6" fontWeight={700} sx={{ color: ACCENT }}>
+            <Typography
+              variant="h6"
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+              sx={{
+                display: "block",
+                cursor: "pointer",
+                color: ACCENT,
+              }}
+              fontWeight={700}
+            >
               AI Comment
             </Typography>
 

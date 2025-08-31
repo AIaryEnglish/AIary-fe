@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material";
-import { Container, Box, Button, Grid } from "@mui/material";
+import { Container, Box, Button, Typography } from "@mui/material";
 import VocabBodyProgress from "./component/VocabBodyProgress";
 import VocabBodySearch from "./component/VocabBodySearch";
 import VocabBodyWord from "./component/VocabBodyWord";
 import useReadVocab from "../../hooks/useReadVocab";
 import useUpdateVocab from "../../hooks/useUpdateVocab";
 import useDeleteVocab from "../../hooks/useDeleteVocab";
+import { useAuthStore } from "../../stores/authStore";
 
 const VocabPage = () => {
   //단어목록, 상태변화 훅들 불러오기
@@ -47,9 +48,13 @@ const VocabPage = () => {
 
   const navigate = useNavigate();
 
+  const { user } = useAuthStore(); // 유저 정보
+  const username = user?.name || "사용자";
+
   return (
     <VocabPageContainer>
       <VocabContent maxWidth="xl">
+        <HeaderText>{username} 님의 단어장</HeaderText>
         <VocabLayout>
           {/* 왼쪽 패널: 검색 + 진행률 */}
           <LeftPanel>
@@ -105,6 +110,13 @@ const VocabPage = () => {
 };
 
 export default VocabPage;
+
+const HeaderText = styled(Typography)(({ theme }) => ({
+  fontSize: "1.3rem",
+  fontWeight: 600,
+  marginBottom: theme.spacing(2),
+  color: "var(--mui-palette-primary-main)",
+}));
 
 // Styled Components
 const ActionButton = styled(Button)(({ theme }) => ({
