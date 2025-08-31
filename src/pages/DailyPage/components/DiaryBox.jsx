@@ -35,7 +35,10 @@ const DiaryBox = ({ displayedDateKey }) => {
           width: 1,
           alignSelf: { xs: "stretch", md: "auto" },
           maxWidth: { xs: "none", md: "unset" },
-          height: 560,
+          height: {
+            xs: "auto",
+            md: 560,
+          },
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-start",
@@ -49,7 +52,9 @@ const DiaryBox = ({ displayedDateKey }) => {
           borderColor: "success.light",
         }}
       >
-        <CardContent sx={{ overflowY: "auto", flexGrow: 1 }}>
+        <CardContent
+          sx={{ overflowY: { xs: "visible", md: "auto" }, flexGrow: 1 }}
+        >
           <Typography
             variant="h6"
             fontWeight={700}
@@ -93,9 +98,3 @@ const DiaryBox = ({ displayedDateKey }) => {
 };
 
 export default React.memo(DiaryBox);
-
-const DiaryDate = styled(Typography)(() => ({
-  color: ACCENT,
-  fontWeight: 700,
-  fontSize: "25px",
-}));
