@@ -287,7 +287,7 @@ const HeaderDescription = styled(Typography)(({ theme }) => ({
   color: "var(--app-muted-fg)",
   fontWeight: 400,
   [theme.breakpoints.down("md")]: {
-    fontSize: "1.2rem",
+    fontSize: "0.91rem",
     marginTop: 16,
   },
 }));
