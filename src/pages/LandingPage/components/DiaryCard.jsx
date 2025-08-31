@@ -22,8 +22,12 @@ export default function DiaryCard({ diary, isLoggedIn, opened, onToggle }) {
   const contentRef = useRef(null);
   const isShort = useIsShortText(contentRef);
 
+  const titleClass = opened ? "entry-title" : "entry-title line-clamp-1";
   const contentClass =
     opened || isShort ? "entry-content" : "entry-content line-clamp-3";
+  const cardClass = `card feed-card hoverlift ${
+    opened ? "opened" : "collapsed"
+  }`;
 
   const { vocabList } = useReadVocab();
 
@@ -36,15 +40,15 @@ export default function DiaryCard({ diary, isLoggedIn, opened, onToggle }) {
   } = useCreateVocab(vocabList);
 
   return (
-    <div className="card feed-card hoverlift">
+    <div className={cardClass}>
       <CardHeader
         title={
           <div className="entry-head">
-            <p className="entry-title">{title}</p>
+            <p className={titleClass}>{title}</p>
           </div>
         }
       />
-      <CardContent className="card-body">
+      <CardContent className={`card-body ${isShort ? "no-cta" : "has-cta"}`}>
         <p
           ref={contentRef}
           className={contentClass}
@@ -81,6 +85,7 @@ export default function DiaryCard({ diary, isLoggedIn, opened, onToggle }) {
                 variant="outlined"
                 fullWidth
                 className="btn-outline subtle"
+                sx={{ fontWeight: 700 }}
               >
                 {opened ? "접기" : "전체 읽기"}
               </Button>
@@ -91,6 +96,7 @@ export default function DiaryCard({ diary, isLoggedIn, opened, onToggle }) {
                 variant="outlined"
                 fullWidth
                 className="btn-outline subtle"
+                sx={{ fontWeight: 700 }}
               >
                 전체 읽기
               </Button>

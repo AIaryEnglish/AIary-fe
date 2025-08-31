@@ -60,7 +60,7 @@ const DiaryBox = ({ displayedDateKey }) => {
             <Button
               onClick={openAddForm}
               variant="contained"
-              sx={{ mt: 2, backgroundColor: ACCENT }}
+              sx={{ mt: 2, backgroundColor: ACCENT, fontWeight: 700 }}
             >
               일기 작성하기
             </Button>

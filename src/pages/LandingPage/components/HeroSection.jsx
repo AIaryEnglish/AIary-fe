@@ -62,6 +62,7 @@ export default function HeroSection() {
               size="large"
               variant="contained"
               className="btn-primary"
+              sx={{ fontWeight: 700 }}
               startIcon={<EditNoteIcon fontSize="small" />}
             >
               내 일기 작성하기

@@ -155,6 +155,18 @@ const NewDiaryDialog = ({ mode, open, onClose }) => {
             value={formData.title}
             onChange={handleChange}
             input={{ maxLength: 60 }}
+            InputLabelProps={{
+              sx: {
+                "&.Mui-focused": { color: ACCENT }, // 포커스 시 라벨만 악센트
+              },
+            }}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                // 기본은 MUI 디폴트 테두리색(회색 유지)
+                "&:hover fieldset": { borderColor: ACCENT },
+                "&.Mui-focused fieldset": { borderColor: ACCENT },
+              },
+            }}
           />
           <TextField
             id="content"
@@ -165,6 +177,18 @@ const NewDiaryDialog = ({ mode, open, onClose }) => {
             rows={6}
             value={formData.content}
             onChange={handleChange}
+            InputLabelProps={{
+              sx: {
+                "&.Mui-focused": { color: ACCENT }, // 포커스 시 라벨만 악센트
+              },
+            }}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                // 기본은 MUI 디폴트 테두리색(회색 유지)
+                "&:hover fieldset": { borderColor: ACCENT },
+                "&.Mui-focused fieldset": { borderColor: ACCENT },
+              },
+            }}
           />
           <FormControlLabel
             sx={{ mt: 1 }}
@@ -197,7 +221,9 @@ const NewDiaryDialog = ({ mode, open, onClose }) => {
       <DialogActions
         sx={{ px: 3, pb: 2, borderTop: "1px solid", borderColor: "divider" }}
       >
-        <Button onClick={handleClose}>취소</Button>
+        <Button onClick={handleClose} sx={{ color: ACCENT }}>
+          취소
+        </Button>
         <Button
           type="submit"
           form="diary-form"

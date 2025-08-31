@@ -162,7 +162,12 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
                   <Button
                     onClick={openEditForm}
                     variant="outlined"
-                    sx={{ borderColor: ACCENT, color: ACCENT }}
+                    sx={{
+                      ml: 1,
+                      borderColor: ACCENT,
+                      color: ACCENT,
+                      fontWeight: 700,
+                    }}
                   >
                     수정
                   </Button>
@@ -170,6 +175,7 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
                     onClick={deleteEntry}
                     variant="outlined"
                     color="error"
+                    sx={{ ml: 1, fontWeight: 700 }}
                   >
                     삭제
                   </Button>
@@ -208,7 +214,20 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
               overflowY: "auto",
             }}
           >
-            <Typography variant="h6" fontWeight={700} sx={{ color: ACCENT }}>
+            <Typography
+              variant="h6"
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+              sx={{
+                display: "block",
+                cursor: "pointer",
+                color: ACCENT,
+              }}
+              fontWeight={700}
+            >
               AI Comment
             </Typography>
 
