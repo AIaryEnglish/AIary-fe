@@ -11,19 +11,30 @@ import {
   Chip,
 } from "@mui/material";
 import dayjs from "dayjs";
+import "dayjs/locale/ko";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import useDiaryStore from "../../../stores/useDiaryStore";
 import useReadVocab from "../../../hooks/useReadVocab";
 import useCreateVocab from "../../../hooks/useCreateVocab";
-import { Switch, FormControlLabel } from "@mui/material";
+import { Switch } from "@mui/material";
 import React, { useState } from "react";
 import NewDiaryDialog from "./NewDiaryDialog";
 import useDeleteDiary from "../../../hooks/useDeleteDiary";
 import { useUpdatePublicDiary } from "../../../hooks/useUpdatePublicDiary";
+import DeleteConfirmDialog from "./DeleteConfirmDialog";
+
+dayjs.locale("ko");
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const ACCENT = "#00BE83";
 
 const ResultsBox = ({ diary, displayedDateKey }) => {
   if (!diary) return null;
+
+  const fmtKST = (d) =>
+    d ? dayjs(d).tz("Asia/Seoul").format("YYYY.MM.DD(ddd) A h:mm") : "";
 
   const { selectedDate } = useDiaryStore();
 
@@ -46,6 +57,7 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
   const { mutate: deleteDiaryMutate } = useDeleteDiary();
 
   const [openDialog, setOpenDialog] = useState(false);
+  const [open, setOpen] = useState(false);
   const [mode, setMode] = useState("edit");
 
   const formatDateKey = (dk) =>
@@ -88,6 +100,7 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
       year,
       month,
     });
+    setOpen(false);
   };
 
   const displayStr =
@@ -175,6 +188,9 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
             >
               {diary?.content ?? ""}
             </Typography>
+            <Typography sx={{ mt: 2, color: "text.secondary", fontSize: 11 }}>
+              {fmtKST(diary?.createdAt)}
+            </Typography>
             <Box
               sx={{
                 mt: "auto",
@@ -199,13 +215,18 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
                     Edit
                   </Button>
                   <Button
-                    onClick={deleteEntry}
+                    onClick={() => setOpen(true)}
                     variant="outlined"
                     color="error"
                     sx={{ mr: 1, fontWeight: 700 }}
                   >
                     Delete
                   </Button>
+                  <DeleteConfirmDialog
+                    open={open}
+                    onClose={() => setOpen(false)}
+                    onConfirm={deleteEntry}
+                  />
                 </Box>
               )}
 

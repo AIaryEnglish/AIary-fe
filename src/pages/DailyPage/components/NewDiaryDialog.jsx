@@ -16,6 +16,7 @@ import useSnackbarStore from "../../../stores/useSnackbarStore";
 import { useUpdateDiary } from "../../../hooks/useUpdateDiary";
 
 const ACCENT = "#00BE83";
+const MAX_LENGTH = 1000;
 
 const NewDiaryDialog = ({ mode, open, onClose }) => {
   const { selectedDate, diariesByDate } = useDiaryStore();
@@ -110,7 +111,10 @@ const NewDiaryDialog = ({ mode, open, onClose }) => {
 
   const handleChange = (event) => {
     const { id, value } = event.target;
-    setFormData((prev) => ({ ...prev, [id]: value }));
+    setFormData((prev) => ({
+      ...prev,
+      [id]: id === "content" ? value.slice(0, MAX_LENGTH) : value, // content만 제한
+    }));
   };
 
   const uploadImage = (url) => {
@@ -156,7 +160,7 @@ const NewDiaryDialog = ({ mode, open, onClose }) => {
             margin="normal"
             value={formData.title}
             onChange={handleChange}
-            input={{ maxLength: 60 }}
+            inputProps={{ maxLength: 60 }}
             InputLabelProps={{
               sx: {
                 "&.Mui-focused": { color: ACCENT }, // 포커스 시 라벨만 악센트
@@ -179,6 +183,7 @@ const NewDiaryDialog = ({ mode, open, onClose }) => {
             rows={6}
             value={formData.content}
             onChange={handleChange}
+            inputProps={{ maxLength: MAX_LENGTH }}
             InputLabelProps={{
               sx: {
                 "&.Mui-focused": { color: ACCENT }, // 포커스 시 라벨만 악센트
@@ -191,6 +196,7 @@ const NewDiaryDialog = ({ mode, open, onClose }) => {
                 "&.Mui-focused fieldset": { borderColor: ACCENT },
               },
             }}
+            helperText={`${formData.content.length} / ${MAX_LENGTH} characters`} // 카운트 표시
           />
           <FormControlLabel
             sx={{ mt: 1 }}

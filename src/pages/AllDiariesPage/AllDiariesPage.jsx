@@ -11,6 +11,7 @@ import { styled } from "@mui/material/styles";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
 import useReadAllDiaries from "../../hooks/useReadAllDiaries";
+import useTotalDiariesCount from "../../hooks/useTotalDiariesCount";
 import { filterAndSortDiaries } from "../../util/diaryFilter";
 import AllDiariesCard from "./components/AllDiariesCard";
 import SearchAndSortFilter from "./components/SearchAndSortFilter";
@@ -36,6 +37,8 @@ const AllDiariesPage = () => {
     isError,
   } = useReadAllDiaries();
 
+  const { data: totalCountData } = useTotalDiariesCount();
+
   const loadMoreRef = useRef(null);
 
   useEffect(() => {
@@ -60,6 +63,15 @@ const AllDiariesPage = () => {
     const allDiaries = data?.pages?.flatMap((page) => page.diaries || []) || [];
     return filterAndSortDiaries(allDiaries, searchQuery, sortBy);
   }, [data, searchQuery, sortBy]);
+
+  // 표시할 개수 결정: 검색어나 정렬이 있으면 필터링된 개수, 없으면 총 개수
+  const displayCount = useMemo(() => {
+    const hasSearchOrSort = searchQuery.trim() || sortBy !== "newest";
+    if (hasSearchOrSort) {
+      return filteredAndSortedDiaries.length;
+    }
+    return totalCountData?.totalCount || 0;
+  }, [searchQuery, sortBy, filteredAndSortedDiaries.length, totalCountData]);
 
   // 모달 관련 핸들러들
   const handleOpenModal = (diary) => {
@@ -155,9 +167,9 @@ const AllDiariesPage = () => {
         </Container>
       </HeaderContainer>
       <ContentContainer maxWidth="lg">
-        {filteredAndSortedDiaries.length > 0 && (
+        {displayCount > 0 && (
           <Typography variant="h7" fontWeight={600} color="var(--app-chart-1)">
-            총 {filteredAndSortedDiaries.length} 개의 일기가 있습니다.
+            총 {displayCount} 개의 일기가 있습니다.
           </Typography>
         )}
         {/* 일기 카드 그리드 */}
@@ -287,7 +299,7 @@ const HeaderDescription = styled(Typography)(({ theme }) => ({
   color: "var(--app-muted-fg)",
   fontWeight: 400,
   [theme.breakpoints.down("md")]: {
-    fontSize: "1.2rem",
+    fontSize: "0.91rem",
     marginTop: 16,
   },
 }));

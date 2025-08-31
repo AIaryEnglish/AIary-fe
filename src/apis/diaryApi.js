@@ -13,6 +13,17 @@ export const getAllDiaries = async ({ lastId }) => {
   }
 };
 
+export const getTotalPublicDiariesCount = async () => {
+  const path = "/diary/count";
+  try {
+    const response = await api.get(path);
+    return response.data;
+  } catch (error) {
+    console.error("getTotalPublicDiariesCount API 에러:", error);
+    throw error;
+  }
+};
+
 export const getUserDiariesByMonth = async ({ year, month }) => {
   const path = "/diary/my/month";
   try {
@@ -43,30 +54,30 @@ export const createDiaryApi = async (diary) => {
     throw err;
   }
 };
-export const updateDiaryApi = async(id, diary) => {
+export const updateDiaryApi = async (id, diary) => {
   try {
     const response = await api.put(`/diary/${id}`, diary);
     return response.data;
-  } catch(err) {
+  } catch (err) {
     console.error("일기 수정 실패:", err);
     throw err;
   }
 };
-export const updatePublicApi = async(id, state) => {
+export const updatePublicApi = async (id, state) => {
   try {
     const response = await api.put(`diary/published/${id}`, state);
     return response.data;
-  } catch(err) {
+  } catch (err) {
     console.error("일기 수정 실패:", err);
     throw err;
   }
 };
 
-export const deleteDiaryApi = async(id) => {
+export const deleteDiaryApi = async (id) => {
   try {
     const response = await api.delete(`/diary/${id}`);
     return response.data;
-  } catch(err) {
+  } catch (err) {
     console.error("일기 삭제 실패:", err);
     throw err;
   }
