@@ -11,19 +11,29 @@ import {
   Chip,
 } from "@mui/material";
 import dayjs from "dayjs";
+import "dayjs/locale/ko";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import useDiaryStore from "../../../stores/useDiaryStore";
 import useReadVocab from "../../../hooks/useReadVocab";
 import useCreateVocab from "../../../hooks/useCreateVocab";
-import { Switch, FormControlLabel } from "@mui/material";
+import { Switch } from "@mui/material";
 import React, { useState } from "react";
 import NewDiaryDialog from "./NewDiaryDialog";
 import useDeleteDiary from "../../../hooks/useDeleteDiary";
 import { useUpdatePublicDiary } from "../../../hooks/useUpdatePublicDiary";
 
+dayjs.locale("ko");
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 const ACCENT = "#00BE83";
 
 const ResultsBox = ({ diary, displayedDateKey }) => {
   if (!diary) return null;
+
+  const fmtKST = (d) =>
+    d ? dayjs(d).tz("Asia/Seoul").format("YYYY.MM.DD(ddd) A h:mm") : "";
 
   const { selectedDate } = useDiaryStore();
 
@@ -174,6 +184,9 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
               style={{ cursor: "pointer" }}
             >
               {diary?.content ?? ""}
+            </Typography>
+            <Typography sx={{ mt: 2, color: "text.secondary", fontSize: 11 }}>
+              {fmtKST(diary?.createdAt)}
             </Typography>
             <Box
               sx={{
