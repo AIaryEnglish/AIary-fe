@@ -23,7 +23,7 @@ const useCreateVocab = (existingVocab = []) => {
   });
 
   let pressTimer = null;
-  let errorTimer = null; // 5초 카운트
+  let errorTimer = null; // 3초 카운트
   let isDragging = false;
 
   const saveWord = (word) => {
@@ -46,22 +46,22 @@ const useCreateVocab = (existingVocab = []) => {
     const selectedWord = window.getSelection()?.toString().trim();
     if (!selectedWord) return;
 
-    // 3초 후 롱프레스 성공
+    // 2초 후 롱프레스 성공
     pressTimer = setTimeout(() => {
       if (!isDragging) {
         saveWord(selectedWord);
         clearTimeout(errorTimer); // 실패 타이머 취소
       }
-    }, 3000);
+    }, 2000);
 
-    // 5초 후 롱프레스 실패 -> 에러 메시지
+    // 3초 후 롱프레스 실패 -> 에러 메시지
     errorTimer = setTimeout(() => {
       showError("단어를 다시 한 번 선택해 주세요.", 3000, {
         vertical: "top",
         horizontal: "center",
       });
       clearTimeout(pressTimer); // 성공 타이머 취소
-    }, 5000);
+    }, 3000);
   };
 
   const handlePressMove = () => {
