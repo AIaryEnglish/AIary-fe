@@ -19,6 +19,7 @@ import React, { useState } from "react";
 import NewDiaryDialog from "./NewDiaryDialog";
 import useDeleteDiary from "../../../hooks/useDeleteDiary";
 import { useUpdatePublicDiary } from "../../../hooks/useUpdatePublicDiary";
+import DeleteConfirmDialog from "./DeleteConfirmDialog";
 
 const ACCENT = "#00BE83";
 
@@ -46,6 +47,7 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
   const { mutate: deleteDiaryMutate } = useDeleteDiary();
 
   const [openDialog, setOpenDialog] = useState(false);
+  const [open, setOpen] = useState(false);
   const [mode, setMode] = useState("edit");
 
   const formatDateKey = (dk) =>
@@ -88,6 +90,7 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
       year,
       month,
     });
+    setOpen(false);
   };
 
   const displayStr =
@@ -199,13 +202,18 @@ const ResultsBox = ({ diary, displayedDateKey }) => {
                     Edit
                   </Button>
                   <Button
-                    onClick={deleteEntry}
+                    onClick={() => setOpen(true)}
                     variant="outlined"
                     color="error"
                     sx={{ mr: 1, fontWeight: 700 }}
                   >
                     Delete
                   </Button>
+                  <DeleteConfirmDialog
+                    open={open}
+                    onClose={() => setOpen(false)}
+                    onConfirm={deleteEntry}
+                  />
                 </Box>
               )}
 
