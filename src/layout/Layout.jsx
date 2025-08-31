@@ -3,6 +3,7 @@ import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
+import ScrollToTopButton from "../common/components/ScrollToTopButton";
 
 const Layout = () => {
   return (
@@ -31,6 +32,7 @@ const Layout = () => {
         </Box>
       </Box>
       <Footer />
+      <ScrollToTopButton />
     </Box>
   );
 };
