@@ -48,6 +48,7 @@ const VocabPage = () => {
 
   const navigate = useNavigate();
 
+  //사용자 이름 인식 단어
   const { user } = useAuthStore(); // 유저 정보
   const username = user?.name || "사용자";
 
