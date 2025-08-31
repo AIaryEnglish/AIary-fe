@@ -81,15 +81,19 @@ export default function DiaryModal({
 
       <DialogTitle
         sx={{
-          backgroundColor: "var(--app-chart-1)",
-          color: "white",
+          backgroundColor: "var(--mui-palette-background-paper)",
+          color: "var(--app-chart-1)",
         }}
       >
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="h5" component="h2" fontWeight={600}>
             {title}
           </Typography>
-          <IconButton onClick={onClose} size="small" sx={{ color: "white" }}>
+          <IconButton
+            onClick={onClose}
+            size="small"
+            sx={{ color: "var(--app-chart-1)" }}
+          >
             <CloseIcon />
           </IconButton>
         </Box>
@@ -138,7 +142,7 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
   },
   "& .MuiDialogTitle-root": {
     padding: theme.spacing(2, 4),
-    borderBottom: "1px solid var(--app-border)",
+    borderBottom: "1px solid var(--app-chart-1)",
   },
   [theme.breakpoints.down("md")]: {
     "& .MuiDialog-paper": {
@@ -215,6 +219,8 @@ const NavigationButton = styled(IconButton)(({ direction, theme }) => ({
     cursor: "not-allowed",
   },
   [theme.breakpoints.down("md")]: {
-    top: "87%",
+    top: "91%",
+    width: "28px",
+    height: "28px",
   },
 }));
